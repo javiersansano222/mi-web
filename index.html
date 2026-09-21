@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Configuración básica del documento -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Web personal de Javier Sansano Martínez, estudiante de 1º DAM en el IES Simarro.">
+  
+  <!-- Open Graph para redes sociales -->
+  <meta property="og:title" content="Javier Sansano Martínez | Desarrollador Multiplataforma">
+  <meta property="og:description" content="Portfolio personal y proyectos de desarrollo de aplicaciones (DAM 1º).">
+  <meta property="og:type" content="website">
+  <meta property="og:theme-color" content="#071426">
+
+  <title>Javier Sansano Martínez | Web Personal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- FILTRO SVG DE DISTORSIÓN CÁUSTICA SUBMARINA (BIOSHOCK) -->
+<svg style="display: none;">
+  <defs>
+    <filter id="rapture-water-caustics" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.025" numOctaves="3" result="noise" seed="5">
+        <animate attributeName="baseFrequency" dur="18s" values="0.012 0.025; 0.025 0.015; 0.012 0.025" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<!-- CAPA DE OCÉANO Y CÚPULA DE RAPTURE -->
+<div class="ocean-viewport">
+  <div class="caustics-layer"></div>
+  <div class="water-vignette"></div>
+  <div class="bubble-chamber">
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+    <div class="bubble b4"></div>
+    <div class="bubble b5"></div>
+  </div>
+</div>
+  <!-- Barra de progreso de lectura (scroll) -->
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- Decoración superior estilo Art Déco -->
+  <div class="deco-top" aria-hidden="true"></div>
+
+
+    <div class="header-container">
+      <a href="#inicio" class="brand-logo">J. Sansano</a>
+
+      <!-- Botón menú hamburguesa para móviles -->
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+        <span class="hamburger"></span>
+      </button>
+
+      <!-- Menú principal de navegación -->
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#sobre-mi">Sobre mí</a></li>
+          <li><a href="#hecho">Línea de Tiempo</a></li>
+          <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#gustos">Me gusta</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <!-- Botón cambio de tema -->
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Cambiar a modo claro">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span class="theme-text"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Botón flotante de contacto por WhatsApp -->
+  <a
+    href="https://wa.me/34663509281"
+    class="whatsapp-deco"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Contactar por WhatsApp"
+  >
+    <span class="whatsapp-deco__icon" aria-hidden="true">
+      <svg viewBox="0 0 48 48" role="img">
+        <path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path d="M24 8 40 24 24 40 8 24Z" fill="none" stroke="currentColor" />
+        <path d="M16 14 13 19 Q12 28 22 35 Q29 39 35 31 L29 26 24 29 Q20 27 19 23 L22 19Z" fill="currentColor" />
+      </svg>
+    </span>
+    <span class="whatsapp-deco__text">Contactar</span>
+  </a>
+
+  <!-- Sección Hero / Portada principal -->
+  <section class="site-hero" id="inicio">
+    <!-- Torre lateral izquierda -->
+    <div class="deco-side left" aria-hidden="true">
+      <div class="tower">
+        <div class="tower-spire"></div>
+        <div class="tower-top"></div>
+        <div class="tower-body">
+          <span class="win on"></span><span class="win"></span><span class="win"></span><span class="win on"></span>
+          <span class="win"></span><span class="win on"></span><span class="win"></span><span class="win"></span>
+          <span class="win on"></span><span class="win"></span><span class="win"></span><span class="win on"></span>
+        </div>
+      </div>
+      <div class="statue classic">
+        <span class="statue-head"></span>
+        <span class="statue-torso"></span>
+        <span class="statue-base"></span>
+      </div>
+    </div>
+
+    <!-- Contenido central de bienvenida -->
+    <div class="header-inner">
+      <h1 class="brand-name">JAVIER SANSANO MARTÍNEZ</h1>
+     
+      <p class="brand-phrase">
+      «<span id="typewriter-text"></span><span class="typewriter-cursor">◆</span>»
+</p>
+
+      <!-- Pórtico/Monumento Art Déco -->
+      <div class="deco-monument">
+        <span class="monument-glow"></span>
+        <div class="monument-pediment"></div>
+        <div class="monument-architrave"></div>
+        <div class="monument-columns">
+          <span class="column"></span>
+          <span class="column"></span>
+          <span class="column"></span>
+          <span class="column"></span>
+          <span class="column"></span>
+        </div>
+        <div class="monument-steps"></div>
+      </div>
+    </div>
+
+    <!-- Torre lateral derecha -->
+    <div class="deco-side right" aria-hidden="true">
+      <div class="tower">
+        <div class="tower-spire"></div>
+        <div class="tower-top"></div>
+        <div class="tower-body">
+          <span class="win"></span><span class="win on"></span><span class="win"></span><span class="win"></span>
+          <span class="win on"></span><span class="win"></span><span class="win on"></span><span class="win"></span>
+          <span class="win"></span><span class="win"></span><span class="win on"></span><span class="win"></span>
+        </div>
+      </div>
+      <div class="statue deco">
+        <span class="statue-head"></span>
+        <span class="statue-torso"></span>
+        <span class="statue-base"></span>
+      </div>
+    </div>
+  </section>
+
+ <!-- SECCIÓN SOBRE MÍ -->
+<section id="sobre-mi" class="section">
+  <div class="container">
+    <h2 class="section-title">SOBRE MÍ</h2>
+    <div class="sobre-mi-content">
+      <p>
+        ¡Hola! Soy <strong>Javier Sansano Martínez</strong>, estudiante de 1º de Desarrollo de Aplicaciones Multiplataforma (DAM) en el <strong>IES Simarro</strong>. Apasionado por la programación, la resolución de problemas técnicos y la creación de software eficiente.
+      </p>
+      <p>
+        Actualmente enfocado en afianzar las bases de la programación orientada a objetos, gestión de bases de datos y desarrollo web, combinando lógica sólida con un diseño cuidado.
+      </p>
+    </div>
+  </div>
+</section>
+
+  </div>
+</div>
+
+    <!-- Sección: Lo que he hecho -->
+    <section id="hecho" class="section reveal">
+      <h2>Lo que he hecho</h2>
+      <ul class="timeline">
+        <li>
+          <h3>Grado medio de SMX</h3>
+          <p>
+            He cursado el Grado Medio de <strong>SMX</strong>
+            (Sistemas Microinformáticos y Redes), una base importante
+            para entender ordenadores, redes y tecnología.
+          </p>
+        </li>
+        <li>
+          <h3>Estudio de inglés por niveles</h3>
+          <p>
+            He estudiado inglés de forma progresiva, intentando superar niveles
+            como <strong>B1</strong> y <strong>B2</strong>, porque sé que es clave
+            para seguir aprendiendo programación y tecnología.
+          </p>
+        </li>
+        <li>
+          <h3>DAM en el IES Simarro</h3>
+          <p>
+            Estoy estudiando <strong>Desarrollo de Aplicaciones Multiplataforma</strong>
+            con la idea de formarme como programador y trabajar en distintos proyectos.
+          </p>
+        </li>
+        <li>
+          <h3>Entrenamiento casi a diario</h3>
+          <p>
+            Entreno casi a diario. Esto me ayuda a mantener disciplina, constancia
+            y una mentalidad aplicada tanto al estudio como al desarrollo personal.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Sección: Proyectos -->
+    <section id="proyectos" class="section reveal artdeco-frame">
+      <h2>Proyectos & Código</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Aplicación de Gestión en Java</h3>
+          <p>
+            Proyecto orientado a objetos para la gestión de datos con persistencia de ficheros y manejo de excepciones.
+          </p>
+          <div class="tech-tags">
+            <span>Java</span>
+            <span>OOP</span>
+          </div>
+          <a href="https://github.com/tuusuario" target="_blank" rel="noopener" class="card-link">Ver en GitHub →</a>
+        </article>
+
+        <article class="card">
+          <h3>Base de Datos SQL</h3>
+          <p>
+            Diseño y modelado Entidad-Relación con consultas avanzadas, triggers y vistas integradas.
+          </p>
+          <div class="tech-tags">
+            <span>MySQL</span>
+            <span>SQL</span>
+          </div>
+          <a href="https://github.com/tuusuario" target="_blank" rel="noopener" class="card-link">Ver en GitHub →</a>
+        </article>
+
+        <article class="card">
+          <h3>Web Personal Art Déco</h3>
+          <p>
+            Diseño web semántico y adaptable con temática clásica, animaciones en CSS y alternancia de temas.
+          </p>
+          <div class="tech-tags">
+            <span>HTML5</span>
+            <span>CSS3</span>
+            <span>JS</span>
+          </div>
+          <a href="https://github.com/ornyx50" target="_blank" rel="noopener" class="card-link">Ver en GitHub →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Sección: Me gusta -->
+    <section id="gustos" class="section reveal">
+      <h2>Me gusta</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Videojuegos</h3>
+          <p>
+            Me gustan los videojuegos, no solo como entretenimiento,
+            sino también por el diseño, la lógica y la experiencia que ofrecen.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Películas</h3>
+          <p>
+            Disfruto viendo películas: historias, personajes, ambientación
+            y ese valor clásico que también me atrae del estilo Art Déco.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>Tecnología</h3>
+          <p>
+            Me interesan los ordenadores, cómo se montan, cómo funcionan
+            y cómo se integran con el software y el desarrollo.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página -->
+  <footer id="contacto" class="site-footer reveal">
+    <h2>Contacto</h2>
+
+    <address class="contact-links">
+      <a href="mailto:tucorreo@ejemplo.com" target="_blank" rel="noopener noreferrer">Email</a>
+      <a href="https://github.com/tuusuario" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/tuusuario" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </address>
+
+    <p class="footer-copy">
+      © <time id="year"></time> Javier Sansano Martínez
+    </p>
+  </footer>
+
+  <!-- Decoración inferior estilo Art Déco -->
+  <div class="deco-bottom" aria-hidden="true"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
