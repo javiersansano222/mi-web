@@ -1,5 +1,3 @@
-/// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Año dinámico en el pie de página
   const year = document.getElementById("year");
@@ -17,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
       mainNav.classList.toggle("nav-open");
     });
 
-    // Cerrar el menú al hacer clic en cualquier enlace
     const navLinks = mainNav.querySelectorAll("a");
     navLinks.forEach((link) => {
       link.addEventListener("click", () => {
@@ -54,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
 
-            // Animación en cascada para tarjetas y elementos de la línea de tiempo
             const cards = entry.target.querySelectorAll(".card, .timeline li");
             cards.forEach((card, index) => {
               setTimeout(() => {
@@ -154,39 +150,38 @@ document.addEventListener("DOMContentLoaded", () => {
     sync();
   });
 })();
+
 // =========================================
 // EFECTO MÁQUINA DE ESCRIBIR MÍSTICA / ART DÉCO
 // =========================================
 document.addEventListener("DOMContentLoaded", () => {
   const textElement = document.getElementById("typewriter-text");
-  
+
   if (textElement) {
     const textToType = "Construyo mi futuro línea a línea: codigo,constancia, y estilo Art deco: asi construyo mi futuro";
     let index = 0;
-    const speed = 45; // Velocidad de escritura en milisegundos por letra
+    const speed = 45;
 
     function typeWriter() {
       if (index < textToType.length) {
         const char = textToType.charAt(index);
-        
-        // Creamos un span para que la última letra escrita haga un leve destello dorado
+
         const charSpan = document.createElement("span");
         charSpan.classList.add("type-char");
         charSpan.textContent = char;
-        
+
         textElement.appendChild(charSpan);
         index++;
 
-        // Pequeño ritmo irregular para simular el pulso humano de tecleo
         const randomSpeed = speed + Math.random() * 30 - 15;
         setTimeout(typeWriter, randomSpeed);
       }
     }
 
-    // Iniciamos la animación con un pequeño retraso inicial
     setTimeout(typeWriter, 500);
   }
 });
+
 // =========================================
 // EFECTO TILT 3D INTERACTIVO PARA TARJETAS
 // =========================================
@@ -194,25 +189,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".card");
 
   cards.forEach((card) => {
-    // Cuando el ratón se mueve dentro de la tarjeta
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
-      
-      // Obtenemos las coordenadas X e Y relativas al centro de la tarjeta
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
 
-      // Dividimos para suavizar los grados de inclinación (máximo ~12deg)
       const rotateX = (-y / rect.height) * 15;
       const rotateY = (x / rect.width) * 15;
 
-      // Aplicamos la rotación en 3D + una ligera escala de elevación
       card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
     });
 
-    // Cuando el ratón sale de la tarjeta, vuelve suavemente a su posición original
     card.addEventListener("mouseleave", () => {
       card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
     });
   });
 });
+
+// =========================================
+// SELECTOR DE ÉPOCAS (data-era + localStorage)
+// Oro & Noche = tu claro/oscuro de siempre.
+// Las otras 3 fijan su propio tema y ocultan el toggle.
+// =========================================
+(function () {
+  const root = document.documentElement;
+  const themeBtn = document.getElementById("theme-toggle");
+  const eraBtns = document.querySelectorAll(".era-btn");
+  if (!eraBtns.length) return;
+
+  const NATURAL = {
+    "oro-noche": "dark",
+    "cobre-esmeralda": "dark",
+    "plata-carbon": "dark",
+    "bronce-perla": "light"
+  };
+
+  function applyEra(era, save) {
+    root.setAttribute("data-era", era);
+    if (era !== "oro-noche") {
+      root.setAttribute("data-theme", NATURAL[era]);
+      if (themeBtn) themeBtn.style.display = "none";
+    } else {
+      if (themeBtn) themeBtn.style.display = "";
+      const t = localStorage.getItem("theme");
+      if (t) root.setAttribute("data-theme", t);
+    }
+    eraBtns.forEach(b => {
+      const on = b.dataset.era === era;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", String(on));
+    });
+    if (save) localStorage.setItem("era", era);
+  }
+
+  applyEra(localStorage.getItem("era") || "oro-noche", false);
+  eraBtns.forEach(b => b.addEventListener("click", () => applyEra(b.dataset.era, true)));
+})();

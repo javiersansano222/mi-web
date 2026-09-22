@@ -48,7 +48,7 @@
   <!-- Decoración superior estilo Art Déco -->
   <div class="deco-top" aria-hidden="true"></div>
 
-    <header class="site-header" id= "inicio">
+    <header class="header">
     <div class="header-container">
       <a href="#inicio" class="brand-logo">J. Sansano</a>
 
@@ -68,6 +68,14 @@
           <li><a href="#contacto">Contacto</a></li>
         </ul>
       </nav>
+
+      <!-- Selector de épocas -->
+      <div class="era-selector" role="group" aria-label="Selector de época">
+        <button class="era-btn is-active" type="button" data-era="oro-noche" aria-pressed="true">Oro &amp; Noche</button>
+        <button class="era-btn" type="button" data-era="cobre-esmeralda" aria-pressed="false">Cobre &amp; Esmeralda</button>
+        <button class="era-btn" type="button" data-era="plata-carbon" aria-pressed="false">Plata &amp; Carbón</button>
+        <button class="era-btn" type="button" data-era="bronce-perla" aria-pressed="false">Bronce &amp; Perla</button>
+      </div>
 
       <!-- Botón cambio de tema -->
       <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Cambiar a modo claro">
