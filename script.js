@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const textElement = document.getElementById("typewriter-text");
   
   if (textElement) {
-    const textToType = "Construyo mi futuro línea a línea: disciplina hoy, código mañana, grandeza siempre.";
+    const textToType = "Construyo mi futuro línea a línea: codigo,constancia, y estilo Art deco: asi construyo mi futuro";
     let index = 0;
     const speed = 45; // Velocidad de escritura en milisegundos por letra
 
