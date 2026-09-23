@@ -1,247 +1,353 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Año dinámico en el pie de página
-  const year = document.getElementById("year");
+(() => {
+  "use strict";
+
+  const root = document.documentElement;
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+
+  const safeGet = (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  };
+
+  const safeSet = (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // El sitio sigue funcionando aunque el navegador bloquee el almacenamiento.
+    }
+  };
+
+  const eras = [
+    "oro-noche",
+    "cobre-esmeralda",
+    "plata-carbon",
+    "coral-abismo"
+  ];
+
+  const year = $("#year");
   if (year) {
-    year.textContent = new Date().getFullYear();
+    year.textContent = String(new Date().getFullYear());
   }
 
-  // 2. Lógica para abrir/cerrar el menú responsivo (Hamburguesa)
-  const navToggle = document.getElementById("nav-toggle");
-  const mainNav = document.getElementById("main-nav");
+  const eraSelect = $("#era-select");
+  const storedEra = safeGet("portfolio-era");
 
-  if (navToggle && mainNav) {
-    navToggle.addEventListener("click", () => {
-      navToggle.classList.toggle("open");
-      mainNav.classList.toggle("nav-open");
-    });
+  if (storedEra && eras.includes(storedEra)) {
+    root.dataset.era = storedEra;
+  }
 
-    const navLinks = mainNav.querySelectorAll("a");
-    navLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        navToggle.classList.remove("open");
-        mainNav.classList.remove("nav-open");
-      });
+  if (eraSelect) {
+    eraSelect.value = eras.includes(root.dataset.era)
+      ? root.dataset.era
+      : "oro-noche";
+
+    eraSelect.addEventListener("change", () => {
+      if (!eras.includes(eraSelect.value)) return;
+
+      root.dataset.era = eraSelect.value;
+      safeSet("portfolio-era", eraSelect.value);
     });
   }
 
-  // 3. Barra de progreso de lectura al hacer scroll
-  const progressBar = document.getElementById("scroll-progress");
-  if (progressBar) {
-    window.addEventListener(
-      "scroll",
-      () => {
-        const winScroll = document.documentElement.scrollTop;
-        const height =
-          document.documentElement.scrollHeight -
-          document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        progressBar.style.width = scrolled + "%";
-      },
-      { passive: true }
+  const themeToggle = $("#theme-toggle");
+  const storedTheme = safeGet("portfolio-theme");
+
+  if (storedTheme === "light" || storedTheme === "dark") {
+    root.dataset.theme = storedTheme;
+  }
+
+  const syncThemeControl = () => {
+    if (!themeToggle) return;
+
+    const light = root.dataset.theme === "light";
+    themeToggle.setAttribute("aria-pressed", String(light));
+    themeToggle.setAttribute(
+      "aria-label",
+      light ? "Cambiar a tema oscuro" : "Cambiar a tema claro"
     );
-  }
+  };
 
-  // 4. Animación de aparición escalonada (Stagger Effect)
-  const reveals = document.querySelectorAll(".reveal");
+  syncThemeControl();
+
+  themeToggle?.addEventListener("click", () => {
+    root.dataset.theme =
+      root.dataset.theme === "light" ? "dark" : "light";
+
+    safeSet("portfolio-theme", root.dataset.theme);
+    syncThemeControl();
+  });
+
+  const navToggle = $("#nav-toggle");
+  const mainNav = $("#main-nav");
+
+  const setMenu = (open) => {
+    if (!navToggle || !mainNav) return;
+
+    navToggle.setAttribute("aria-expanded", String(open));
+    navToggle.setAttribute(
+      "aria-label",
+      open ? "Cerrar menú" : "Abrir menú"
+    );
+    mainNav.classList.toggle("nav-open", open);
+  };
+
+  navToggle?.addEventListener("click", () => {
+    setMenu(navToggle.getAttribute("aria-expanded") !== "true");
+  });
+
+  $$("a", mainNav || document).forEach((link) => {
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      mainNav?.classList.contains("nav-open") &&
+      !mainNav.contains(event.target) &&
+      !navToggle?.contains(event.target)
+    ) {
+      setMenu(false);
+    }
+  });
+
+  const progress = $("#scroll-progress");
+  let scrollQueued = false;
+
+  const updateProgress = () => {
+    if (!progress) return;
+
+    const max =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const value =
+      max > 0
+        ? Math.min(100, Math.max(0, (window.scrollY / max) * 100))
+        : 0;
+
+    progress.style.width = `${value}%`;
+    progress.setAttribute("aria-valuenow", String(Math.round(value)));
+    scrollQueued = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!scrollQueued) {
+        window.requestAnimationFrame(updateProgress);
+        scrollQueued = true;
+      }
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("resize", updateProgress, { passive: true });
+  updateProgress();
+
+  const revealItems = $$(".reveal");
 
   if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-
-            const cards = entry.target.querySelectorAll(".card, .timeline li");
-            cards.forEach((card, index) => {
-              setTimeout(() => {
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-              }, index * 120);
-            });
-
+            entry.target.classList.add("is-visible");
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -35px 0px"
+      }
     );
 
-    reveals.forEach((el) => observer.observe(el));
+    revealItems.forEach((item) => revealObserver.observe(item));
   } else {
-    reveals.forEach((el) => el.classList.add("visible"));
+    revealItems.forEach((item) => item.classList.add("is-visible"));
   }
 
-  // 5. Parpadeo dinámico aleatorio para las luces de las torres Art Déco
-  const windows = document.querySelectorAll(".tower-body .win");
-  if (windows.length > 0) {
-    setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * windows.length);
-      windows[randomIndex].classList.toggle("on");
-    }, 1800);
+  const typewriter = $("#typewriter");
+  const phrases = [
+    "ser programador",
+    "crear proyectos diferentes",
+    "no rendirme ante un reto"
+  ];
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+  if (typewriter && !reduceMotion.matches) {
+    let phraseIndex = 0;
+    let letterIndex = phrases[0].length;
+    let deleting = true;
+
+    const type = () => {
+      const phrase = phrases[phraseIndex];
+      letterIndex += deleting ? -1 : 1;
+      typewriter.textContent = phrase.slice(0, letterIndex);
+
+      let delay = deleting ? 42 : 75;
+
+      if (letterIndex <= 0) {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        delay = 380;
+      }
+
+      if (
+        letterIndex >= phrases[phraseIndex].length &&
+        !deleting
+      ) {
+        deleting = true;
+        delay = 1450;
+      }
+
+      window.setTimeout(type, delay);
+    };
+
+    window.setTimeout(type, 1700);
   }
 
-  // 6. Desplazamiento suave para enlaces internos
-  const internalLinks = document.querySelectorAll('a[href^="#"]');
+  const cards = $$("[data-tilt]");
+  const finePointer = window.matchMedia(
+    "(hover: hover) and (pointer: fine)"
+  );
 
-  internalLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      const href = link.getAttribute("href");
-      const target = document.querySelector(href);
+  if (finePointer.matches && !reduceMotion.matches) {
+    cards.forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const bounds = card.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+        const y = (event.clientY - bounds.top) / bounds.height - 0.5;
 
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth" });
-      }
+        card.style.transform =
+          `perspective(900px) rotateX(${-y * 3}deg) ` +
+          `rotateY(${x * 3}deg) translateY(-2px)`;
+      });
+
+      card.addEventListener("pointerleave", () => {
+        card.style.transform = "";
+      });
     });
-  });
+  }
 
-  // 7. Resaltar enlace activo de navegación al hacer scroll
-  const sections = document.querySelectorAll("section[id], footer[id]");
-  const navLinks = document.querySelectorAll(".main-nav a");
+  const canvas = $("#particles");
+  const context = canvas?.getContext("2d", { alpha: true });
 
-  const activateLink = () => {
-    let currentId = "";
+  if (canvas && context && !reduceMotion.matches) {
+    let width = 0;
+    let height = 0;
+    let particles = [];
+    let frame = 0;
 
-    sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 140;
+    const pointer = {
+      x: -1000,
+      y: -1000,
+      active: false
+    };
 
-      if (window.scrollY >= sectionTop) {
-        currentId = section.getAttribute("id");
-      }
-    });
+    const particleCount = () =>
+      Math.min(48, Math.max(18, Math.floor(window.innerWidth / 28)));
 
-    navLinks.forEach((link) => {
-      link.classList.remove("active");
+    const resizeCanvas = () => {
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
 
-      if (link.getAttribute("href") === `#${currentId}`) {
-        link.classList.add("active");
-      }
-    });
-  };
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
 
-  window.addEventListener("scroll", activateLink, { passive: true });
-  activateLink();
-});
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-// 8. Modo claro / oscuro con persistencia en localStorage
-(function () {
-  const root = document.documentElement;
-  const btn = document.getElementById("theme-toggle");
-  if (!btn) return;
+      particles = Array.from(
+        { length: particleCount() },
+        () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.7 + 0.4,
+          speed: Math.random() * 0.22 + 0.08,
+          phase: Math.random() * Math.PI * 2
+        })
+      );
+    };
 
-  const saved = localStorage.getItem("theme");
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-  root.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
+    const draw = () => {
+      context.clearRect(0, 0, width, height);
+      const time = performance.now() * 0.001;
 
-  function sync() {
-    const light = root.getAttribute("data-theme") === "light";
-    btn.setAttribute("aria-pressed", String(light));
-    btn.setAttribute(
-      "aria-label",
-      light ? "Cambiar a modo oscuro" : "Cambiar a modo claro"
+      particles.forEach((particle) => {
+        particle.y -= particle.speed;
+        particle.x += Math.sin(time + particle.phase) * 0.13;
+
+        if (particle.y < -4) {
+          particle.y = height + 4;
+          particle.x = Math.random() * width;
+        }
+
+        let alpha =
+          0.28 + Math.sin(time * 0.8 + particle.phase) * 0.14;
+
+        if (pointer.active) {
+          const dx = pointer.x - particle.x;
+          const dy = pointer.y - particle.y;
+
+          if (dx * dx + dy * dy < 90 * 90) {
+            alpha = 0.78;
+          }
+        }
+
+        context.beginPath();
+        context.fillStyle = `rgba(230, 204, 139, ${alpha})`;
+        context.arc(
+          particle.x,
+          particle.y,
+          particle.r,
+          0,
+          Math.PI * 2
+        );
+        context.fill();
+      });
+
+      frame = window.requestAnimationFrame(draw);
+    };
+
+    resizeCanvas();
+    draw();
+
+    window.addEventListener("resize", resizeCanvas, { passive: true });
+
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+        pointer.active = true;
+      },
+      { passive: true }
     );
-  }
-  sync();
 
-  btn.addEventListener("click", () => {
-    const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
-    root.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    sync();
-  });
-})();
+    window.addEventListener(
+      "pointerleave",
+      () => {
+        pointer.active = false;
+      },
+      { passive: true }
+    );
 
-// =========================================
-// EFECTO MÁQUINA DE ESCRIBIR MÍSTICA / ART DÉCO
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-  const textElement = document.getElementById("typewriter-text");
-
-  if (textElement) {
-    const textToType = "Construyo mi futuro línea a línea: codigo,constancia, y estilo Art deco: asi construyo mi futuro";
-    let index = 0;
-    const speed = 45;
-
-    function typeWriter() {
-      if (index < textToType.length) {
-        const char = textToType.charAt(index);
-
-        const charSpan = document.createElement("span");
-        charSpan.classList.add("type-char");
-        charSpan.textContent = char;
-
-        textElement.appendChild(charSpan);
-        index++;
-
-        const randomSpeed = speed + Math.random() * 30 - 15;
-        setTimeout(typeWriter, randomSpeed);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(frame);
+      } else if (!reduceMotion.matches) {
+        draw();
       }
-    }
-
-    setTimeout(typeWriter, 500);
+    });
   }
-});
-
-// =========================================
-// EFECTO TILT 3D INTERACTIVO PARA TARJETAS
-// =========================================
-document.addEventListener("DOMContentLoaded", () => {
-  const cards = document.querySelectorAll(".card");
-
-  cards.forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      const rotateX = (-y / rect.height) * 15;
-      const rotateY = (x / rect.width) * 15;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
-    });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-    });
-  });
-});
-
-// =========================================
-// SELECTOR DE ÉPOCAS (data-era + localStorage)
-// Oro & Noche = tu claro/oscuro de siempre.
-// Las otras 3 fijan su propio tema y ocultan el toggle.
-// =========================================
-(function () {
-  const root = document.documentElement;
-  const themeBtn = document.getElementById("theme-toggle");
-  const eraBtns = document.querySelectorAll(".era-btn");
-  if (!eraBtns.length) return;
-
-  const NATURAL = {
-    "oro-noche": "dark",
-    "cobre-esmeralda": "dark",
-    "plata-carbon": "dark",
-    "bronce-perla": "light"
-  };
-
-  function applyEra(era, save) {
-    root.setAttribute("data-era", era);
-    if (era !== "oro-noche") {
-      root.setAttribute("data-theme", NATURAL[era]);
-      if (themeBtn) themeBtn.style.display = "none";
-    } else {
-      if (themeBtn) themeBtn.style.display = "";
-      const t = localStorage.getItem("theme");
-      if (t) root.setAttribute("data-theme", t);
-    }
-    eraBtns.forEach(b => {
-      const on = b.dataset.era === era;
-      b.classList.toggle("is-active", on);
-      b.setAttribute("aria-pressed", String(on));
-    });
-    if (save) localStorage.setItem("era", era);
-  }
-
-  applyEra(localStorage.getItem("era") || "oro-noche", false);
-  eraBtns.forEach(b => b.addEventListener("click", () => applyEra(b.dataset.era, true)));
 })();
