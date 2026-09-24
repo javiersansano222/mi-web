@@ -1668,3 +1668,335 @@ button:focus-visible, a:focus-visible, select:focus-visible{
   .pc__caption-body{ font-size: 14px }
   .pc__caption-line{ font-size: 17px }
 }
+
+
+/* =========================================================
+   21. CONTROLES DEL HEADER (paletas + tema)
+   Estilo Art Déco refinado
+   ========================================================= */
+
+.header-tools{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ---------------------------------------------------------
+   Base común para los dos controles
+   --------------------------------------------------------- */
+.era-select,
+.theme-toggle{
+  position: relative;
+  height: 40px;
+  border: 1px solid var(--gold);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 80%, transparent) 100%);
+  color: var(--gold-bright);
+  font: 500 11px var(--serif);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background .3s,
+    border-color .3s,
+    box-shadow .3s,
+    transform .2s;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 15%, transparent),
+    0 2px 8px rgba(0, 0, 0, .25);
+}
+
+/* Filete interior (segundo borde) */
+.era-select::after,
+.theme-toggle::after{
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+  pointer-events: none;
+  transition: border-color .3s;
+}
+
+.era-select:hover,
+.theme-toggle:hover{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--gold) 18%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 70%, transparent) 100%);
+  border-color: var(--gold-bright);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent),
+    0 0 18px color-mix(in srgb, var(--gold) 35%, transparent),
+    0 4px 12px rgba(0, 0, 0, .35);
+}
+
+.era-select:hover::after,
+.theme-toggle:hover::after{
+  border-color: color-mix(in srgb, var(--gold-bright) 50%, transparent);
+}
+
+.era-select:active,
+.theme-toggle:active{
+  transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------
+   Select de paletas
+   --------------------------------------------------------- */
+.era-select{
+  padding: 0 38px 0 16px;
+  max-width: 165px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: var(--gold-bright);
+}
+
+/* El chevron del select (dibujado en CSS) */
+.era-select + * ,
+.header-tools::before{
+  /* No usamos esto, es solo referencia visual */
+}
+
+/* Truco: envolvemos el select con un contenedor con el chevron */
+.header-tools{
+  position: relative;
+}
+.header-tools::after{
+  content: "▾";
+  position: absolute;
+  right: 60px;         /* posición del chevron (ajustar si es necesario) */
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold-bright);
+  font-size: 11px;
+  pointer-events: none;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--gold) 50%, transparent);
+}
+
+/* ---------------------------------------------------------
+   Botón de tema (sol / luna)
+   --------------------------------------------------------- */
+.theme-toggle{
+  width: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 0;         /* oculta el ◐ original */
+  overflow: hidden;
+}
+
+/* Icono dibujado con CSS: círculo dorado + sombra */
+.theme-toggle::before{
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--gold) 70%, transparent);
+  transition: transform .3s, background .3s;
+}
+
+/* Cuando el tema es claro, el icono se convierte en "sol lleno" */
+html[data-theme="light"] .theme-toggle::before{
+  background: #f0c040;
+  box-shadow: 0 0 12px #f0c040;
+}
+
+/* Cuando el tema es oscuro, "media luna" con sombra interior */
+html[data-theme="dark"] .theme-toggle::before{
+  background: var(--gold-bright);
+  box-shadow:
+    inset -4px -2px 0 0 var(--bg),
+    0 0 8px color-mix(in srgb, var(--gold) 70%, transparent);
+}
+
+.theme-toggle:hover::before{
+  transform: scale(1.15);
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  .header-tools{ gap: 8px }
+  .era-select{
+    height: 34px;
+    padding: 0 30px 0 12px;
+    max-width: 125px;
+    font-size: 10px;
+    letter-spacing: .1em;
+  }
+  .theme-toggle{ width: 34px; height: 34px }
+  .theme-toggle::before{ width: 12px; height: 12px }
+  .header-tools::after{
+    right: 52px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px){
+  .era-select{ max-width: 100px; padding: 0 24px 0 8px; font-size: 9px }
+  .header-tools::after{ right: 42px }
+}
+
+
+/* =========================================================
+   22. ENLACES PROFESIONALES (Outlook, GitHub, LinkedIn)
+   ========================================================= */
+.contact-links{
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px dashed var(--line-soft);
+  position: relative;
+}
+
+/* Pequeño diamante decorativo sobre la línea */
+.contact-links::before{
+  content: "◆";
+  position: absolute;
+  top: -8px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg);
+  padding: 0 10px;
+  color: var(--gold);
+  font-size: 10px;
+}
+
+.contact-links__label{
+  margin: 0 0 18px;
+  font: italic 13px var(--serif);
+  color: var(--muted);
+  letter-spacing: .08em;
+}
+
+.contact-links__row{
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------
+   Cada botón
+   --------------------------------------------------------- */
+.contact-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  min-width: 180px;
+  border: 1px solid var(--gold);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 78%, transparent) 100%);
+  color: var(--gold-bright);
+  text-decoration: none;
+  position: relative;
+  transition:
+    background .3s,
+    border-color .3s,
+    box-shadow .3s,
+    transform .2s;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 15%, transparent),
+    0 4px 14px rgba(0, 0, 0, .25);
+}
+
+/* Filete interior doble (Art Déco) */
+.contact-link::after{
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  pointer-events: none;
+  transition: border-color .3s;
+}
+
+.contact-link:hover{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--gold) 22%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 68%, transparent) 100%);
+  border-color: var(--gold-bright);
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 35%, transparent),
+    0 0 22px color-mix(in srgb, var(--gold) 40%, transparent),
+    0 8px 22px rgba(0, 0, 0, .35);
+}
+
+.contact-link:hover::after{
+  border-color: color-mix(in srgb, var(--gold-bright) 55%, transparent);
+}
+
+/* Icono */
+.contact-link__icon{
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+  color: var(--gold-bright);
+  transition: color .3s, border-color .3s, transform .3s;
+}
+
+.contact-link:hover .contact-link__icon{
+  color: #fff;
+  border-color: var(--gold-bright);
+  transform: rotate(-6deg) scale(1.05);
+}
+
+/* Texto */
+.contact-link__text{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.contact-link__text strong{
+  font: 600 12px var(--serif);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition: color .3s;
+}
+
+.contact-link:hover .contact-link__text strong{
+  color: #fff;
+}
+
+.contact-link__text small{
+  font: italic 10px var(--serif);
+  color: var(--muted);
+  letter-spacing: .04em;
+  margin-top: 2px;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  .contact-links{ margin-top: 28px; padding-top: 22px }
+  .contact-links__label{ font-size: 12px; margin-bottom: 14px }
+  .contact-links__row{
+    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contact-link{
+    min-width: 0;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .contact-link__icon{ width: 34px; height: 34px }
+  .contact-link__text strong{ font-size: 11px }
+  .contact-link__text small{ font-size: 9px }
+}
