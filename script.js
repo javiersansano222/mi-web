@@ -1,4 +1,4 @@
-(() => {
+() => {
   "use strict";
 
   const root = document.documentElement;
@@ -350,4 +350,53 @@
       }
     });
   }
+
+    /* =========================================================
+     CONTADOR "COSAS QUE HE HECHO"
+     ========================================================= */
+
+  // 1. Cogemos las referencias del DOM
+  //    counter    → el contenedor (.counter) que lleva la clase is-open
+  //    counterHead → el botón (.counter__head) que recibe el clic
+  const counter = $("#counter");
+  const counterHead = $(".counter__head");
+
+  // 2. Función que abre o cierra el contador
+  //    Recibe un booleano: true = abrir, false = cerrar
+  const setCounter = (open) => {
+    // Si no existe el contador en el DOM, no hacemos nada (por seguridad)
+    if (!counter || !counterHead) return;
+
+    // Añade o quita la clase .is-open del contenedor
+    // classList.toggle("is-open", true)  → añade la clase
+    // classList.toggle("is-open", false) → quita la clase
+    counter.classList.toggle("is-open", open);
+
+    // Actualiza el atributo aria-expanded para accesibilidad
+    // (los lectores de pantalla sabrán si está abierto o cerrado)
+    counterHead.setAttribute("aria-expanded", String(open));
+
+    // Guarda el estado en localStorage
+    // "open" o "closed" → así al recargar recordamos cómo estaba
+    safeSet("portfolio-counter", open ? "open" : "closed");
+  };
+
+  // 3. Al cargar la página, leemos la preferencia guardada
+  //    Si el usuario dejó el contador abierto, lo abrimos otra vez
+  const storedCounter = safeGet("portfolio-counter");
+  if (storedCounter === "open") {
+    setCounter(true);
+  }
+
+  // 4. Escuchamos el clic en la cabecera
+  //    El símbolo "?." (optional chaining) evita error si counterHead es null
+  counterHead?.addEventListener("click", () => {
+    // ¿Está abierto AHORA MISMO?
+    const isOpen = counter?.classList.contains("is-open");
+
+    // Si está abierto (true), lo cerramos (false)
+    // Si está cerrado (false), lo abrimos (true)
+    // El "!" invierte el valor: !true = false, !false = true
+    setCounter(!isOpen);
+  });
 })();
