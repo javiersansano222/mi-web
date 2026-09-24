@@ -1598,4 +1598,73 @@ button:focus-visible, a:focus-visible, select:focus-visible{
   .pc__caption-line{ font-size: 16px; margin-bottom: 12px }
   .pc__caption-body{ font-size: 12px; line-height: 1.8 }
 }
- 
+
+
+/* =========================================================
+   19. AJUSTE DE TAMAÑO DE TEXTO (párrafos)
+   ========================================================= */
+
+/* Párrafo del hero (el "Soy Javier Sansano...") */
+.hero__intro{
+  font-size: 16px;
+  line-height: 2;
+}
+
+/* Párrafos de secciones (Intro, etc.) */
+.intro__body p{
+  font-size: 15px;
+  line-height: 2;
+}
+
+/* El "lead" (la frase destacada en cursiva) */
+.intro__body .lead{
+  font-size: 24px;
+  line-height: 1.5;
+}
+
+/* Párrafos de las tarjetas de proyectos */
+.project-info p:not(.project-kicker){
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+/* Párrafos del timeline */
+.timeline-item p{
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+/* Párrafo de contacto */
+.contact-frame > p:not(.eyebrow){
+  font-size: 14px;
+  line-height: 2;
+}
+
+/* Texto del contador (los ítems de la lista) */
+.counter__list li{
+  font-size: 14px;
+}
+
+/* Descripción debajo de la foto del PC */
+.pc__caption-body{
+  font-size: 15px;
+  line-height: 2;
+}
+.pc__caption-line{
+  font-size: 20px;
+}
+
+/* =========================================================
+   20. RESPONSIVE (para móvil)
+   ========================================================= */
+@media (max-width: 700px){
+  .hero__intro{ font-size: 15px }
+  .intro__body p{ font-size: 14px }
+  .intro__body .lead{ font-size: 20px }
+  .project-info p:not(.project-kicker){ font-size: 11px }
+  .timeline-item p{ font-size: 11px }
+  .contact-frame > p:not(.eyebrow){ font-size: 13px }
+  .counter__list li{ font-size: 13px }
+  .pc__caption-body{ font-size: 14px }
+  .pc__caption-line{ font-size: 17px }
+}
