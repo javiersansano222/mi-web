@@ -2000,3 +2000,386 @@ html[data-theme="dark"] .theme-toggle::before{
   .contact-link__text strong{ font-size: 11px }
   .contact-link__text small{ font-size: 9px }
 }
+
+
+
+/* =========================================================
+   23. LEGIBILIDAD: contraste mejorado
+   Subimos el brillo de los textos secundarios y ajustamos
+   los tamaños para que se lean sin esfuerzo.
+   ========================================================= */
+
+/* Texto secundario: más claro */
+:root{
+  --muted: #b8c2ce;
+}
+
+/* Tema claro: más oscuro para contrastar con fondo claro */
+html[data-theme="light"]{
+  --muted: #4a5261;
+}
+
+/* Paletas específicas: ajustamos el --muted por si quedaba muy bajo */
+html[data-era="cobre-esmeralda"]{ --muted: #b8c8c2; }
+html[data-era="plata-carbon"]    { --muted: #c0c8d0; }
+html[data-era="coral-abismo"]    { --muted: #c8c0d0; }
+
+/* ---------------------------------------------------------
+   Refuerzos de legibilidad por elemento
+   --------------------------------------------------------- */
+
+/* El hero intro: le subimos un poco el color también */
+.hero__intro{
+  color: #d8dce4;
+}
+
+/* Los párrafos de intro y secciones: */
+.intro__body p{
+  color: #c8d2dc;
+}
+
+/* Los párrafos del timeline: */
+.timeline-item p{
+  color: #c0cad6;
+}
+
+/* Los párrafos de las tarjetas de proyectos: */
+.project-info p:not(.project-kicker){
+  color: #c0cad6;
+}
+
+/* El párrafo del contacto: */
+.contact-frame > p:not(.eyebrow){
+  color: #c8d2dc;
+}
+
+/* La descripción bajo la foto del PC: */
+.pc__caption-body{
+  color: #c8d2dc;
+}
+
+/* Los ítems del contador: */
+.counter__list li{
+  color: #e0e6ee;
+}
+
+/* Los tooltips de los hotspots: */
+.hotspot__tip small{
+  color: #d0d8e2;
+}
+
+/* El texto de los botones de contacto: */
+.contact-link__text small{
+  color: #c0cad6;
+}
+
+/* Los textos pequeños del footer y notas: */
+.footer-note,
+.contact__small,
+.section-index,
+.timeline-date,
+.projects-note{
+  color: #c0cad6;
+}
+
+/* ---------------------------------------------------------
+   Tema claro: ajustamos los mismos elementos
+   --------------------------------------------------------- */
+html[data-theme="light"] .hero__intro,
+html[data-theme="light"] .intro__body p,
+html[data-theme="light"] .timeline-item p,
+html[data-theme="light"] .project-info p:not(.project-kicker),
+html[data-theme="light"] .contact-frame > p:not(.eyebrow),
+html[data-theme="light"] .pc__caption-body{
+  color: #3a4250;
+}
+
+html[data-theme="light"] .counter__list li{
+  color: #2a3240;
+}
+
+html[data-theme="light"] .hotspot__tip small,
+html[data-theme="light"] .contact-link__text small{
+  color: #3a4250;
+}
+
+
+/* =========================================================
+   24. HEADER: contraste de letras según tema
+   Modo oscuro → letras blancas
+   Modo claro  → letras oscuras
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   MODO OSCURO (por defecto)
+   --------------------------------------------------------- */
+
+/* Navegación: links blancos en reposo */
+html[data-theme="dark"] .nav a{
+  color: #ffffff;
+  opacity: .85;
+}
+html[data-theme="dark"] .nav a:hover{
+  color: var(--gold-bright);
+  opacity: 1;
+}
+
+/* Nombre de la marca: blanco puro */
+html[data-theme="dark"] .brand__name{
+  color: #ffffff;
+}
+html[data-theme="dark"] .brand__name small{
+  color: #d8dce4;   /* un pelín más suave que el nombre, pero claro */
+}
+
+/* Sello JS: mantener el dorado */
+html[data-theme="dark"] .brand__seal{
+  color: var(--gold-bright);
+}
+
+/* ---------------------------------------------------------
+   MODO CLARO
+   --------------------------------------------------------- */
+
+/* Navegación: links oscuros en reposo */
+html[data-theme="light"] .nav a{
+  color: #1a1a1f;
+  opacity: .85;
+}
+html[data-theme="light"] .nav a:hover{
+  color: #000000;
+  opacity: 1;
+}
+
+/* Nombre de la marca: negro puro */
+html[data-theme="light"] .brand__name{
+  color: #0a0a0f;
+}
+html[data-theme="light"] .brand__name small{
+  color: #2a2a30;
+}
+
+/* Sello JS: sigue dorado pero con más contraste */
+html[data-theme="light"] .brand__seal{
+  color: #8c6a25;   /* dorado oscuro para que se lea sobre fondo claro */
+  border-color: #8c6a25;
+}
+html[data-theme="light"] .brand__seal::after{
+  border-color: rgba(140, 106, 37, .5);
+}
+
+/* ---------------------------------------------------------
+   Otros elementos del header
+   --------------------------------------------------------- */
+
+/* El botón hamburguesa (móvil): blanco en oscuro, negro en claro */
+html[data-theme="dark"] .nav-toggle span{
+  background: #ffffff;
+}
+html[data-theme="light"] .nav-toggle span{
+  background: #1a1a1f;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  /* En móvil, los links del menú desplegable */
+  html[data-theme="dark"] .nav a{
+    color: #ffffff;
+  }
+  html[data-theme="light"] .nav a{
+    color: #1a1a1f;
+  }
+}
+/* =========================================================
+   25. TEXTO BLANCO EN OSCURO / OSCURO EN CLARO (global)
+   Modo oscuro → texto blanco
+   Modo claro  → texto oscuro
+   Mantiene el dorado como acento.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   MODO OSCURO: todo el texto principal a blanco
+   --------------------------------------------------------- */
+html[data-theme="dark"]{
+  --ink:  #ffffff;   /* texto principal → blanco puro */
+  --muted: #dde3ea;  /* texto secundario → blanco suave */
+}
+
+/* Refuerzos por si algún elemento tiene color propio */
+html[data-theme="dark"] body,
+html[data-theme="dark"] .hero__intro,
+html[data-theme="dark"] .intro__body p,
+html[data-theme="dark"] .intro__body .lead,
+html[data-theme="dark"] .timeline-item p,
+html[data-theme="dark"] .timeline-item h3,
+html[data-theme="dark"] .project-info h3,
+html[data-theme="dark"] .project-info p:not(.project-kicker),
+html[data-theme="dark"] .contact-frame > p:not(.eyebrow),
+html[data-theme="dark"] .pc__caption-body,
+html[data-theme="dark"] .counter__list li,
+html[data-theme="dark"] .future-window strong,
+html[data-theme="dark"] .mini-layout__title,
+html[data-theme="dark"] .game__meta strong{
+  color: #ffffff;
+}
+
+/* Los textos secundarios se quedan en blanco suave */
+html[data-theme="dark"] .hero__note,
+html[data-theme="dark"] .projects-note,
+html[data-theme="dark"] .footer-note,
+html[data-theme="dark"] .contact__small,
+html[data-theme="dark"] .section-index,
+html[data-theme="dark"] .timeline-date,
+html[data-theme="dark"] .hotspot__tip small,
+html[data-theme="dark"] .contact-link__text small,
+html[data-theme="dark"] .game__meta small,
+html[data-theme="dark"] .pc__caption-line,
+html[data-theme="dark"] .future-window span,
+html[data-theme="dark"] .future-window small,
+html[data-theme="dark"] .brand__name small,
+html[data-theme="dark"] .counter__title{
+  color: #dde3ea;
+}
+
+/* El dorado se mantiene dorado en modo oscuro */
+html[data-theme="dark"] .eyebrow,
+html[data-theme="dark"] .project-kicker,
+html[data-theme="dark"] .counter__list li span,
+html[data-theme="dark"] .timeline-date,
+html[data-theme="dark"] .section-index,
+html[data-theme="dark"] .contact__ornament,
+html[data-theme="dark"] .art-cross{
+  color: var(--gold-bright);
+}
+
+/* El lead del intro y los em mantienen el dorado */
+html[data-theme="dark"] .hero h1 span,
+html[data-theme="dark"] .section-heading em,
+html[data-theme="dark"] .contact h2 em{
+  color: var(--gold-bright);
+}
+
+/* ---------------------------------------------------------
+   MODO CLARO: todo el texto principal a oscuro
+   --------------------------------------------------------- */
+html[data-theme="light"]{
+  --ink:  #0a0a0f;   /* texto principal → casi negro */
+  --muted: #3a4250;  /* texto secundario → gris oscuro */
+}
+
+html[data-theme="light"] body,
+html[data-theme="light"] .hero__intro,
+html[data-theme="light"] .intro__body p,
+html[data-theme="light"] .intro__body .lead,
+html[data-theme="light"] .timeline-item p,
+html[data-theme="light"] .timeline-item h3,
+html[data-theme="light"] .project-info h3,
+html[data-theme="light"] .project-info p:not(.project-kicker),
+html[data-theme="light"] .contact-frame > p:not(.eyebrow),
+html[data-theme="light"] .pc__caption-body,
+html[data-theme="light"] .counter__list li,
+html[data-theme="light"] .future-window strong,
+html[data-theme="light"] .mini-layout__title,
+html[data-theme="light"] .game__meta strong{
+  color: #0a0a0f;
+}
+
+html[data-theme="light"] .hero__note,
+html[data-theme="light"] .projects-note,
+html[data-theme="light"] .footer-note,
+html[data-theme="light"] .contact__small,
+html[data-theme="light"] .section-index,
+html[data-theme="light"] .timeline-date,
+html[data-theme="light"] .hotspot__tip small,
+html[data-theme="light"] .contact-link__text small,
+html[data-theme="light"] .game__meta small,
+html[data-theme="light"] .pc__caption-line,
+html[data-theme="light"] .future-window span,
+html[data-theme="light"] .future-window small,
+html[data-theme="light"] .brand__name small,
+html[data-theme="light"] .counter__title{
+  color: #3a4250;
+}
+
+/* Dorado en modo claro: usamos el dorado oscuro para contraste */
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .project-kicker,
+html[data-theme="light"] .counter__list li span,
+html[data-theme="light"] .section-index,
+html[data-theme="light"] .art-cross{
+  color: #8c6a25;
+}
+
+html[data-theme="light"] .hero h1 span,
+html[data-theme="light"] .section-heading em,
+html[data-theme="light"] .contact h2 em{
+  color: #8c6a25;
+}
+
+/* El botón gold: texto oscuro sobre fondo dorado */
+html[data-theme="light"] .button--gold{
+  color: #0a0a0f;
+}
+
+html[data-theme="dark"] .button--gold{
+  color: #1a1208;
+}
+
+/* ---------------------------------------------------------
+   Textos de los botones del header
+   --------------------------------------------------------- */
+html[data-theme="dark"] .era-select,
+html[data-theme="dark"] .theme-toggle{
+  color: #ffffff;
+}
+html[data-theme="light"] .era-select,
+html[data-theme="light"] .theme-toggle{
+  color: #0a0a0f;
+}
+
+
+/* =========================================================
+   26. HEADER SIEMPRE OSCURO CON LETRAS BLANCAS
+   ========================================================= */
+
+/* Fondo del header siempre oscuro */
+.site-header{
+  background: #0a1220 !important;
+  border-bottom: 1px solid rgba(212, 168, 75, .35) !important;
+}
+
+/* Nombre de la marca siempre blanco */
+.brand__name{
+  color: #ffffff !important;
+}
+.brand__name small{
+  color: #dde3ea !important;
+}
+
+/* Navegación siempre blanca */
+.nav a{
+  color: #ffffff !important;
+  opacity: .85;
+}
+.nav a:hover{
+  color: var(--gold-bright) !important;
+  opacity: 1;
+}
+
+/* Los controles del header con texto blanco */
+.era-select,
+.theme-toggle{
+  color: #ffffff !important;
+}
+
+/* El chevron del select siempre dorado */
+.header-tools::after{
+  color: var(--gold-bright) !important;
+}
+
+/* El botón hamburguesa siempre blanco */
+.nav-toggle span{
+  background: #ffffff !important;
+}
