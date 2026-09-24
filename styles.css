@@ -1547,6 +1547,55 @@ button:focus-visible, a:focus-visible, select:focus-visible{
   .counter__chevron{ transition: none }
   .counter__list li{ transition: none }
 }
+
+/* =========================================================
+   18. DESCRIPCIÓN BAJO LA FOTO DEL PC
+   ========================================================= */
+.pc__caption{
+  max-width: 720px;
+  margin: 32px auto 0;
+  text-align: center;
+  padding-top: 28px;
+  position: relative;
+}
+
+/* Filete dorado decorativo arriba */
+.pc__caption::before{
+  content: "";
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* Frase principal en cursiva Art Déco */
+.pc__caption-line{
+  margin: 0 0 16px;
+  font: italic 18px/1.4 var(--serif);
+  color: var(--gold-bright);
+  letter-spacing: .01em;
+}
+
+/* Párrafo descriptivo */
+.pc__caption-body{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+/* Palabras destacadas */
+.pc__caption-body strong{
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 700px){
+  .pc__caption{ margin-top: 24px; padding-top: 22px }
+  .pc__caption-line{ font-size: 16px; margin-bottom: 12px }
+  .pc__caption-body{ font-size: 12px; line-height: 1.8 }
+}
  
-
-
