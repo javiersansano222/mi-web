@@ -4,48 +4,139 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Portafolio de Javier Sansano Martínez, estudiante de Desarrollo de Aplicaciones Multiplataforma.">
-  <meta name="theme-color" content="#061321">
+  <meta name="theme-color" content="#0a1220">
   <title>Javier Sansano Martínez — Portafolio</title>
+
+  <!-- Google Fonts: Cinzel (títulos) + Lora (cuerpo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
-  <div class="scroll-progress" id="scroll-progress" role="progressbar" aria-label="Progreso de lectura" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
 
+  <div class="scroll-progress"
+       id="scroll-progress"
+       role="progressbar"
+       aria-label="Progreso de lectura"
+       aria-valuemin="0"
+       aria-valuemax="100"
+       aria-valuenow="0"></div>
+
+  <!-- ============================================================
+       FONDO ART DÉCO
+       Orden de capas (de abajo a arriba):
+         1. .ocean          → cielo (z-index -3)
+         2. .city-bg        → ciudad animada (z-index -2)
+         3. .bubble / #particles → detalles vivos (por encima)
+       ============================================================ -->
   <div class="ocean" aria-hidden="true">
+
+    <!-- Ciudad Art Déco animada: 3 capas de profundidad -->
+    <div class="city-bg" aria-hidden="true">
+
+      <div class="city-layer city-layer--far">
+        <div class="city-layer__inner">
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--sm"></span>
+        </div>
+        <div class="city-layer__inner" aria-hidden="true">
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--sm"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--sm"></span>
+        </div>
+      </div>
+
+      <div class="city-layer city-layer--mid">
+        <div class="city-layer__inner">
+          <span class="bld bld--md"></span>
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--lg"></span>
+        </div>
+        <div class="city-layer__inner" aria-hidden="true">
+          <span class="bld bld--md"></span>
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--md"></span>
+          <span class="bld bld--lg"></span>
+        </div>
+      </div>
+
+      <div class="city-layer city-layer--near">
+        <div class="city-layer__inner">
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--xl"></span>
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--xl"></span>
+        </div>
+        <div class="city-layer__inner" aria-hidden="true">
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--xl"></span>
+          <span class="bld bld--lg"></span>
+          <span class="bld bld--xl"></span>
+        </div>
+      </div>
+
+    </div>
+
     <div class="ocean__glow"></div>
     <div class="ocean__grain"></div>
+
     <div class="bubble bubble--one"></div>
     <div class="bubble bubble--two"></div>
     <div class="bubble bubble--three"></div>
     <div class="bubble bubble--four"></div>
+
     <canvas id="particles"></canvas>
   </div>
 
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Javier Sansano, inicio">
-      <span class="brand__seal">JS</span>
+      <span class="brand__seal"><span>JS</span></span>
       <span class="brand__name">JAVIER SANSANO<small>PORTAFOLIO · DAM</small></span>
     </a>
-    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">
+
+    <button class="nav-toggle"
+            id="nav-toggle"
+            aria-expanded="false"
+            aria-controls="main-nav"
+            aria-label="Abrir menú">
       <span></span><span></span>
     </button>
+
     <nav class="nav" id="main-nav" aria-label="Navegación principal">
       <a href="#sobre-mi">Perfil</a>
       <a href="#proyectos">Intereses</a>
+      <a href="#dentro">Ordenador</a>
       <a href="#recorrido">Recorrido</a>
       <a href="#contacto">Objetivo</a>
     </nav>
+
     <div class="header-tools">
       <label class="sr-only" for="era-select">Paleta visual</label>
       <select id="era-select" class="era-select" aria-label="Elegir paleta">
-        <option value="oro-noche">Azul clásico</option>
-        <option value="cobre-esmeralda">Cobre esmeralda</option>
-        <option value="plata-carbon">Plata carbón</option>
-        <option value="coral-abismo">Coral abismo</option>
+        <option value="oro-noche">Oro &amp; Noche</option>
+        <option value="cobre-esmeralda">Cobre &amp; Esmeralda</option>
+        <option value="plata-carbon">Plata &amp; Carbón</option>
+        <option value="coral-abismo">Coral &amp; Abismo</option>
       </select>
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Cambiar a tema claro" aria-pressed="false">
+      <button class="theme-toggle"
+              id="theme-toggle"
+              type="button"
+              aria-label="Cambiar a tema claro"
+              aria-pressed="false">
         <span aria-hidden="true">◐</span>
       </button>
     </div>
@@ -99,6 +190,27 @@
         <p class="eyebrow">01 / QUIÉN SOY</p>
         <h2>Seguir adelante<br>es mi <em>método.</em></h2>
       </div>
+              <!-- Contador de cosas que he hecho -->
+        <div class="counter reveal" id="counter">
+          <button class="counter__head" type="button"
+                  aria-expanded="false"
+                  aria-controls="counter-list">
+            <span class="counter__num" data-target="6">06</span>
+            <span class="counter__title">cosas que he hecho</span>
+            <span class="counter__chevron" aria-hidden="true">▾</span>
+          </button>
+
+          <div class="counter__body" id="counter-list">
+            <ul class="counter__list">
+              <li><span>01</span> Terminé el Grado Medio de SMX</li>
+              <li><span>02</span> Empecé el Grado Superior de DAM</li>
+              <li><span>03</span> Monté mi primer PC desde cero</li>
+              <li><span>04</span> Aprendí HTML, CSS y JavaScript</li>
+              <li><span>05</span> Creé mi primera página web</li>
+              <li><span>06</span> Llevo años entrenando a diario</li>
+            </ul>
+          </div>
+        </div>
       <div class="intro__body reveal">
         <p class="lead">No hace falta saberlo todo para empezar. Hace falta constancia para seguir aprendiendo.</p>
         <p>Soy una persona disciplinada y perseverante. Me gusta marcarme objetivos y avanzar paso a paso, tanto en mis estudios como en el entrenamiento. Si algo cuesta, lo intento de otra manera y sigo hasta lograrlo.</p>
@@ -132,6 +244,7 @@
             </div>
             <span class="project-visual__label">01 — IMAGINACIÓN</span>
           </div>
+
           <div class="project-info">
             <div>
               <p class="project-kicker">VIDEOJUEGOS</p>
@@ -140,6 +253,57 @@
             </div>
             <span class="project-number">01</span>
           </div>
+
+          <!-- Galería de juegos favoritos -->
+          <div class="game-grid" aria-label="Algunos de mis videojuegos favoritos">
+
+            <article class="game" data-game="fallout">
+              <span class="game__num">01</span>
+              <span class="game__initial">F</span>
+              <div class="game__meta">
+                <strong>Fallout</strong>
+                <small>1997 — Post-apocalipsis</small>
+              </div>
+            </article>
+
+            <article class="game" data-game="doom">
+              <span class="game__num">02</span>
+              <span class="game__initial">D</span>
+              <div class="game__meta">
+                <strong>Doom</strong>
+                <small>1993 — Acción</small>
+              </div>
+            </article>
+
+            <article class="game" data-game="skyrim">
+              <span class="game__num">03</span>
+              <span class="game__initial">S</span>
+              <div class="game__meta">
+                <strong>Skyrim</strong>
+                <small>2011 — Fantasía</small>
+              </div>
+            </article>
+
+            <article class="game" data-game="bioshock">
+              <span class="game__num">04</span>
+              <span class="game__initial">B</span>
+              <div class="game__meta">
+                <strong>Bioshock</strong>
+                <small>2007 — Distopía</small>
+              </div>
+            </article>
+
+            <article class="game" data-game="cyberpunk">
+              <span class="game__num">05</span>
+              <span class="game__initial">C</span>
+              <div class="game__meta">
+                <strong>Cyberpunk 2077</strong>
+                <small>2020 — Futuro</small>
+              </div>
+            </article>
+
+          </div>
+
           <div class="tag-row"><span>Historias</span><span>Retos</span><span>Creatividad</span></div>
         </article>
 
@@ -189,9 +353,81 @@
       <p class="projects-note reveal"><span>✳</span> Los proyectos irán creciendo conmigo. Vuelve pronto para ver las novedades.</p>
     </section>
 
+    <!-- ============================================================
+         SECCIÓN: DENTRO DEL ORDENADOR
+         Vista lateral de un PC gaming real con hotspots interactivos.
+         ============================================================ -->
+    <section class="inside section-shell" id="dentro">
+      <div class="section-heading reveal">
+        <p class="eyebrow">03 / DENTRO DEL ORDENADOR</p>
+        <h2>Cada pieza,<br><em>una función.</em></h2>
+      </div>
+
+      <div class="inside__stage reveal">
+
+        <div class="pc" aria-label="Vista lateral de un ordenador gaming con sus componentes">
+
+          <img class="pc__photo"
+               src="img/pc.jpg.jpeg"
+               alt="Ordenador gaming en vista lateral con iluminación RGB, mostrando la tarjeta gráfica, el procesador, la memoria RAM y los ventiladores">
+
+          <!-- Hotspot 1: CPU -->
+          <button class="hotspot" data-part="cpu" style="top: 33%; left: 42%;"
+                  aria-label="CPU: procesador">
+            <span class="hotspot__dot"></span>
+            <span class="hotspot__tip">
+              <strong>CPU</strong>
+              <small>Procesador — el cerebro del PC. Ejecuta todas las instrucciones.</small>
+            </span>
+          </button>
+
+          <!-- Hotspot 2: RAM -->
+          <button class="hotspot" data-part="ram" style="top: 37%; left: 57%;"
+                  aria-label="RAM: memoria">
+            <span class="hotspot__dot"></span>
+            <span class="hotspot__tip">
+              <strong>RAM</strong>
+              <small>Memoria — guarda los datos que el PC está usando ahora mismo.</small>
+            </span>
+          </button>
+
+          <!-- Hotspot 3: GPU -->
+          <button class="hotspot" data-part="gpu" style="top: 63%; left: 50%;"
+                  aria-label="GPU: tarjeta gráfica">
+            <span class="hotspot__dot"></span>
+            <span class="hotspot__tip">
+              <strong>GPU</strong>
+              <small>Tarjeta gráfica — dibuja los gráficos y los juegos.</small>
+            </span>
+          </button>
+
+          <!-- Hotspot 4: Refrigeración -->
+          <button class="hotspot" data-part="cooling" style="top: 40%; left: 82%;"
+                  aria-label="Refrigeración: ventiladores">
+            <span class="hotspot__dot"></span>
+            <span class="hotspot__tip">
+              <strong>REFRIGERACIÓN</strong>
+              <small>Ventiladores y radiador — mantienen fríos los componentes.</small>
+            </span>
+          </button>
+
+          <!-- Hotspot 5: Almacenamiento -->
+          <button class="hotspot" data-part="storage" style="top: 82%; left: 65%;"
+                  aria-label="Almacenamiento: SSD">
+            <span class="hotspot__dot"></span>
+            <span class="hotspot__tip">
+              <strong>ALMACENAMIENTO</strong>
+              <small>SSD o disco duro — guarda tus archivos y programas.</small>
+            </span>
+          </button>
+
+        </div>
+      </div>
+    </section>
+
     <section class="journey section-shell" id="recorrido">
       <div class="section-heading reveal">
-        <p class="eyebrow">03 / MI RECORRIDO</p>
+        <p class="eyebrow">04 / MI RECORRIDO</p>
         <h2>Un paso detrás<br>de otro. <em>Siempre.</em></h2>
       </div>
       <div class="timeline">
@@ -237,7 +473,7 @@
     <section class="contact section-shell" id="contacto">
       <div class="contact-frame reveal">
         <div class="contact__ornament" aria-hidden="true">✳</div>
-        <p class="eyebrow">04 / HACIA DÓNDE VOY</p>
+        <p class="eyebrow">05 / HACIA DÓNDE VOY</p>
         <h2>Crear proyectos.<br><em>Seguir creciendo.</em></h2>
         <p>Me gustaría trabajar como programador y participar en proyectos diferentes. Quiero seguir aprendiendo, aportar lo que sé y afrontar cada reto con constancia.</p>
         <a class="button button--gold" href="https://wa.me/34663509281?text=Hola%2C%20soy%20Javier%20Sansano%20Mart%C3%ADnez.%20Estoy%20estudiando%20Desarrollo%20de%20Aplicaciones%20Multiplataforma%20%28DAM%29%20y%20me%20gustar%C3%ADa%20trabajar%20como%20programador%20en%20proyectos%20diferentes.%20Me%20interesan%20la%20tecnolog%C3%ADa%2C%20los%20ordenadores%20y%20seguir%20aprendiendo.%20%C2%A1Encantado%20de%20conocerte!" target="_blank" rel="noopener noreferrer">Presentarme por WhatsApp <span aria-hidden="true">↗</span></a>
@@ -248,7 +484,7 @@
 
   <footer class="site-footer">
     <a class="brand brand--footer" href="#inicio">
-      <span class="brand__seal">JS</span>
+      <span class="brand__seal"><span>JS</span></span>
       <span class="brand__name">JAVIER SANSANO<small>HECHO CON CURIOSIDAD · <span id="year"></span></small></span>
     </a>
     <span class="footer-note">Un paso cada día. Una idea cada vez.</span>
