@@ -2623,3 +2623,500 @@ html[data-theme="light"] .era-select option{
   background: #0a1220;
   color: #f4d98a;
 }
+
+/* =========================================================
+   34. SELECT DE PALETAS: MÁS ANCHO Y TEXTO MÁS CLARO
+   ========================================================= */
+
+/* Más ancho para que no se corte el texto */
+.era-select{
+  max-width: 220px !important;      /* antes 165px */
+  padding: 0 42px 0 16px !important; /* más hueco a la derecha */
+  color: #ffffff !important;         /* blanco puro para máximo contraste */
+  font-size: 11px !important;
+  letter-spacing: .12em !important;
+}
+
+/* El chevron dorado, más visible */
+.header-tools::after{
+  color: #f4d98a !important;
+  font-size: 12px !important;
+  text-shadow: 0 0 8px rgba(244, 217, 138, .8) !important;
+}
+
+/* Modo claro: también blanco puro para que contraste con el fondo oscuro del select */
+html[data-theme="light"] .era-select{
+  color: #ffffff !important;
+}
+
+/* Opciones del desplegable: texto claro */
+.era-select option{
+  color: #f4d98a !important;
+  background: #0a1220 !important;
+}
+
+/* Responsive */
+@media (max-width: 700px){
+  .era-select{
+    max-width: 170px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 380px){
+  .era-select{
+    max-width: 140px !important;
+    font-size: 9px !important;
+    padding: 0 32px 0 10px !important;
+  }
+}
+
+/* =========================================================
+   35. TEXTOS DEL HERO MÁS VISIBLES
+   La nota y el scroll-cue tienen que leerse bien
+   ========================================================= */
+
+/* "DISCIPLINA. CONSTANCIA. INTENTARLO HASTA CONSEGUIRLO." */
+.hero__note{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+  letter-spacing: .06em;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, .6),
+    0 0 20px rgba(224, 138, 60, .15);
+}
+
+.hero__note-line{
+  background: var(--gold-bright) !important;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+/* "DESPLÁZATE PARA DESCUBRIR" */
+.scroll-cue{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 9px !important;
+  letter-spacing: .22em;
+  font-weight: 500;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, .6),
+    0 0 20px rgba(224, 138, 60, .15);
+}
+
+.scroll-cue span{
+  background: var(--gold-bright) !important;
+  box-shadow: 0 0 8px var(--gold);
+  height: 1px;
+}
+
+/* ---------------------------------------------------------
+   Modo claro: lo mantenemos oscuro para contraste
+   --------------------------------------------------------- */
+html[data-theme="light"] .hero__note,
+html[data-theme="light"] .scroll-cue{
+  color: #1a1a1f !important;
+  text-shadow: none;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  .hero__note{ font-size: 12px !important }
+  .scroll-cue{ font-size: 8px !important }
+}
+
+/* =========================================================
+   36. TEXTOS SECUNDARIOS VISIBLES EN TODA LA WEB
+   Sube el contraste de todos los textos pequeños/notas
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   MODO OSCURO: todos los textos secundarios en claro
+   --------------------------------------------------------- */
+html[data-theme="dark"] .eyebrow,
+html[data-theme="dark"] .section-index,
+html[data-theme="dark"] .timeline-date,
+html[data-theme="dark"] .timeline-state,
+html[data-theme="dark"] .project-kicker,
+html[data-theme="dark"] .project-number,
+html[data-theme="dark"] .project-info p:not(.project-kicker),
+html[data-theme="dark"] .projects-note,
+html[data-theme="dark"] .tag-row span,
+html[data-theme="dark"] .skill-list span,
+html[data-theme="dark"] .footer-note,
+html[data-theme="dark"] .contact__small,
+html[data-theme="dark"] .contact-links__label,
+html[data-theme="dark"] .contact-form__label,
+html[data-theme="dark"] .hero__note,
+html[data-theme="dark"] .scroll-cue,
+html[data-theme="dark"] .art-caption,
+html[data-theme="dark"] .game__meta small,
+html[data-theme="dark"] .game__num,
+html[data-theme="dark"] .pc__caption-body,
+html[data-theme="dark"] .hotspot__tip small,
+html[data-theme="dark"] .future-window span,
+html[data-theme="dark"] .future-window small,
+html[data-theme="dark"] .browser-bar span,
+html[data-theme="dark"] .timeline-item p,
+html[data-theme="dark"] .intro__body p{
+  color: #e0e6ee !important;
+  opacity: 1 !important;
+}
+
+/* Textos que deben ir en blanco puro */
+html[data-theme="dark"] .counter__list li,
+html[data-theme="dark"] .hero__intro,
+html[data-theme="dark"] .contact-link__text small,
+html[data-theme="dark"] .contact-frame > p:not(.eyebrow){
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Acentos que se quedan en dorado */
+html[data-theme="dark"] .eyebrow,
+html[data-theme="dark"] .project-kicker,
+html[data-theme="dark"] .timeline-date,
+html[data-theme="dark"] .section-index,
+html[data-theme="dark"] .counter__list li span,
+html[data-theme="dark"] .game__num{
+  color: var(--gold-bright) !important;
+}
+
+/* Las etiquetas de valores (Disciplina, Perseverancia...) */
+html[data-theme="dark"] .skill-list span,
+html[data-theme="dark"] .tag-row span{
+  color: #e0e6ee !important;
+  border-color: rgba(224, 230, 238, .25) !important;
+}
+
+/* Línea del scroll-cue y hero__note */
+html[data-theme="dark"] .scroll-cue span,
+html[data-theme="dark"] .hero__note-line{
+  background: var(--gold-bright) !important;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+/* ---------------------------------------------------------
+   MODO CLARO: todos los textos secundarios en oscuro
+   --------------------------------------------------------- */
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .section-index,
+html[data-theme="light"] .timeline-date,
+html[data-theme="light"] .timeline-state,
+html[data-theme="light"] .project-kicker,
+html[data-theme="light"] .project-info p:not(.project-kicker),
+html[data-theme="light"] .projects-note,
+html[data-theme="light"] .tag-row span,
+html[data-theme="light"] .skill-list span,
+html[data-theme="light"] .footer-note,
+html[data-theme="light"] .contact__small,
+html[data-theme="light"] .contact-links__label,
+html[data-theme="light"] .contact-form__label,
+html[data-theme="light"] .hero__note,
+html[data-theme="light"] .scroll-cue,
+html[data-theme="light"] .art-caption,
+html[data-theme="light"] .game__meta small,
+html[data-theme="light"] .pc__caption-body,
+html[data-theme="light"] .hotspot__tip small,
+html[data-theme="light"] .future-window span,
+html[data-theme="light"] .future-window small,
+html[data-theme="light"] .browser-bar span,
+html[data-theme="light"] .timeline-item p,
+html[data-theme="light"] .intro__body p{
+  color: #2a3240 !important;
+  opacity: 1 !important;
+}
+
+html[data-theme="light"] .counter__list li,
+html[data-theme="light"] .hero__intro,
+html[data-theme="light"] .contact-link__text small,
+html[data-theme="light"] .contact-frame > p:not(.eyebrow){
+  color: #0a0a0f !important;
+}
+
+/* Acentos en dorado oscuro */
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .project-kicker,
+html[data-theme="light"] .timeline-date,
+html[data-theme="light"] .section-index,
+html[data-theme="light"] .counter__list li span{
+  color: #8c6a25 !important;
+}
+
+/* ---------------------------------------------------------
+   Bordes y separadores
+   --------------------------------------------------------- */
+html[data-theme="dark"] .timeline-state,
+html[data-theme="dark"] .tag-row span,
+html[data-theme="dark"] .skill-list span{
+  border-color: rgba(224, 230, 238, .22) !important;
+}
+
+html[data-theme="light"] .timeline-state,
+html[data-theme="light"] .tag-row span,
+html[data-theme="light"] .skill-list span{
+  border-color: rgba(42, 50, 64, .28) !important;
+}/* =========================================================
+   37. TODOS LOS TEXTOS EN CLARO (modo oscuro)
+   Que se lean bien sobre el fondo Art Déco
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   MODO OSCURO: TODO el texto a claro
+   --------------------------------------------------------- */
+html[data-theme="dark"] body,
+html[data-theme="dark"] .hero__intro,
+html[data-theme="dark"] .hero__note,
+html[data-theme="dark"] .scroll-cue,
+html[data-theme="dark"] .intro__body p,
+html[data-theme="dark"] .intro__body .lead,
+html[data-theme="dark"] .skill-list span,
+html[data-theme="dark"] .section-index,
+html[data-theme="dark"] .timeline-item p,
+html[data-theme="dark"] .timeline-item h3,
+html[data-theme="dark"] .timeline-state,
+html[data-theme="dark"] .project-info h3,
+html[data-theme="dark"] .project-info p:not(.project-kicker),
+html[data-theme="dark"] .project-number,
+html[data-theme="dark"] .tag-row span,
+html[data-theme="dark"] .projects-note,
+html[data-theme="dark"] .contact-frame > p:not(.eyebrow),
+html[data-theme="dark"] .contact__small,
+html[data-theme="dark"] .contact-links__label,
+html[data-theme="dark"] .contact-form__label,
+html[data-theme="dark"] .contact-link__text small,
+html[data-theme="dark"] .footer-note,
+html[data-theme="dark"] .pc__caption-body,
+html[data-theme="dark"] .pc__caption-line,
+html[data-theme="dark"] .hotspot__tip small,
+html[data-theme="dark"] .future-window span,
+html[data-theme="dark"] .future-window small,
+html[data-theme="dark"] .future-window strong,
+html[data-theme="dark"] .browser-bar span,
+html[data-theme="dark"] .game__meta small,
+html[data-theme="dark"] .game__meta strong,
+html[data-theme="dark"] .counter__list li,
+html[data-theme="dark"] .counter__title,
+html[data-theme="dark"] .mini-layout__title,
+html[data-theme="dark"] .art-caption{
+  color: #f5eede !important;
+  opacity: 1 !important;
+}
+
+/* Textos que deben brillar más (blanco puro) */
+html[data-theme="dark"] .hero h1,
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .contact h2,
+html[data-theme="dark"] .brand__name,
+html[data-theme="dark"] .nav a{
+  color: #ffffff !important;
+}
+
+/* Acentos dorados que se quedan dorados (para que no pierdan personalidad) */
+html[data-theme="dark"] .eyebrow,
+html[data-theme="dark"] .project-kicker,
+html[data-theme="dark"] .counter__list li span,
+html[data-theme="dark"] .timeline-date,
+html[data-theme="dark"] .game__num,
+html[data-theme="dark"] .contact__ornament{
+  color: var(--gold-bright) !important;
+}
+
+/* Mantener el dorado de los elementos grandes */
+html[data-theme="dark"] .hero h1 span,
+html[data-theme="dark"] .section-heading em,
+html[data-theme="dark"] .contact h2 em{
+  color: var(--gold-bright) !important;
+}
+
+/* ---------------------------------------------------------
+   MODO CLARO: aquí sí queremos texto OSCURO para que contraste
+   con el fondo claro. Si no, no se leería.
+   --------------------------------------------------------- */
+html[data-theme="light"] body,
+html[data-theme="light"] .hero__intro,
+html[data-theme="light"] .hero__note,
+html[data-theme="light"] .scroll-cue,
+html[data-theme="light"] .intro__body p,
+html[data-theme="light"] .intro__body .lead,
+html[data-theme="light"] .timeline-item p,
+html[data-theme="light"] .timeline-item h3,
+html[data-theme="light"] .project-info h3,
+html[data-theme="light"] .project-info p:not(.project-kicker),
+html[data-theme="light"] .projects-note,
+html[data-theme="light"] .contact-frame > p:not(.eyebrow),
+html[data-theme="light"] .contact-links__label,
+html[data-theme="light"] .contact-form__label,
+html[data-theme="light"] .contact-link__text small,
+html[data-theme="light"] .footer-note,
+html[data-theme="light"] .pc__caption-body,
+html[data-theme="light"] .hotspot__tip small,
+html[data-theme="light"] .counter__list li,
+html[data-theme="light"] .counter__title{
+  color: #1a1a1f !important;
+}
+
+/* =========================================================
+   38. ESTADOS Y ETIQUETAS PEQUEÑAS VISIBLES
+   (timeline-state, tags, skill-list, section-index, etc.)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Estados del timeline: COMPLETADO, AHORA, EN PROCESO, HÁBITO
+   --------------------------------------------------------- */
+.timeline-state{
+  color: #f0e6d2 !important;              /* casi blanco */
+  border: 1px solid rgba(212, 168, 75, .55) !important;  /* borde dorado más visible */
+  background: rgba(212, 168, 75, .08);
+  padding: 5px 10px !important;
+  font-size: 9px !important;              /* antes 7px → más legible */
+  letter-spacing: .15em !important;
+  font-weight: 500;
+  border-radius: 0;
+  text-shadow: 0 0 6px rgba(0, 0, 0, .5);
+}
+
+/* El estado "AHORA" tiene un tono verde para destacar */
+.timeline-state--active{
+  color: #b8f0d0 !important;
+  border-color: rgba(140, 220, 170, .7) !important;
+  background: rgba(140, 220, 170, .12);
+}
+
+/* ---------------------------------------------------------
+   Tags de las tarjetas de proyectos (Historias, Retos, etc.)
+   --------------------------------------------------------- */
+.tag-row span,
+.skill-list span{
+  color: #f0e6d2 !important;
+  border: 1px solid rgba(212, 168, 75, .35) !important;
+  background: rgba(212, 168, 75, .06);
+  padding: 6px 11px;
+  font-size: 9px;
+  letter-spacing: .06em;
+}
+
+/* ---------------------------------------------------------
+   Índice de la sección "INTERESES · 01—03"
+   --------------------------------------------------------- */
+.section-index{
+  color: var(--gold-bright) !important;
+  font-size: 9px !important;
+  letter-spacing: .2em;
+  opacity: 1 !important;
+}
+
+/* ---------------------------------------------------------
+   Fechas del timeline: FORMACIÓN, EN CURSO, OBJETIVO PERSONAL
+   --------------------------------------------------------- */
+.timeline-date{
+  color: var(--gold-bright) !important;
+  font-size: 9px !important;
+  letter-spacing: .22em;
+  font-weight: 600;
+  opacity: 1 !important;
+  text-shadow: 0 0 8px rgba(224, 138, 60, .3);
+}
+
+/* ---------------------------------------------------------
+   Kickers de las tarjetas: VIDEOJUEGOS, CINE, ORDENADORES
+   --------------------------------------------------------- */
+.project-kicker{
+  color: var(--gold-bright) !important;
+  font-size: 8px !important;
+  letter-spacing: .2em;
+  font-weight: 600;
+  opacity: 1 !important;
+  text-shadow: 0 0 8px rgba(224, 138, 60, .3);
+}
+
+/* ---------------------------------------------------------
+   Nota al pie de la sección proyectos
+   --------------------------------------------------------- */
+.projects-note{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+}
+
+/* ---------------------------------------------------------
+   Nota del hero y scroll cue
+   --------------------------------------------------------- */
+.hero__note{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+}
+.scroll-cue{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 9px !important;
+  letter-spacing: .22em;
+  font-weight: 500;
+}
+.scroll-cue span{
+  background: var(--gold-bright) !important;
+  box-shadow: 0 0 8px var(--gold);
+}
+
+/* ---------------------------------------------------------
+   Textos del footer
+   --------------------------------------------------------- */
+.footer-note{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 13px !important;
+}
+
+.contact__small{
+  color: #f0e6d2 !important;
+  opacity: 1 !important;
+  font-size: 9px !important;
+  letter-spacing: .15em;
+}
+
+/* ---------------------------------------------------------
+   Aviso del juego / meta pequeño
+   --------------------------------------------------------- */
+.game__meta small{
+  color: #e0e6ee !important;
+  opacity: 1 !important;
+}
+
+.game__num{
+  color: var(--gold-bright) !important;
+  opacity: 1 !important;
+}
+
+/* ---------------------------------------------------------
+   MODO CLARO: para que se vean sobre beige, oscurecemos
+   --------------------------------------------------------- */
+html[data-theme="light"] .timeline-state{
+  color: #1a1a1f !important;
+  border-color: rgba(140, 106, 37, .5) !important;
+  background: rgba(140, 106, 37, .08);
+}
+html[data-theme="light"] .timeline-state--active{
+  color: #14522e !important;
+  border-color: rgba(20, 82, 46, .5) !important;
+  background: rgba(20, 82, 46, .08);
+}
+html[data-theme="light"] .tag-row span,
+html[data-theme="light"] .skill-list span{
+  color: #1a1a1f !important;
+  border-color: rgba(140, 106, 37, .4) !important;
+}
+html[data-theme="light"] .timeline-date,
+html[data-theme="light"] .project-kicker,
+html[data-theme="light"] .section-index{
+  color: #8c6a25 !important;
+}
+html[data-theme="light"] .projects-note,
+html[data-theme="light"] .hero__note,
+html[data-theme="light"] .scroll-cue,
+html[data-theme="light"] .footer-note,
+html[data-theme="light"] .contact__small{
+  color: #1a1a1f !important;
+}
