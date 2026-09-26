@@ -2564,3 +2564,62 @@ textarea,
     8 24,
     text;
 }
+/* =========================================================
+   33. SELECT DE PALETAS: DESPLEGABLE EN NEGRO
+   La lista de opciones se ve con fondo oscuro y texto claro
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   El <select> cerrado (ya lo tenías, lo reforzamos)
+   --------------------------------------------------------- */
+.era-select{
+  background: #0a1220 !important;
+  color: var(--gold-bright) !important;
+  border-color: var(--gold) !important;
+}
+
+/* ---------------------------------------------------------
+   Las <option> (la lista desplegable)
+   --------------------------------------------------------- */
+.era-select option{
+  background: #0a1220;
+  color: #f4d98a;
+  padding: 10px;
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: .1em;
+}
+
+/* Al pasar el ratón por una opción (si el SO lo permite) */
+.era-select option:hover,
+.era-select option:focus,
+.era-select option:checked{
+  background: #d4a84b;
+  color: #0a1220;
+}
+
+/* ---------------------------------------------------------
+   Firefox: aplicar color de fondo y texto al desplegable
+   --------------------------------------------------------- */
+.era-select:-moz-focusring{
+  color: transparent;
+  text-shadow: 0 0 0 var(--gold-bright);
+}
+
+/* ---------------------------------------------------------
+   Chrome / Edge: el desplegable heredará los estilos
+   de las <option> de arriba
+   --------------------------------------------------------- */
+
+/* ---------------------------------------------------------
+   Modo claro: que el desplegable también sea oscuro
+   (porque el usuario lo ha pedido así)
+   --------------------------------------------------------- */
+html[data-theme="light"] .era-select{
+  background: #0a1220 !important;
+  color: var(--gold-bright) !important;
+}
+html[data-theme="light"] .era-select option{
+  background: #0a1220;
+  color: #f4d98a;
+}
