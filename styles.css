@@ -3201,3 +3201,114 @@ html[data-theme="light"] .contact__small{
     grid-template-columns: repeat(2, 1fr);
   }
 }
+/* =========================================================
+   41. BARRA DE SCROLL PERSONALIZADA ART DÉCO
+   Dorada sobre fondo oscuro, coherente con la web
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Chrome / Edge / Safari
+   --------------------------------------------------------- */
+
+/* Ancho total de la barra */
+::-webkit-scrollbar{
+  width: 12px;
+  height: 12px;
+}
+
+/* El carril (fondo) */
+::-webkit-scrollbar-track{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--bg-deep) 95%, transparent),
+      color-mix(in srgb, var(--bg) 95%, transparent));
+  border-left: 1px solid color-mix(in srgb, var(--gold) 20%, transparent);
+}
+
+/* La pieza que arrastras */
+::-webkit-scrollbar-thumb{
+  background:
+    linear-gradient(180deg,
+      var(--gold-bright) 0%,
+      var(--gold) 50%,
+      var(--gold-deep) 100%);
+  border: 1px solid var(--gold-bright);
+  border-radius: 0;
+  box-shadow:
+    inset 0 0 0 2px rgba(10, 18, 32, .35),
+    0 0 8px color-mix(in srgb, var(--gold) 50%, transparent);
+}
+
+/* Al pasar el ratón */
+::-webkit-scrollbar-thumb:hover{
+  background:
+    linear-gradient(180deg,
+      #ffffff 0%,
+      var(--gold-bright) 50%,
+      var(--gold) 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(10, 18, 32, .3),
+    0 0 16px color-mix(in srgb, var(--gold) 80%, transparent);
+}
+
+/* Al hacer clic sobre el thumb */
+::-webkit-scrollbar-thumb:active{
+  background:
+    linear-gradient(180deg,
+      var(--gold) 0%,
+      var(--gold-deep) 100%);
+}
+
+/* Las flechitas de arriba y abajo (si aparecen) */
+::-webkit-scrollbar-button{
+  background: var(--bg-deep);
+  border: 1px solid var(--gold);
+  height: 12px;
+  width: 12px;
+}
+
+::-webkit-scrollbar-button:hover{
+  background: var(--gold);
+}
+
+/* La esquina inferior derecha (donde se juntan los dos scroll) */
+::-webkit-scrollbar-corner{
+  background: var(--bg-deep);
+}
+
+/* ---------------------------------------------------------
+   Firefox
+   --------------------------------------------------------- */
+html{
+  scrollbar-color: var(--gold) var(--bg-deep);
+  scrollbar-width: thin;
+}
+
+/* ---------------------------------------------------------
+   Modo claro
+   --------------------------------------------------------- */
+html[data-theme="light"] ::-webkit-scrollbar-track{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--bg-deep) 95%, transparent),
+      color-mix(in srgb, var(--bg) 95%, transparent));
+  border-left: 1px solid color-mix(in srgb, var(--gold-deep) 30%, transparent);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb{
+  background:
+    linear-gradient(180deg,
+      var(--gold) 0%,
+      var(--gold-deep) 100%);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover{
+  background:
+    linear-gradient(180deg,
+      var(--gold-bright) 0%,
+      var(--gold) 100%);
+}
+
+html[data-theme="light"]{
+  scrollbar-color: var(--gold-deep) var(--bg-deep);
+}
