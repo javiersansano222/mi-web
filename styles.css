@@ -2527,3 +2527,196 @@ html[data-theme="light"] .theme-toggle{
   display: inline-flex;   /* que no ocupe todo el ancho */
   margin-inline: auto;    /* lo centra horizontalmente */
 }
+
+/* =========================================================
+   29. LÍNEA DE BIENVENIDA (encima del header)
+   ========================================================= */
+.welcome-bar{
+  position: relative;
+  z-index: 21;             /* por encima del header sticky */
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+
+  /* Fondo con degradado dorado sutil */
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--gold) 12%, transparent) 0%,
+      color-mix(in srgb, var(--bg-deep) 92%, transparent) 100%);
+  border-bottom: 1px solid var(--line);
+
+  /* Filete dorado arriba */
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--gold) 45%, transparent),
+    0 1px 0 color-mix(in srgb, var(--gold) 15%, transparent);
+}
+
+/* Texto central */
+.welcome-bar__text{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font: 500 10px var(--serif);
+  letter-spacing: .55em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-shadow:
+    0 0 8px color-mix(in srgb, var(--gold) 45%, transparent),
+    0 0 20px color-mix(in srgb, var(--ember) 25%, transparent);
+  padding-left: .55em;   /* compensa el letter-spacing para centrar */
+}
+
+/* Las estrellitas ✦ */
+.welcome-bar__star{
+  font-size: 9px;
+  color: var(--gold);
+  opacity: .9;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+
+/* ---------------------------------------------------------
+   Ajuste del header para que no se pegue a la línea
+   --------------------------------------------------------- */
+.site-header{
+  top: 34px;   /* se pega debajo de la línea de bienvenida */
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  .welcome-bar{
+    height: 30px;
+    padding: 0 16px;
+  }
+  .welcome-bar__text{
+    font-size: 9px;
+    letter-spacing: .4em;
+    gap: 9px;
+  }
+  .welcome-bar__star{ font-size: 8px }
+  .site-header{ top: 30px }
+}
+
+@media (max-width: 380px){
+  .welcome-bar__text{
+    font-size: 8px;
+    letter-spacing: .3em;
+  }
+  .welcome-bar__star{ font-size: 7px }
+}
+
+/* =========================================================
+   30. HEADER + BIENVENIDA FIJOS ARRIBA
+   Siempre visibles al hacer scroll
+   ========================================================= */
+
+/* La línea de bienvenida queda fija arriba del todo */
+.welcome-bar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 22;      /* por encima del header */
+}
+
+/* El header queda fijo justo debajo */
+.site-header{
+  position: fixed;
+  top: 34px;        /* debajo de la línea de bienvenida */
+  left: 0;
+  right: 0;
+  z-index: 21;
+}
+
+/* Como ahora el header no ocupa espacio en el flujo,
+   hay que empujar el contenido hacia abajo */
+body{
+  padding-top: 116px;   /* 34px (welcome) + 82px (header) = 116px */
+}
+
+/* El scroll-padding-top también hay que actualizarlo */
+html{
+  scroll-padding-top: 116px;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+@media (max-width: 700px){
+  .site-header{ top: 30px }
+  body{ padding-top: 100px }   /* 30px + 70px = 100px */
+  html{ scroll-padding-top: 100px }
+}
+
+
+/* =========================================================
+   31. HEADER Y BIENVENIDA ESTÁTICOS
+   No se quedan pegados al hacer scroll
+   ========================================================= */
+
+.welcome-bar{
+  position: relative;    /* vuelve al flujo normal */
+  top: auto;
+}
+
+.site-header{
+  position: relative;    /* ya no es sticky ni fixed */
+  top: auto;
+}
+
+/* Quitamos el padding-top que empujaba el contenido */
+body{
+  padding-top: 0;
+}
+
+html{
+  scroll-padding-top: 90px;   /* dejamos esto para que los anclajes no tapen el título */
+}
+
+/* =========================================================
+   32. CURSOR PERSONALIZADO ART DÉCO
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Cursor principal: flecha con forma de rombo dorado
+   --------------------------------------------------------- */
+html, body{
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 L30 16 L16 30 L2 16 Z' fill='%230a1220' stroke='%23d4a84b' stroke-width='1.5'/%3E%3Cpath d='M16 8 L24 16 L16 24 L8 16 Z' fill='%23f4d98a'/%3E%3C/svg%3E")
+    2 2,
+    auto;
+}
+
+/* ---------------------------------------------------------
+   Cursor de "enlace" (sobre <a>)
+   Un anillo Art Déco dorado
+   --------------------------------------------------------- */
+a,
+button,
+.hotspot,
+.counter__head,
+.theme-toggle,
+.era-select,
+.contact-link,
+.contact-form__submit{
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23d4a84b' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23f4d98a'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%230a1220'/%3E%3C/svg%3E")
+    16 16,
+    pointer;
+}
+
+/* ---------------------------------------------------------
+   Cursor de "texto" (sobre inputs)
+   Una varita dorada
+   --------------------------------------------------------- */
+input,
+textarea,
+[contenteditable]{
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cline x1='8' y1='24' x2='24' y2='8' stroke='%23d4a84b' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='22' y1='6' x2='26' y2='10' stroke='%23f4d98a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    8 24,
+    text;
+}
