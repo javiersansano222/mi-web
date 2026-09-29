@@ -2435,17 +2435,17 @@ html{
   filter: drop-shadow(0 0 6px var(--gold-bright));
 }
 /* =========================================================
-   25. AVATAR DEL CHAT: PERSONA SALUDANDO
+   AVATAR DEL CHAT: PERSONA SALUDANDO (v2 más animado)
    ========================================================= */
 
-/* El avatar ya no es rombo, sino un cuadrado con SVG */
 .chat__avatar{
   transform: none !important;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--gold) 8%, transparent) 0%,
     color-mix(in srgb, var(--bg-deep) 60%, transparent) 100%);
-  border-radius: 0;
-  overflow: hidden;
 }
 
 .chat__avatar::after{
@@ -2456,72 +2456,85 @@ html{
   pointer-events: none;
 }
 
-/* El SVG ocupa todo el avatar */
 .chat__avatar svg{
   display: block;
   width: 100%;
   height: 100%;
   color: var(--gold-bright);
+  overflow: visible;
+  transform: none !important;
+}
+
+/* ----- Brazo saludando ----- */
+.chat-avatar__wave{
+  transform-origin: 40px 38px;
+  transform-box: view-box;
+  animation: chat-wave-hello 0.9s ease-in-out infinite;
+}
+
+@keyframes chat-wave-hello{
+  0%   { transform: rotate(0deg) }
+  15%  { transform: rotate(-22deg) }
+  30%  { transform: rotate(8deg) }
+  45%  { transform: rotate(-20deg) }
+  60%  { transform: rotate(6deg) }
+  75%  { transform: rotate(-16deg) }
+  100% { transform: rotate(0deg) }
+}
+
+/* ----- Cuerpo se balancea un poquito ----- */
+.chat__avatar svg > g:not(.chat-avatar__wave){
+  transform-origin: 32px 56px;
+  transform-box: view-box;
+  animation: chat-body-sway 1.6s ease-in-out infinite;
+}
+
+@keyframes chat-body-sway{
+  0%, 100%{ transform: rotate(0deg) }
+  50%     { transform: rotate(1.5deg) }
+}
+
+/* ----- Ojos parpadean ----- */
+.chat__avatar svg circle[cx="28"],
+.chat__avatar svg circle[cx="36"]{
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: chat-eye-blink 4s ease-in-out infinite;
+}
+
+@keyframes chat-eye-blink{
+  0%, 90%, 100%{ transform: scaleY(1) }
+  92%          { transform: scaleY(.15) }
+  94%          { transform: scaleY(1) }
+}
+
+/* ----- Cabeza hace un gesto sutil ----- */
+.chat__avatar svg circle[cx="32"][cy="20"]{
+  transform-origin: 32px 30px;
+  transform-box: view-box;
+  animation: chat-head-nod 2.4s ease-in-out infinite;
+}
+
+@keyframes chat-head-nod{
+  0%, 100%{ transform: rotate(0deg) }
+  25%     { transform: rotate(-3deg) }
+  75%     { transform: rotate(3deg) }
+}
+
+/* ----- Brillo global ----- */
+.chat__avatar svg{
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 50%, transparent));
   transition: filter .3s;
 }
-
-/* El brazo saluda con rotación */
-.chat-avatar__wave{
-  transform-origin: 40px 38px;   /* el hombro */
-  transform: rotate(0deg);
-  animation: chat-wave-hello 1.2s ease-in-out infinite;
-  transform-box: fill-box;
-}
-
-/* Animación de saludo */
-@keyframes chat-wave-hello{
-  0%, 100%{ transform: rotate(0deg) }
-  25%{ transform: rotate(-18deg) }
-  75%{ transform: rotate(18deg) }
-}
-
-/* Cuando el panel del chat está abierto → sigue saludando */
 .chat.is-open .chat__avatar svg{
-  filter: drop-shadow(0 0 6px var(--gold-bright));
-}
-
-/* Cuando el panel está cerrado → deja de saludar */
-.chat:not(.is-open) .chat-avatar__wave{
-  animation-duration: 3s;   /* más lento */
-  animation-timing-function: ease-in-out;
+  filter: drop-shadow(0 0 8px var(--gold-bright));
 }
 
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce){
-  .chat-avatar__wave{ animation: none !important }
-}
-/* =========================================================
-   ARREGLO: avatar del chat recto y brazo saludando bien
-   ========================================================= */
-
-/* El SVG entero no se mueve */
-.chat__avatar svg{
-  transform: none !important;
-  overflow: visible;
-}
-
-/* El brazo saluda con rotación correcta */
-.chat-avatar__wave{
-  transform-origin: 40px 38px;
-  transform-box: view-box;      /* ← clave: usar coordenadas del SVG */
-  animation: chat-wave-hello 1.2s ease-in-out infinite;
-}
-
-@keyframes chat-wave-hello{
-  0%, 100%{ transform: rotate(0deg) }
-  25%{ transform: rotate(-15deg) }
-  75%{ transform: rotate(15deg) }
-}
-
-/* El avatar se centra y no se descentra */
-.chat__avatar{
-  transform: none !important;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
+  .chat-avatar__wave,
+  .chat__avatar svg > g,
+  .chat__avatar svg circle{
+    animation: none !important;
+  }
 }
