@@ -2419,3 +2419,18 @@ html{
   }
   .chat__panel{ transition: none }
 }
+/* =========================================================
+   24. ICONOS SVG PROPIOS DE CONTACTO
+   ========================================================= */
+.contact-link__icon svg{
+  display: block;
+  width: 22px;
+  height: 22px;
+  transition: transform .3s var(--ease), filter .3s;
+  color: currentColor;
+}
+
+.contact-link:hover .contact-link__icon svg{
+  transform: rotate(-6deg) scale(1.1);
+  filter: drop-shadow(0 0 6px var(--gold-bright));
+}
