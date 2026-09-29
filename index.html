@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
+
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
@@ -623,5 +624,81 @@
     <span class="footer-note">Un paso cada día. Una idea cada vez.</span>
     <a class="back-top" href="#inicio" aria-label="Volver arriba">↑</a>
   </footer>
+    <!-- ============================================================
+       CHATBOT FLOTANTE — ASISTENTE DE JAVIER
+       ============================================================ -->
+  <div class="chat" id="chat">
+
+    <!-- Botón flotante (burbuja que abre el chat) -->
+    <button class="chat__toggle"
+            id="chat-toggle"
+            type="button"
+            aria-label="Abrir chat del asistente"
+            aria-expanded="false"
+            aria-controls="chat-panel">
+      <span class="chat__toggle-icon" aria-hidden="true">JS</span>
+      <span class="chat__toggle-badge" aria-hidden="true">1</span>
+    </button>
+
+    <!-- Panel del chat -->
+    <div class="chat__panel"
+         id="chat-panel"
+         role="dialog"
+         aria-label="Chat del asistente"
+         aria-hidden="true">
+
+      <!-- Cabecera -->
+      <header class="chat__header">
+        <span class="chat__avatar" aria-hidden="true">JS</span>
+        <div class="chat__meta">
+          <strong class="chat__name">Asistente de Javier</strong>
+          <small class="chat__status">
+            <span class="chat__status-dot" aria-hidden="true"></span>
+            En línea
+          </small>
+        </div>
+        <button class="chat__close"
+                id="chat-close"
+                type="button"
+                aria-label="Cerrar chat">
+          ✕
+        </button>
+      </header>
+
+      <!-- Mensajes -->
+      <div class="chat__messages"
+           id="chat-messages"
+           role="log"
+           aria-live="polite">
+        <!-- Los mensajes se añaden aquí dinámicamente con JS -->
+      </div>
+
+      <!-- Botones rápidos -->
+      <div class="chat__quick" id="chat-quick" aria-label="Preguntas rápidas">
+        <button type="button" class="chat__quick-btn" data-msg="proyectos">Proyectos</button>
+        <button type="button" class="chat__quick-btn" data-msg="contacto">Contacto</button>
+        <button type="button" class="chat__quick-btn" data-msg="estudios">Estudios</button>
+        <button type="button" class="chat__quick-btn" data-msg="pc">PC</button>
+        <button type="button" class="chat__quick-btn" data-msg="juegos">Juegos</button>
+      </div>
+
+      <!-- Formulario de envío -->
+      <form class="chat__form" id="chat-form" autocomplete="off">
+        <label for="chat-input" class="sr-only">Escribe tu mensaje</label>
+        <input type="text"
+               id="chat-input"
+               class="chat__input"
+               placeholder="Escribe tu pregunta..."
+               maxlength="200"
+               required>
+        <button type="submit"
+                class="chat__send"
+                aria-label="Enviar mensaje">
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
 </body>
 </html>
