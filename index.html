@@ -636,26 +636,44 @@
             aria-label="Abrir chat del asistente"
             aria-expanded="false"
             aria-controls="chat-panel">
-            <span class="chat__toggle-icon" aria-hidden="true">JS</span>
-                  <span class="chat__toggle-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="32" cy="32" rx="28" ry="16"
+
+      <!-- Ondas de energía expandiéndose -->
+      <span class="chat__wave chat__wave--1" aria-hidden="true"></span>
+      <span class="chat__wave chat__wave--2" aria-hidden="true"></span>
+      <span class="chat__wave chat__wave--3" aria-hidden="true"></span>
+
+      <!-- Aro exterior girando -->
+      <span class="chat__ring chat__ring--outer" aria-hidden="true"></span>
+      <span class="chat__ring chat__ring--inner" aria-hidden="true"></span>
+
+      <!-- El ojo de Rapture -->
+      <span class="chat__toggle-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <!-- Párpado -->
+          <ellipse cx="32" cy="32" rx="26" ry="15"
                    fill="none"
                    stroke="currentColor"
-                   stroke-width="2"/>
-          <circle cx="32" cy="32" r="12"
+                   stroke-width="2"
+                   class="chat-eye__lid"/>
+          <!-- Iris -->
+          <circle cx="32" cy="32" r="11"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.5"
                   opacity="0.7"/>
+          <!-- Relleno del iris -->
           <circle cx="32" cy="32" r="8"
                   fill="currentColor"
                   class="chat-eye__iris"/>
+          <!-- Pupila -->
           <circle cx="32" cy="32" r="3.5"
-                  fill="#0a1220"/>
-          <circle cx="28.5" cy="28.5" r="1.6"
+                  fill="#0a1220"
+                  class="chat-eye__pupil"/>
+          <!-- Brillo -->
+          <circle cx="28.5" cy="28.5" r="1.8"
                   fill="#ffffff"
-                  opacity="0.9"/>
+                  opacity="0.95"/>
+          <!-- Pestañas Art Déco -->
           <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
             <line x1="6"  y1="32" x2="12" y2="32"/>
             <line x1="52" y1="32" x2="58" y2="32"/>
@@ -668,7 +686,15 @@
           </g>
         </svg>
       </span>
-  </button>
+
+      <!-- Partículas doradas girando -->
+      <span class="chat__spark chat__spark--1" aria-hidden="true"></span>
+      <span class="chat__spark chat__spark--2" aria-hidden="true"></span>
+      <span class="chat__spark chat__spark--3" aria-hidden="true"></span>
+
+      <!-- Badge -->
+      <span class="chat__toggle-badge" aria-hidden="true">1</span>
+    </button>
 
     <!-- Panel del chat -->
     <div class="chat__panel"
