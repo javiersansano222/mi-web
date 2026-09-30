@@ -221,6 +221,37 @@
           <span>Curiosidad</span>
           <span>Superación</span>
         </div>
+                <!-- ============================================================
+             ÁRBOL DE REPOSITORIOS DE GITHUB
+             ============================================================ -->
+        <div class="counter counter--tree reveal" id="counter-repos">
+          <button class="counter__head" type="button"
+                  aria-expanded="false"
+                  aria-controls="repos-tree">
+            <span class="counter__num" id="repos-count" data-target="0">00</span>
+            <span class="counter__title">repositorios en GitHub</span>
+            <span class="counter__chevron" aria-hidden="true">▾</span>
+          </button>
+
+          <div class="counter__body" id="repos-tree">
+            <ul class="tree" id="repos-list">
+              <!-- Se rellena dinámicamente con JS -->
+              <li class="tree__loading">
+                <span class="tree__loading-dot"></span>
+                <span class="tree__loading-dot"></span>
+                <span class="tree__loading-dot"></span>
+                <em>cargando repositorios…</em>
+              </li>
+            </ul>
+
+            <a class="repos-all"
+               href="https://github.com/javiersansano222?tab=repositories"
+               target="_blank"
+               rel="noopener noreferrer">
+              Ver todos en GitHub <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
 
         <!-- Contador de cosas que he hecho -->
         <div class="counter reveal" id="counter">
@@ -534,17 +565,19 @@
         <a class="button button--gold" href="https://wa.me/34663509281?text=Hola%2C%20soy%20Javier%20Sansano%20Mart%C3%ADnez.%20Estoy%20estudiando%20Desarrollo%20de%20Aplicaciones%20Multiplataforma%20%28DAM%29%20y%20me%20gustar%C3%ADa%20trabajar%20como%20programador%20en%20proyectos%20diferentes.%20Me%20interesan%20la%20tecnolog%C3%ADa%2C%20los%20ordenadores%20y%20seguir%20aprendiendo.%20%C2%A1Encantado%20de%20conocerte!" target="_blank" rel="noopener noreferrer">Presentarme por WhatsApp <span aria-hidden="true">↗</span></a>
         <span class="contact__small">SE ABRIRÁ WHATSAPP CON EL MENSAJE LISTO PARA ENVIAR</span>
 
-        <!-- ============================================================
-             FORMULARIO DE CONTACTO
-             (Sustituye TU_EMAIL@outlook.com por tu email real)
-             ============================================================ -->
-        <form class="contact-form"
-              action="https://formsubmit.co/javsanmar6@alu.edu.gva.es"
+               <form class="contact-form"
+              action="https://api.web3forms.com/submit"
               method="POST">
 
-          <input type="hidden" name="_subject" value="Nuevo mensaje desde tu portafolio">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
+          <!-- Access Key de Web3Forms -->
+          <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
+
+          <!-- Asunto del correo -->
+          <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
+          <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
+
+          <!-- Anti-spam (honeypot invisible) -->
+          <input type="checkbox" name="botcheck" style="display:none">
 
           <p class="contact-form__label">O escríbeme directamente:</p>
 
@@ -578,6 +611,11 @@
                       placeholder="Cuéntame en qué puedo ayudarte..."
                       required></textarea>
           </div>
+
+          <button type="submit" class="contact-form__submit">
+            Enviar mensaje <span aria-hidden="true">→</span>
+          </button>
+        </form>
 
           <button type="submit" class="contact-form__submit">
             Enviar mensaje <span aria-hidden="true">→</span>
