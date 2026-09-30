@@ -495,5 +495,167 @@
   if (storedChatOpen === "true") {
     window.setTimeout(openChat, 800);
   }
+    /* =========================================================
+     ÁRBOL DE REPOSITORIOS DE GITHUB
+     ========================================================= */
+  const reposCounter = $("#counter-repos");
+  const reposHead = $(".counter__head", reposCounter);
+  const reposList = $("#repos-list");
+  const reposCount = $("#repos-count");
+
+  const setReposCounter = (open) => {
+    if (!reposCounter || !reposHead) return;
+    reposCounter.classList.toggle("is-open", open);
+    reposHead.setAttribute("aria-expanded", String(open));
+  };
+
+  reposHead?.addEventListener("click", () => {
+    setReposCounter(!reposCounter.classList.contains("is-open"));
+  });
+
+  const GITHUB_USER = "javiersansano222";
+  const REPOS_LIMIT = 6;
+  const CACHE_KEY = "portfolio-github-repos";
+  const CACHE_TTL = 60 * 60 * 1000; // 1 hora
+
+  const colorForLang = (lang) => {
+    const map = {
+      JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
+      CSS: "#563d7c", Java: "#b07219", Python: "#3572A5", PHP: "#4F5D95",
+      "C#": "#178600", "C++": "#f34b7d", C: "#555555", Shell: "#89e051",
+      Vue: "#41b883", Ruby: "#701516", Go: "#00ADD8", Rust: "#dea584",
+      Kotlin: "#A97BFF", Swift: "#ffac45"
+    };
+    return map[lang] || "#d4a84b";
+  };
+
+  const renderTree = (repos) => {
+    if (!reposList) return;
+
+    if (!repos || repos.length === 0) {
+      reposList.innerHTML = `
+        <li class="tree__empty">
+          No he podido cargar los repositorios ahora mismo.<br>
+          Míralos directamente en
+          <a href="https://github.com/${GITHUB_USER}?tab=repositories"
+             target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        </li>`;
+      if (reposCount) reposCount.textContent = "00";
+      return;
+    }
+
+    if (reposCount) {
+      reposCount.textContent = String(repos.length).padStart(2, "0");
+      reposCount.dataset.target = String(repos.length);
+    }
+
+    reposList.innerHTML = "";
+
+    repos.forEach((repo) => {
+      const li = document.createElement("li");
+      li.className = "tree__item";
+
+      const a = document.createElement("a");
+      a.className = "tree__row";
+      a.href = repo.html_url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", `Abrir ${repo.name} en GitHub`);
+
+         const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        icon.setAttribute("viewBox", "0 0 16 16");
+        icon.setAttribute("width", "16");
+        icon.setAttribute("height", "16");
+        icon.setAttribute("class", "tree__icon");
+        icon.setAttribute("aria-hidden", "true");
+        icon.style.width = "16px";
+        icon.style.height = "16px";
+        icon.style.flexShrink = "0";
+        icon.innerHTML = `
+          <path d="M1.5 3.5 h4 l1.5 2 h7.5 v8.5 h-13 z"
+                fill="none" stroke="currentColor" stroke-width="1.2"
+                stroke-linejoin="round"/>
+          <line x1="1.5" y1="6" x2="14.5" y2="6"
+                stroke="currentColor" stroke-width="0.7" opacity="0.6"/>`;
+      const name = document.createElement("span");
+      name.className = "tree__name";
+      name.textContent = repo.name;
+
+      const meta = document.createElement("span");
+      meta.className = "tree__meta";
+
+      if (repo.language) {
+        const lang = document.createElement("span");
+        lang.className = "tree__lang";
+        const dot = document.createElement("i");
+        const c = colorForLang(repo.language);
+        dot.style.background = c;
+        dot.style.color = c;
+        lang.appendChild(dot);
+        lang.appendChild(document.createTextNode(repo.language));
+        meta.appendChild(lang);
+      }
+
+      if (repo.stargazers_count > 0) {
+        const stars = document.createElement("span");
+        stars.className = "tree__stars";
+        stars.innerHTML = `
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 .25l2.36 4.78 5.28.77-3.82 3.72.9 5.26L8 12.3l-4.72 2.48.9-5.26L.36 5.8l5.28-.77L8 .25z"/>
+          </svg>`;
+        stars.appendChild(document.createTextNode(String(repo.stargazers_count)));
+        meta.appendChild(stars);
+      }
+
+      const arrow = document.createElement("span");
+      arrow.className = "tree__arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "↗";
+
+      a.appendChild(icon);
+      a.appendChild(name);
+      a.appendChild(meta);
+      a.appendChild(arrow);
+
+      li.appendChild(a);
+      reposList.appendChild(li);
+    });
+  };
+
+  const loadRepos = async () => {
+    if (!reposList) return;
+
+    // 1. Intentar caché
+    try {
+      const cached = JSON.parse(safeGet(CACHE_KEY) || "null");
+      if (cached && Date.now() - cached.time < CACHE_TTL) {
+        renderTree(cached.data);
+        return;
+      }
+    } catch { /* ignorar */ }
+
+    // 2. Fetch a la API
+    try {
+      const res = await fetch(
+        `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`,
+        { headers: { Accept: "application/vnd.github+json" } }
+      );
+      if (!res.ok) throw new Error("GitHub API error " + res.status);
+
+      const all = await res.json();
+      const filtered = all
+        .filter((r) => !r.fork && !r.archived)
+        .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+        .slice(0, REPOS_LIMIT);
+
+      safeSet(CACHE_KEY, JSON.stringify({ time: Date.now(), data: filtered }));
+      renderTree(filtered);
+    } catch (err) {
+      console.warn("No se pudieron cargar los repos:", err);
+      renderTree(null);
+    }
+  };
+
+  loadRepos();
 
 })();
