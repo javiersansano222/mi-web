@@ -568,18 +568,25 @@
                <form class="contact-form"
               action="https://api.web3forms.com/submit"
               method="POST">
+            <form class="contact-form"
+                  action="https://api.web3forms.com/submit"
+                  method="POST">
 
-          <!-- Access Key de Web3Forms -->
-          <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
+              <!-- Access Key de Web3Forms -->
+              <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
 
-          <!-- Asunto del correo -->
-          <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
-          <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
+              <!-- Redirigir a tu página de gracias tras enviar -->
+              <input type="hidden" name="redirect" value="https://javiersansano222.github.io/mi-web/gracias.html">
 
-          <!-- Anti-spam (honeypot invisible) -->
-          <input type="checkbox" name="botcheck" style="display:none">
+              <!-- Asunto y remitente del correo -->
+              <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
+              <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
 
-          <p class="contact-form__label">O escríbeme directamente:</p>
+              <!-- Anti-spam honeypot invisible -->
+              <input type="checkbox" name="botcheck" style="display:none">
+
+  <p class="contact-form__label">O escríbeme directamente:</p>
+  ...
 
           <div class="contact-form__row">
             <div class="contact-form__field">
