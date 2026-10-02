@@ -5,36 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Portafolio de Javier Sansano Martínez, estudiante de Desarrollo de Aplicaciones Multiplataforma.">
   <meta name="theme-color" content="#0a1220">
-    <!-- =========================================================
-       META OG (Open Graph) — para compartir en redes sociales
-       ========================================================= -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Javier Sansano Martínez — Portafolio">
-  <meta property="og:description" content="Estudiante de DAM. Portafolio personal con diseño Art Déco: proyectos, intereses, recorrido y contacto.">
-  <meta property="og:url" content="https://javiersansano222.github.io/mi-web/">
-  <meta property="og:image" content="https://javiersansano222.github.io/mi-web/img/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="es_ES">
-
-  <!-- Twitter Card (opcional, pero ayuda) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Javier Sansano Martínez — Portafolio">
-  <meta name="twitter:description" content="Estudiante de DAM. Portafolio personal con diseño Art Déco.">
-  <meta name="twitter:image" content="https://javiersansano222.github.io/mi-web/img/og-image.jpg">
   <title>Javier Sansano Martínez — Portafolio</title>
 
-  <!-- Google Fonts: Cinzel (títulos) + Lora (cuerpo) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
   <script src="script.js" defer></script>
+  <script src="scene.js" defer></script>
 </head>
 
-<body>
+<body class="is-loading">
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <!-- INTRO -->
+  <div class="intro-overlay" id="intro-overlay" aria-hidden="true">
+    <div class="intro-overlay__inner">
+      <p class="intro-overlay__eyebrow">PORTFOLIO · MMXXV</p>
+      <h1 class="intro-overlay__name">
+        <span class="intro-overlay__name-line">JAVIER</span>
+        <span class="intro-overlay__name-line">SANSANO</span>
+      </h1>
+      <div class="intro-overlay__progress">
+        <div class="intro-overlay__bar" id="intro-bar"></div>
+      </div>
+      <p class="intro-overlay__percent" id="intro-percent">0%</p>
+    </div>
+  </div>
 
   <div class="scroll-progress"
        id="scroll-progress"
@@ -44,14 +44,9 @@
        aria-valuemax="100"
        aria-valuenow="0"></div>
 
-  <!-- ============================================================
-       FONDO ART DÉCO
-       ============================================================ -->
+  <!-- FONDO ART DÉCO -->
   <div class="ocean" aria-hidden="true">
-
-    <!-- Ciudad Art Déco animada: 3 capas de profundidad -->
     <div class="city-bg" aria-hidden="true">
-
       <div class="city-layer city-layer--far">
         <div class="city-layer__inner">
           <span class="bld bld--sm"></span>
@@ -70,7 +65,6 @@
           <span class="bld bld--sm"></span>
         </div>
       </div>
-
       <div class="city-layer city-layer--mid">
         <div class="city-layer__inner">
           <span class="bld bld--md"></span>
@@ -87,7 +81,6 @@
           <span class="bld bld--lg"></span>
         </div>
       </div>
-
       <div class="city-layer city-layer--near">
         <div class="city-layer__inner">
           <span class="bld bld--lg"></span>
@@ -102,21 +95,18 @@
           <span class="bld bld--xl"></span>
         </div>
       </div>
-
     </div>
 
     <div class="ocean__glow"></div>
     <div class="ocean__grain"></div>
-
     <div class="bubble bubble--one"></div>
     <div class="bubble bubble--two"></div>
     <div class="bubble bubble--three"></div>
     <div class="bubble bubble--four"></div>
-
     <canvas id="particles"></canvas>
   </div>
 
-    <!-- Línea de bienvenida -->
+  <!-- BIENVENIDA -->
   <div class="welcome-bar">
     <span class="welcome-bar__text">
       <span class="welcome-bar__star" aria-hidden="true">✦</span>
@@ -124,6 +114,8 @@
       <span class="welcome-bar__star" aria-hidden="true">✦</span>
     </span>
   </div>
+
+  <!-- HEADER CON EL LOGO JS -->
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Javier Sansano, inicio">
       <span class="brand__seal"><span>JS</span></span>
@@ -165,6 +157,7 @@
   </header>
 
   <main id="contenido">
+    <!-- HERO -->
     <section class="hero section-shell" id="inicio">
       <div class="hero__copy reveal">
         <p class="eyebrow"><span class="status-dot"></span> ESTUDIANTE DE DAM · CONSTRUYENDO MI CAMINO</p>
@@ -185,10 +178,17 @@
         </div>
       </div>
 
-      <div class="hero-art reveal" aria-label="Ilustración decorativa de una ciudad Art Déco">
+      <div class="hero-scene" id="hero-scene" aria-hidden="true">
+        <canvas id="scene-3d"></canvas>
+        <div class="hero-scene__hud">
+          <span>◈ SISTEMA 3D ACTIVO</span>
+          <span id="scene-fps">60 FPS</span>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" id="hero-art-fallback" aria-label="Ilustración decorativa de una ciudad Art Déco">
         <div class="hero-art__orbit hero-art__orbit--outer"></div>
         <div class="hero-art__orbit hero-art__orbit--inner"></div>
-        <div class="hero-art__sun"></div>
         <div class="hero-art__waterline"></div>
         <div class="city">
           <div class="tower tower--left"><i></i><i></i><i></i><i></i><i></i></div>
@@ -207,6 +207,7 @@
       <a class="scroll-cue" href="#sobre-mi"><span></span> DESPLÁZATE PARA DESCUBRIR</a>
     </section>
 
+    <!-- SOBRE MÍ -->
     <section class="intro section-shell" id="sobre-mi">
       <div class="section-heading reveal">
         <p class="eyebrow">01 / QUIÉN SOY</p>
@@ -221,9 +222,7 @@
           <span>Curiosidad</span>
           <span>Superación</span>
         </div>
-                <!-- ============================================================
-             ÁRBOL DE REPOSITORIOS DE GITHUB
-             ============================================================ -->
+
         <div class="counter counter--tree reveal" id="counter-repos">
           <button class="counter__head" type="button"
                   aria-expanded="false"
@@ -232,10 +231,8 @@
             <span class="counter__title">repositorios en GitHub</span>
             <span class="counter__chevron" aria-hidden="true">▾</span>
           </button>
-
           <div class="counter__body" id="repos-tree">
             <ul class="tree" id="repos-list">
-              <!-- Se rellena dinámicamente con JS -->
               <li class="tree__loading">
                 <span class="tree__loading-dot"></span>
                 <span class="tree__loading-dot"></span>
@@ -243,7 +240,6 @@
                 <em>cargando repositorios…</em>
               </li>
             </ul>
-
             <a class="repos-all"
                href="https://github.com/javiersansano222?tab=repositories"
                target="_blank"
@@ -253,7 +249,6 @@
           </div>
         </div>
 
-        <!-- Contador de cosas que he hecho -->
         <div class="counter reveal" id="counter">
           <button class="counter__head" type="button"
                   aria-expanded="false"
@@ -262,7 +257,6 @@
             <span class="counter__title">cosas que he hecho</span>
             <span class="counter__chevron" aria-hidden="true">▾</span>
           </button>
-
           <div class="counter__body" id="counter-list">
             <ul class="counter__list">
               <li><span>01</span> Terminé el Grado Medio de SMX</li>
@@ -277,6 +271,7 @@
       </div>
     </section>
 
+    <!-- PROYECTOS -->
     <section class="projects section-shell" id="proyectos">
       <div class="section-heading section-heading--row reveal">
         <div>
@@ -308,71 +303,33 @@
             <span class="project-number">01</span>
           </div>
 
-                   <!-- Galería de juegos favoritos con carátulas reales -->
           <div class="game-grid" aria-label="Algunos de mis videojuegos favoritos">
-
             <article class="game" data-game="fallout">
-              <img class="game__cover"
-                   src="img/fallout new vegas.jpg"
-                   alt="Carátula de Fallout"
-                   loading="lazy">
+              <img class="game__cover" src="img/fallout new vegas.jpg" alt="Carátula de Fallout" loading="lazy">
               <span class="game__num">01</span>
-              <div class="game__meta">
-                <strong>Fallout</strong>
-                <small>1997 — Post-apocalipsis</small>
-              </div>
+              <div class="game__meta"><strong>Fallout</strong><small>1997 — Post-apocalipsis</small></div>
             </article>
-
             <article class="game" data-game="doom">
-              <img class="game__cover"
-                    src="img/doom.webp"
-                   alt="Carátula de Doom"
-                   loading="lazy">
+              <img class="game__cover" src="img/doom.webp" alt="Carátula de Doom" loading="lazy">
               <span class="game__num">02</span>
-              <div class="game__meta">
-                <strong>Doom</strong>
-                <small>1993 — Acción</small>
-              </div>
+              <div class="game__meta"><strong>Doom</strong><small>1993 — Acción</small></div>
             </article>
-
             <article class="game" data-game="skyrim">
-              <img class="game__cover"
-                   src="img/skyrim-tag-page-cover-art.avif"
-                   alt="Carátula de Skyrim"
-                   loading="lazy">
+              <img class="game__cover" src="img/skyrim-tag-page-cover-art.avif" alt="Carátula de Skyrim" loading="lazy">
               <span class="game__num">03</span>
-              <div class="game__meta">
-                <strong>Skyrim</strong>
-                <small>2011 — Fantasía</small>
-              </div>
+              <div class="game__meta"><strong>Skyrim</strong><small>2011 — Fantasía</small></div>
             </article>
-
             <article class="game" data-game="bioshock">
-              <img class="game__cover"
-                   src="img/bioshock.png"
-                   alt="Carátula de Bioshock"
-                   loading="lazy">
+              <img class="game__cover" src="img/bioshock.png" alt="Carátula de Bioshock" loading="lazy">
               <span class="game__num">04</span>
-              <div class="game__meta">
-                <strong>Bioshock</strong>
-                <small>2007 — Distopía</small>
-              </div>
+              <div class="game__meta"><strong>Bioshock</strong><small>2007 — Distopía</small></div>
             </article>
-
             <article class="game" data-game="cyberpunk">
-              <img class="game__cover"
-                   src="img/cyberpunk.avif"
-                   alt="Carátula de Cyberpunk 2077"
-                   loading="lazy">
+              <img class="game__cover" src="img/cyberpunk.avif" alt="Carátula de Cyberpunk 2077" loading="lazy">
               <span class="game__num">05</span>
-              <div class="game__meta">
-                <strong>Cyberpunk 2077</strong>
-                <small>2020 — Futuro</small>
-              </div>
+              <div class="game__meta"><strong>Cyberpunk 2077</strong><small>2020 — Futuro</small></div>
             </article>
-
           </div>
-        
 
           <div class="tag-row"><span>Historias</span><span>Retos</span><span>Creatividad</span></div>
         </article>
@@ -423,9 +380,7 @@
       <p class="projects-note reveal"><span>✳</span> Los proyectos irán creciendo conmigo. Vuelve pronto para ver las novedades.</p>
     </section>
 
-    <!-- ============================================================
-         SECCIÓN: DENTRO DEL ORDENADOR
-         ============================================================ -->
+    <!-- DENTRO DEL ORDENADOR -->
     <section class="inside section-shell" id="dentro">
       <div class="section-heading reveal">
         <p class="eyebrow">03 / DENTRO DEL ORDENADOR</p>
@@ -433,70 +388,51 @@
       </div>
 
       <div class="inside__stage reveal">
-
         <div class="pc" aria-label="Vista lateral de un ordenador gaming con sus componentes">
-
           <img class="pc__photo"
-               src="img/pc.jpg."
-               alt="Ordenador gaming en vista lateral con iluminación RGB, mostrando la tarjeta gráfica, el procesador, la memoria RAM y los ventiladores">
+               src="img/pc.jpg"
+               alt="Ordenador gaming en vista lateral con iluminación RGB, mostrando la tarjeta gráfica, el procesador, la memoria RAM y los ventiladores"
+               loading="lazy">
 
-          <!-- Hotspot 1: CPU -->
-          <button class="hotspot" data-part="cpu" style="top: 30%; left: 38%;"
-                  aria-label="CPU: procesador">
+          <button class="hotspot" data-part="cpu" style="top: 30%; left: 38%;" aria-label="CPU: procesador">
             <span class="hotspot__dot"></span>
             <span class="hotspot__tip">
               <strong>CPU</strong>
               <small>Procesador — el cerebro del PC. Ejecuta todas las instrucciones.</small>
             </span>
           </button>
-
-          <!-- Hotspot 2: RAM -->
-          <button class="hotspot" data-part="ram" style="top: 30%; left: 55%;"
-                  aria-label="RAM: memoria">
+          <button class="hotspot" data-part="ram" style="top: 30%; left: 55%;" aria-label="RAM: memoria">
             <span class="hotspot__dot"></span>
             <span class="hotspot__tip">
               <strong>RAM</strong>
               <small>Memoria — guarda los datos que el PC está usando ahora mismo.</small>
             </span>
           </button>
-
-          <!-- Hotspot 3: GPU -->
-          <button class="hotspot" data-part="gpu" style="top: 58%; left: 42%;"
-                  aria-label="GPU: tarjeta gráfica">
+          <button class="hotspot" data-part="gpu" style="top: 58%; left: 42%;" aria-label="GPU: tarjeta gráfica">
             <span class="hotspot__dot"></span>
             <span class="hotspot__tip">
               <strong>GPU</strong>
               <small>Tarjeta gráfica — dibuja los gráficos y los juegos.</small>
             </span>
           </button>
-
-          <!-- Hotspot 4: Refrigeración -->
-          <button class="hotspot" data-part="cooling" style="top: 50%; left: 80%;"
-                  aria-label="Refrigeración: ventiladores">
+          <button class="hotspot" data-part="cooling" style="top: 50%; left: 80%;" aria-label="Refrigeración: ventiladores">
             <span class="hotspot__dot"></span>
             <span class="hotspot__tip">
               <strong>REFRIGERACIÓN</strong>
               <small>Ventiladores y radiador — mantienen fríos los componentes.</small>
             </span>
           </button>
-
-          <!-- Hotspot 5: Almacenamiento -->
-          <button class="hotspot" data-part="storage" style="top: 48%; left: 42%;"
-                  aria-label="Almacenamiento: SSD">
+          <button class="hotspot" data-part="storage" style="top: 48%; left: 42%;" aria-label="Almacenamiento: SSD">
             <span class="hotspot__dot"></span>
             <span class="hotspot__tip">
               <strong>ALMACENAMIENTO</strong>
               <small>SSD o disco duro — guarda tus archivos y programas.</small>
             </span>
           </button>
-
         </div>
 
-        <!-- Descripción bajo la foto -->
         <div class="pc__caption">
-          <p class="pc__caption-line">
-            Un ordenador es mucho más que una caja con luces.
-          </p>
+          <p class="pc__caption-line">Un ordenador es mucho más que una caja con luces.</p>
           <p class="pc__caption-body">
             Cada pieza cumple una función concreta y todas trabajan en equipo:
             el <strong>procesador</strong> ejecuta las órdenes, la
@@ -507,10 +443,10 @@
             Pasa el ratón por encima de cada punto para descubrirlas.
           </p>
         </div>
-
       </div>
     </section>
 
+    <!-- RECORRIDO -->
     <section class="journey section-shell" id="recorrido">
       <div class="section-heading reveal">
         <p class="eyebrow">04 / MI RECORRIDO</p>
@@ -556,6 +492,7 @@
       </div>
     </section>
 
+    <!-- CONTACTO -->
     <section class="contact section-shell" id="contacto">
       <div class="contact-frame reveal">
         <div class="contact__ornament" aria-hidden="true">✳</div>
@@ -565,58 +502,34 @@
         <a class="button button--gold" href="https://wa.me/34663509281?text=Hola%2C%20soy%20Javier%20Sansano%20Mart%C3%ADnez.%20Estoy%20estudiando%20Desarrollo%20de%20Aplicaciones%20Multiplataforma%20%28DAM%29%20y%20me%20gustar%C3%ADa%20trabajar%20como%20programador%20en%20proyectos%20diferentes.%20Me%20interesan%20la%20tecnolog%C3%ADa%2C%20los%20ordenadores%20y%20seguir%20aprendiendo.%20%C2%A1Encantado%20de%20conocerte!" target="_blank" rel="noopener noreferrer">Presentarme por WhatsApp <span aria-hidden="true">↗</span></a>
         <span class="contact__small">SE ABRIRÁ WHATSAPP CON EL MENSAJE LISTO PARA ENVIAR</span>
 
-               <form class="contact-form"
+        <form class="contact-form"
               action="https://api.web3forms.com/submit"
               method="POST">
-            <form class="contact-form"
-                  action="https://api.web3forms.com/submit"
-                  method="POST">
+          <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
+          <input type="hidden" name="redirect" value="https://javiersansano222.github.io/mi-web/gracias.html">
+          <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
+          <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
+          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
 
-              <!-- Access Key de Web3Forms -->
-              <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
-
-              <!-- Redirigir a tu página de gracias tras enviar -->
-              <input type="hidden" name="redirect" value="https://javiersansano222.github.io/mi-web/gracias.html">
-
-              <!-- Asunto y remitente del correo -->
-              <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
-              <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
-
-              <!-- Anti-spam honeypot invisible -->
-              <input type="checkbox" name="botcheck" style="display:none">
-
-  <p class="contact-form__label">O escríbeme directamente:</p>
-  ...
+          <p class="contact-form__label">O escríbeme directamente:</p>
 
           <div class="contact-form__row">
             <div class="contact-form__field">
               <label for="form-nombre">Nombre</label>
-              <input type="text"
-                     id="form-nombre"
-                     name="nombre"
-                     placeholder="Tu nombre"
-                     required
-                     autocomplete="name">
+              <input type="text" id="form-nombre" name="nombre"
+                     placeholder="Tu nombre" required autocomplete="name">
             </div>
-
             <div class="contact-form__field">
               <label for="form-email">Email</label>
-              <input type="email"
-                     id="form-email"
-                     name="email"
-                     placeholder="tu@email.com"
-                     required
-                     autocomplete="email">
+              <input type="email" id="form-email" name="email"
+                     placeholder="tu@email.com" required autocomplete="email">
             </div>
           </div>
 
           <div class="contact-form__field">
             <label for="form-mensaje">Mensaje</label>
-            <textarea id="form-mensaje"
-                      name="mensaje"
-                      rows="5"
-                      placeholder="Cuéntame en qué puedo ayudarte..."
-                      required></textarea>
+            <textarea id="form-mensaje" name="mensaje" rows="5"
+                      placeholder="Cuéntame en qué puedo ayudarte..." required></textarea>
           </div>
 
           <button type="submit" class="contact-form__submit">
@@ -624,36 +537,17 @@
           </button>
         </form>
 
-          <button type="submit" class="contact-form__submit">
-            Enviar mensaje <span aria-hidden="true">→</span>
-          </button>
-        </form>
-
-              <!-- ============================================================
-             ENLACES PROFESIONALES (GitHub + LinkedIn)
-             ============================================================ -->
         <div class="contact-links">
           <p class="contact-links__label">O encuéntrame aquí:</p>
-
           <div class="contact-links__row">
-
-            <!-- GitHub -->
             <a class="contact-link"
                href="https://github.com/javiersansano222"
-               target="_blank"
-               rel="noopener noreferrer"
+               target="_blank" rel="noopener noreferrer"
                aria-label="Ver GitHub">
               <span class="contact-link__icon" aria-hidden="true">
                 <svg viewBox="0 0 48 48" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M24 3 L44 24 L24 45 L4 24 Z"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.4"/>
-                  <path d="M24 10 L38 24 L24 38 L10 24 Z"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="0.8"
-                        opacity="0.6"/>
+                  <path d="M24 3 L44 24 L24 45 L4 24 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                  <path d="M24 10 L38 24 L24 38 L10 24 Z" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.6"/>
                   <circle cx="24" cy="24" r="3" fill="currentColor"/>
                   <circle cx="24" cy="14" r="1.4" fill="currentColor"/>
                   <circle cx="24" cy="34" r="1.4" fill="currentColor"/>
@@ -671,24 +565,14 @@
               </span>
             </a>
 
-            <!-- LinkedIn -->
             <a class="contact-link"
                href="https://www.linkedin.com/in/TU_USUARIO_LINKEDIN"
-               target="_blank"
-               rel="noopener noreferrer"
+               target="_blank" rel="noopener noreferrer"
                aria-label="Ver LinkedIn">
               <span class="contact-link__icon" aria-hidden="true">
                 <svg viewBox="0 0 48 48" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="24" r="20"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.4"/>
-                  <circle cx="24" cy="24" r="15"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="0.7"
-                          opacity="0.6"
-                          stroke-dasharray="2 3"/>
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                  <circle cx="24" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.6" stroke-dasharray="2 3"/>
                   <g fill="currentColor">
                     <rect x="16" y="16" width="2.4" height="2.4"/>
                     <rect x="16" y="20.5" width="2.4" height="12"/>
@@ -707,54 +591,20 @@
                 <small>Mi perfil profesional</small>
               </span>
             </a>
-                        <!-- Proyecto Gimnasio (en proceso) -->
-            <a class="contact-link"
-               href="#"
-               aria-label="Próximo proyecto: gimnasio (en proceso)">
+
+            <a class="contact-link" href="#" aria-label="Próximo proyecto: gimnasio (en proceso)">
               <span class="contact-link__icon" aria-hidden="true">
                 <svg viewBox="0 0 48 48" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Barra central -->
-                  <rect x="14" y="23" width="20" height="2"
-                        fill="currentColor"/>
-
-                  <!-- Disco izquierdo exterior -->
-                  <rect x="8" y="18" width="4" height="12"
-                        fill="currentColor"/>
-                  <!-- Disco izquierdo interior -->
-                  <rect x="12" y="20" width="3" height="8"
-                        fill="currentColor"/>
-                  <!-- Mango izquierdo -->
-                  <rect x="4" y="22" width="4" height="4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.4"/>
-
-                  <!-- Disco derecho exterior -->
-                  <rect x="36" y="18" width="4" height="12"
-                        fill="currentColor"/>
-                  <!-- Disco derecho interior -->
-                  <rect x="33" y="20" width="3" height="8"
-                        fill="currentColor"/>
-                  <!-- Mango derecho -->
-                  <rect x="40" y="22" width="4" height="4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.4"/>
-
-                  <!-- Detalles Art Déco: líneas verticales en los discos -->
-                  <line x1="10" y1="20" x2="10" y2="28"
-                        stroke="#0a1220"
-                        stroke-width="0.6"
-                        opacity="0.6"/>
-                  <line x1="38" y1="20" x2="38" y2="28"
-                        stroke="#0a1220"
-                        stroke-width="0.6"
-                        opacity="0.6"/>
-
-                  <!-- Rombo decorativo en el centro (marca Art Déco) -->
-                  <path d="M24 21 L26 24 L24 27 L22 24 Z"
-                        fill="currentColor"
-                        opacity="0.9"/>
+                  <rect x="14" y="23" width="20" height="2" fill="currentColor"/>
+                  <rect x="8" y="18" width="4" height="12" fill="currentColor"/>
+                  <rect x="12" y="20" width="3" height="8" fill="currentColor"/>
+                  <rect x="4" y="22" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                  <rect x="36" y="18" width="4" height="12" fill="currentColor"/>
+                  <rect x="33" y="20" width="3" height="8" fill="currentColor"/>
+                  <rect x="40" y="22" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+                  <line x1="10" y1="20" x2="10" y2="28" stroke="#0a1220" stroke-width="0.6" opacity="0.6"/>
+                  <line x1="38" y1="20" x2="38" y2="28" stroke="#0a1220" stroke-width="0.6" opacity="0.6"/>
+                  <path d="M24 21 L26 24 L24 27 L22 24 Z" fill="currentColor" opacity="0.9"/>
                 </svg>
               </span>
               <span class="contact-link__text">
@@ -764,6 +614,7 @@
             </a>
           </div>
         </div>
+      </div>
     </section>
   </main>
 
@@ -775,56 +626,28 @@
     <span class="footer-note">Un paso cada día. Una idea cada vez.</span>
     <a class="back-top" href="#inicio" aria-label="Volver arriba">↑</a>
   </footer>
-    <!-- ============================================================
-       CHATBOT FLOTANTE — ASISTENTE DE JAVIER
-       ============================================================ -->
-  <div class="chat" id="chat">
 
-    <!-- Botón flotante (burbuja que abre el chat) -->
+  <!-- CHATBOT -->
+  <div class="chat" id="chat">
     <button class="chat__toggle"
             id="chat-toggle"
             type="button"
             aria-label="Abrir chat del asistente"
             aria-expanded="false"
             aria-controls="chat-panel">
-
-      <!-- Ondas de energía expandiéndose -->
       <span class="chat__wave chat__wave--1" aria-hidden="true"></span>
       <span class="chat__wave chat__wave--2" aria-hidden="true"></span>
       <span class="chat__wave chat__wave--3" aria-hidden="true"></span>
-
-      <!-- Aro exterior girando -->
       <span class="chat__ring chat__ring--outer" aria-hidden="true"></span>
       <span class="chat__ring chat__ring--inner" aria-hidden="true"></span>
 
-      <!-- El ojo de Rapture -->
       <span class="chat__toggle-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <!-- Párpado -->
-          <ellipse cx="32" cy="32" rx="26" ry="15"
-                   fill="none"
-                   stroke="currentColor"
-                   stroke-width="2"
-                   class="chat-eye__lid"/>
-          <!-- Iris -->
-          <circle cx="32" cy="32" r="11"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  opacity="0.7"/>
-          <!-- Relleno del iris -->
-          <circle cx="32" cy="32" r="8"
-                  fill="currentColor"
-                  class="chat-eye__iris"/>
-          <!-- Pupila -->
-          <circle cx="32" cy="32" r="3.5"
-                  fill="#0a1220"
-                  class="chat-eye__pupil"/>
-          <!-- Brillo -->
-          <circle cx="28.5" cy="28.5" r="1.8"
-                  fill="#ffffff"
-                  opacity="0.95"/>
-          <!-- Pestañas Art Déco -->
+          <ellipse cx="32" cy="32" rx="26" ry="15" fill="none" stroke="currentColor" stroke-width="2" class="chat-eye__lid"/>
+          <circle cx="32" cy="32" r="11" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="32" cy="32" r="8" fill="currentColor" class="chat-eye__iris"/>
+          <circle cx="32" cy="32" r="3.5" fill="#0a1220" class="chat-eye__pupil"/>
+          <circle cx="28.5" cy="28.5" r="1.8" fill="#ffffff" opacity="0.95"/>
           <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
             <line x1="6"  y1="32" x2="12" y2="32"/>
             <line x1="52" y1="32" x2="58" y2="32"/>
@@ -838,99 +661,42 @@
         </svg>
       </span>
 
-      <!-- Partículas doradas girando -->
       <span class="chat__spark chat__spark--1" aria-hidden="true"></span>
       <span class="chat__spark chat__spark--2" aria-hidden="true"></span>
       <span class="chat__spark chat__spark--3" aria-hidden="true"></span>
-
-      <!-- Badge -->
       <span class="chat__toggle-badge" aria-hidden="true">1</span>
     </button>
 
-    <!-- Panel del chat -->
     <div class="chat__panel"
          id="chat-panel"
          role="dialog"
          aria-label="Chat del asistente"
          aria-hidden="true">
-
-      <!-- Cabecera -->
       <header class="chat__header">
-        <svg viewBox="0 0 64 64" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
-  <!-- Cabeza -->
-  <circle cx="32" cy="20" r="10"
-          fill="#1a1208"
-          stroke="#f4d98a"
-          stroke-width="1.6"/>
-  
-  <!-- Pelo estilizado -->
-  <path d="M22 14 Q32 6 42 14"
-        fill="#0a1220"
-        stroke="#e08a3c"
-        stroke-width="1.4"
-        stroke-linecap="round"/>
-  <line x1="24" y1="12" x2="26" y2="10" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
-  <line x1="32" y1="10" x2="32" y2="8" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
-  <line x1="40" y1="12" x2="38" y2="10" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
-  
-  <!-- Ojos -->
-  <circle cx="28" cy="19" r="1.2" fill="#f4d98a"/>
-  <circle cx="36" cy="19" r="1.2" fill="#f4d98a"/>
-  
-  <!-- Sonrisa -->
-  <path d="M28 24 Q32 27 36 24"
-        fill="none"
-        stroke="#e08a3c"
-        stroke-width="1.2"
-        stroke-linecap="round"/>
-  
-  <!-- Cuello -->
-  <line x1="32" y1="30" x2="32" y2="34"
-        stroke="#f4d98a"
-        stroke-width="1.6"/>
-  
-  <!-- Cuerpo (traje) -->
-  <path d="M24 36 L40 36 L42 56 L22 56 Z"
-        fill="#0a1220"
-        stroke="#f4d98a"
-        stroke-width="1.6"
-        stroke-linejoin="round"/>
-  
-  <!-- Cuello de la camisa -->
-  <path d="M30 36 L32 40 L34 36"
-        fill="#e08a3c"
-        stroke="#e08a3c"
-        stroke-width="0.9"/>
-  
-  <!-- Corbata -->
-  <line x1="32" y1="40" x2="32" y2="52"
-        stroke="#e08a3c"
-        stroke-width="1.2"/>
-  
-  <!-- Brazo izquierdo -->
-  <line x1="24" y1="38" x2="22" y2="52"
-        stroke="#f4d98a"
-        stroke-width="1.4"
-        stroke-linecap="round"/>
-  
-  <!-- Brazo derecho levantado saludando (ANIMADO) -->
-  <g class="chat-avatar__wave">
-    <line x1="40" y1="38" x2="48" y2="30"
-          stroke="#f4d98a"
-          stroke-width="1.4"
-          stroke-linecap="round"/>
-    <!-- Mano -->
-    <circle cx="49" cy="28" r="2.8"
-            fill="#1a1208"
-            stroke="#f4d98a"
-            stroke-width="1.4"/>
-    <!-- Dedos -->
-    <line x1="48" y1="26" x2="46" y2="23" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
-    <line x1="49" y1="25.5" x2="49" y2="22" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
-    <line x1="50" y1="26" x2="52" y2="23" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
-  </g>
-</svg>
-</span>
+        <span class="chat__avatar" aria-hidden="true">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="32" cy="20" r="10" fill="#1a1208" stroke="#f4d98a" stroke-width="1.6"/>
+            <path d="M22 14 Q32 6 42 14" fill="#0a1220" stroke="#e08a3c" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="24" y1="12" x2="26" y2="10" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
+            <line x1="32" y1="10" x2="32" y2="8" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
+            <line x1="40" y1="12" x2="38" y2="10" stroke="#f4d98a" stroke-width="0.9" stroke-linecap="round"/>
+            <circle cx="28" cy="19" r="1.2" fill="#f4d98a"/>
+            <circle cx="36" cy="19" r="1.2" fill="#f4d98a"/>
+            <path d="M28 24 Q32 27 36 24" fill="none" stroke="#e08a3c" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="32" y1="30" x2="32" y2="34" stroke="#f4d98a" stroke-width="1.6"/>
+            <path d="M24 36 L40 36 L42 56 L22 56 Z" fill="#0a1220" stroke="#f4d98a" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M30 36 L32 40 L34 36" fill="#e08a3c" stroke="#e08a3c" stroke-width="0.9"/>
+            <line x1="32" y1="40" x2="32" y2="52" stroke="#e08a3c" stroke-width="1.2"/>
+            <line x1="24" y1="38" x2="22" y2="52" stroke="#f4d98a" stroke-width="1.4" stroke-linecap="round"/>
+            <g class="chat-avatar__wave">
+              <line x1="40" y1="38" x2="48" y2="30" stroke="#f4d98a" stroke-width="1.4" stroke-linecap="round"/>
+              <circle cx="49" cy="28" r="2.8" fill="#1a1208" stroke="#f4d98a" stroke-width="1.4"/>
+              <line x1="48" y1="26" x2="46" y2="23" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
+              <line x1="49" y1="25.5" x2="49" y2="22" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
+              <line x1="50" y1="26" x2="52" y2="23" stroke="#e08a3c" stroke-width="1" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </span>
         <div class="chat__meta">
           <strong class="chat__name">Asistente de Javier</strong>
           <small class="chat__status">
@@ -938,23 +704,11 @@
             En línea
           </small>
         </div>
-        <button class="chat__close"
-                id="chat-close"
-                type="button"
-                aria-label="Cerrar chat">
-          ✕
-        </button>
+        <button class="chat__close" id="chat-close" type="button" aria-label="Cerrar chat">✕</button>
       </header>
 
-      <!-- Mensajes -->
-      <div class="chat__messages"
-           id="chat-messages"
-           role="log"
-           aria-live="polite">
-        <!-- Los mensajes se añaden aquí dinámicamente con JS -->
-      </div>
+      <div class="chat__messages" id="chat-messages" role="log" aria-live="polite"></div>
 
-      <!-- Botones rápidos -->
       <div class="chat__quick" id="chat-quick" aria-label="Preguntas rápidas">
         <button type="button" class="chat__quick-btn" data-msg="proyectos">Proyectos</button>
         <button type="button" class="chat__quick-btn" data-msg="contacto">Contacto</button>
@@ -963,22 +717,14 @@
         <button type="button" class="chat__quick-btn" data-msg="juegos">Juegos</button>
       </div>
 
-      <!-- Formulario de envío -->
       <form class="chat__form" id="chat-form" autocomplete="off">
         <label for="chat-input" class="sr-only">Escribe tu mensaje</label>
-        <input type="text"
-               id="chat-input"
-               class="chat__input"
-               placeholder="Escribe tu pregunta..."
-               maxlength="200"
-               required>
-        <button type="submit"
-                class="chat__send"
-                aria-label="Enviar mensaje">
+        <input type="text" id="chat-input" class="chat__input"
+               placeholder="Escribe tu pregunta..." maxlength="200" required>
+        <button type="submit" class="chat__send" aria-label="Enviar mensaje">
           <span aria-hidden="true">→</span>
         </button>
       </form>
-
     </div>
   </div>
 </body>
