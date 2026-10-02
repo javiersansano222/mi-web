@@ -2,31 +2,87 @@
   "use strict";
 
   const root = document.documentElement;
-  const $ = (selector, scope = document) => scope.querySelector(selector);
-  const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+  const $ = (sel, scope = document) => scope.querySelector(sel);
+  const $$ = (sel, scope = document) => [...scope.querySelectorAll(sel)];
 
-  /* ---------------------------------------------------------
-     Almacenamiento robusto
-     --------------------------------------------------------- */
-  const memoryStore = {};
-  const safeGet = (key) => {
-    try { return localStorage.getItem(key); }
-    catch { return memoryStore[key] ?? null; }
-  };
-  const safeSet = (key, value) => {
-    try { localStorage.setItem(key, value); }
-    catch { memoryStore[key] = String(value); }
+  const safeGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const safeSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  console.info("[script] Iniciando…");
+
+  /* =========================================================
+     1. INTRO
+     ========================================================= */
+  const introOverlay = $("#intro-overlay");
+  const introBar = $("#intro-bar");
+  const introPercent = $("#intro-percent");
+
+  const introAlreadySeen = safeGet("portfolio-intro-seen") === "true";
+  const skipIntro = prefersReducedMotion() || introAlreadySeen;
+
+  console.info("[script] intro overlay:", !!introOverlay,
+               "| ya vista:", introAlreadySeen,
+               "| reduced-motion:", prefersReducedMotion());
+
+  const finishIntro = () => {
+    document.body.classList.remove("is-loading");
+    safeSet("portfolio-intro-seen", "true");
+    if (!introOverlay) return;
+    introOverlay.classList.add("is-hidden");
+    window.setTimeout(() => {
+      introOverlay.setAttribute("aria-hidden", "true");
+      introOverlay.style.display = "none";
+    }, 1100);
   };
 
-  /* ---------------------------------------------------------
-     Año del footer
-     --------------------------------------------------------- */
+  if (!introOverlay) {
+    document.body.classList.remove("is-loading");
+  } else if (skipIntro) {
+    introOverlay.style.display = "none";
+    introOverlay.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("is-loading");
+    console.info("[script] Intro saltada.");
+  } else {
+    const startTime = performance.now();
+    const minDuration = 1400;
+
+    const step = () => {
+      const elapsed = performance.now() - startTime;
+      const t = Math.min(1, elapsed / minDuration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const value = Math.round(eased * 100);
+
+      if (introBar) introBar.style.width = value + "%";
+      if (introPercent) introPercent.textContent = value + "%";
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        window.setTimeout(finishIntro, 350);
+      }
+    };
+    requestAnimationFrame(step);
+    console.info("[script] Intro en marcha…");
+  }
+
+  window.setTimeout(() => {
+    if (document.body.classList.contains("is-loading")) {
+      console.warn("[script] Timeout de seguridad: liberando scroll");
+      finishIntro();
+    }
+  }, 4000);
+
+  /* =========================================================
+     2. AÑO FOOTER
+     ========================================================= */
   const year = $("#year");
   if (year) year.textContent = String(new Date().getFullYear());
 
-  /* ---------------------------------------------------------
-     Selector de paletas
-     --------------------------------------------------------- */
+  /* =========================================================
+     3. ERAS
+     ========================================================= */
   const eras = ["oro-noche", "cobre-esmeralda", "plata-carbon", "coral-abismo"];
   const eraSelect = $("#era-select");
   const storedEra = safeGet("portfolio-era");
@@ -41,9 +97,9 @@
     });
   }
 
-  /* ---------------------------------------------------------
-     Modo claro / oscuro
-     --------------------------------------------------------- */
+  /* =========================================================
+     4. TEMA
+     ========================================================= */
   const themeToggle = $("#theme-toggle");
   const storedTheme = safeGet("portfolio-theme");
   if (storedTheme === "light" || storedTheme === "dark") root.dataset.theme = storedTheme;
@@ -63,9 +119,9 @@
     syncThemeControl();
   });
 
-  /* ---------------------------------------------------------
-     Menú móvil
-     --------------------------------------------------------- */
+  /* =========================================================
+     5. MENÚ MÓVIL
+     ========================================================= */
   const navToggle = $("#nav-toggle");
   const mainNav = $("#main-nav");
 
@@ -84,144 +140,114 @@
     link.addEventListener("click", () => setMenu(false));
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setMenu(false);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setMenu(false);
   });
 
-  document.addEventListener("click", (event) => {
-    if (mainNav?.classList.contains("nav-open") &&
-        !mainNav.contains(event.target) &&
-        !navToggle?.contains(event.target)) {
-      setMenu(false);
-    }
-  });
-
-  /* ---------------------------------------------------------
-     Barra de progreso del scroll
-     --------------------------------------------------------- */
+  /* =========================================================
+     6. BARRA DE PROGRESO SCROLL
+     ========================================================= */
   const progress = $("#scroll-progress");
   let scrollQueued = false;
-
   const updateProgress = () => {
     if (!progress) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const value = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
-    progress.style.width = `${value}%`;
+    progress.style.width = value + "%";
     progress.setAttribute("aria-valuenow", String(Math.round(value)));
     scrollQueued = false;
   };
-
   window.addEventListener("scroll", () => {
     if (!scrollQueued) {
-      window.requestAnimationFrame(updateProgress);
+      requestAnimationFrame(updateProgress);
       scrollQueued = true;
     }
   }, { passive: true });
-
   window.addEventListener("resize", updateProgress, { passive: true });
   updateProgress();
 
-  /* ---------------------------------------------------------
-     Animación .reveal
-     --------------------------------------------------------- */
+  /* =========================================================
+     7. REVEAL
+     ========================================================= */
   const revealItems = $$(".reveal");
   if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
+    const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
+          io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
-    revealItems.forEach((item) => revealObserver.observe(item));
+    revealItems.forEach((el) => io.observe(el));
   } else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
+    revealItems.forEach((el) => el.classList.add("is-visible"));
   }
 
-  /* ---------------------------------------------------------
-     Máquina de escribir
-     --------------------------------------------------------- */
+  /* =========================================================
+     8. TYPEWRITER
+     ========================================================= */
   const typewriter = $("#typewriter");
-  const phrases = [
-    "ser programador",
-    "crear proyectos diferentes",
-    "no rendirme ante un reto"
-  ];
-
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  if (typewriter && !reduceMotion.matches) {
-    let phraseIndex = 0;
-    let letterIndex = phrases[0].length;
-    let deleting = true;
-
+  const phrases = ["ser programador", "crear proyectos diferentes", "no rendirme ante un reto"];
+  if (typewriter && !prefersReducedMotion()) {
+    let pi = 0, li = phrases[0].length, deleting = true;
     const type = () => {
-      const phrase = phrases[phraseIndex];
-      letterIndex += deleting ? -1 : 1;
-      typewriter.textContent = phrase.slice(0, letterIndex);
+      const phrase = phrases[pi];
+      li += deleting ? -1 : 1;
+      typewriter.textContent = phrase.slice(0, li);
       let delay = deleting ? 42 : 75;
-      if (letterIndex <= 0) {
+      if (li <= 0) {
         deleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
+        pi = (pi + 1) % phrases.length;
         delay = 380;
       }
-      if (letterIndex >= phrases[phraseIndex].length && !deleting) {
+      if (li >= phrases[pi].length && !deleting) {
         deleting = true;
         delay = 1450;
       }
-      window.setTimeout(type, delay);
+      setTimeout(type, delay);
     };
-    window.setTimeout(type, 1700);
+    setTimeout(type, 1700);
   }
 
-  /* ---------------------------------------------------------
-     Tilt 3D
-     --------------------------------------------------------- */
+  /* =========================================================
+     9. TILT
+     ========================================================= */
   const cards = $$("[data-tilt]");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-
-  if (finePointer.matches && !reduceMotion.matches) {
+  if (finePointer.matches && !prefersReducedMotion()) {
     cards.forEach((card) => {
-      card.addEventListener("pointermove", (event) => {
-        const bounds = card.getBoundingClientRect();
-        const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-        const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      card.addEventListener("pointermove", (e) => {
+        const b = card.getBoundingClientRect();
+        const x = (e.clientX - b.left) / b.width - 0.5;
+        const y = (e.clientY - b.top) / b.height - 0.5;
         card.style.transform =
           `perspective(900px) rotateX(${-y * 3}deg) rotateY(${x * 3}deg) translateY(-2px)`;
       });
-      card.addEventListener("pointerleave", () => {
-        card.style.transform = "";
-      });
+      card.addEventListener("pointerleave", () => { card.style.transform = ""; });
     });
   }
 
-  /* ---------------------------------------------------------
-     Partículas del fondo
-     --------------------------------------------------------- */
+  /* =========================================================
+     10. PARTÍCULAS FONDO
+     ========================================================= */
   const canvas = $("#particles");
-  const context = canvas?.getContext("2d", { alpha: true });
-
-  if (canvas && context && !reduceMotion.matches) {
-    let width = 0;
-    let height = 0;
-    let particles = [];
-    let frame = 0;
+  const ctx = canvas?.getContext("2d", { alpha: true });
+  if (canvas && ctx && !prefersReducedMotion()) {
+    let w = 0, h = 0, parts = [], frame = 0;
     const pointer = { x: -1000, y: -1000, active: false };
+    const pCount = () => Math.min(48, Math.max(18, Math.floor(window.innerWidth / 28)));
 
-    const particleCount = () =>
-      Math.min(48, Math.max(18, Math.floor(window.innerWidth / 28)));
-
-    const resizeCanvas = () => {
+    const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.floor(width * ratio);
-      canvas.height = Math.floor(height * ratio);
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      particles = Array.from({ length: particleCount() }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.floor(w * ratio);
+      canvas.height = Math.floor(h * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      parts = Array.from({ length: pCount() }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
         r: Math.random() * 1.7 + 0.4,
         speed: Math.random() * 0.22 + 0.08,
         phase: Math.random() * Math.PI * 2
@@ -229,73 +255,67 @@
     };
 
     const draw = () => {
-      context.clearRect(0, 0, width, height);
-      const time = performance.now() * 0.001;
-      particles.forEach((p) => {
+      ctx.clearRect(0, 0, w, h);
+      const t = performance.now() * 0.001;
+      parts.forEach((p) => {
         p.y -= p.speed;
-        p.x += Math.sin(time + p.phase) * 0.13;
-        if (p.y < -4) {
-          p.y = height + 4;
-          p.x = Math.random() * width;
-        }
-        let alpha = 0.28 + Math.sin(time * 0.8 + p.phase) * 0.14;
+        p.x += Math.sin(t + p.phase) * 0.13;
+        if (p.y < -4) { p.y = h + 4; p.x = Math.random() * w; }
+        let a = 0.28 + Math.sin(t * 0.8 + p.phase) * 0.14;
         if (pointer.active) {
-          const dx = pointer.x - p.x;
-          const dy = pointer.y - p.y;
-          if (dx * dx + dy * dy < 90 * 90) alpha = 0.78;
+          const dx = pointer.x - p.x, dy = pointer.y - p.y;
+          if (dx * dx + dy * dy < 90 * 90) a = 0.78;
         }
-        context.beginPath();
-        context.fillStyle = `rgba(230, 204, 139, ${alpha})`;
-        context.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        context.fill();
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(230, 204, 139, ${a})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
       });
-      frame = window.requestAnimationFrame(draw);
+      frame = requestAnimationFrame(draw);
     };
 
-    resizeCanvas();
+    resize();
     draw();
-
-    window.addEventListener("resize", resizeCanvas, { passive: true });
-    window.addEventListener("pointermove", (event) => {
-      pointer.x = event.clientX;
-      pointer.y = event.clientY;
-      pointer.active = true;
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("pointermove", (e) => {
+      pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true;
     }, { passive: true });
-    window.addEventListener("pointerleave", () => {
-      pointer.active = false;
-    }, { passive: true });
-
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) window.cancelAnimationFrame(frame);
-      else if (!reduceMotion.matches) draw();
+      if (document.hidden) cancelAnimationFrame(frame);
+      else if (!prefersReducedMotion()) draw();
     });
   }
 
-  /* ---------------------------------------------------------
-     Contador "cosas que he hecho"
-     --------------------------------------------------------- */
+  /* =========================================================
+     11. CONTADORES COLAPSABLES
+     ========================================================= */
   const counter = $("#counter");
-  const counterHead = $(".counter__head");
-
+  const counterHead = counter ? $(".counter__head", counter) : null;
   const setCounter = (open) => {
     if (!counter || !counterHead) return;
     counter.classList.toggle("is-open", open);
     counterHead.setAttribute("aria-expanded", String(open));
     safeSet("portfolio-counter", open ? "open" : "closed");
   };
-
-  const storedCounter = safeGet("portfolio-counter");
-  if (storedCounter === "open") setCounter(true);
-
+  if (safeGet("portfolio-counter") === "open") setCounter(true);
   counterHead?.addEventListener("click", () => {
-    const isOpen = counter?.classList.contains("is-open");
-    setCounter(!isOpen);
+    setCounter(!counter.classList.contains("is-open"));
+  });
+
+  const reposCounter = $("#counter-repos");
+  const reposHead = reposCounter ? $(".counter__head", reposCounter) : null;
+  const setReposCounter = (open) => {
+    if (!reposCounter || !reposHead) return;
+    reposCounter.classList.toggle("is-open", open);
+    reposHead.setAttribute("aria-expanded", String(open));
+  };
+  reposHead?.addEventListener("click", () => {
+    setReposCounter(!reposCounter.classList.contains("is-open"));
   });
 
   /* =========================================================
-     CHATBOT FLOTANTE — ASISTENTE DE JAVIER
+     12. CHATBOT
      ========================================================= */
-
   const chat = $("#chat");
   const chatToggle = $("#chat-toggle");
   const chatClose = $("#chat-close");
@@ -305,256 +325,134 @@
   const chatInput = $("#chat-input");
   const chatQuick = $("#chat-quick");
 
-  if (!chat || !chatToggle || !chatPanel) return;
+  if (chat && chatToggle && chatPanel) {
+    const knowledge = [
+      { keys: ["hola","buenas","hey"], reply: "¡Hola! Soy el asistente de Javier. Pregúntame por sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong>, <strong>juegos</strong> o <strong>contacto</strong>." },
+      { keys: ["proyecto","portfolio","web"], reply: "Javier ha creado este <strong>portafolio</strong> con HTML, CSS y JavaScript. Está estudiando DAM." },
+      { keys: ["contacto","whatsapp","linkedin","email"], reply: "Puedes contactarle por el <strong>formulario</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong>." },
+      { keys: ["estudio","dam","smx","formacion"], reply: "Terminó <strong>SMX</strong> y ahora estudia <strong>DAM</strong>." },
+      { keys: ["pc","ordenador","hardware"], reply: "Montó su propio <strong>PC gaming</strong>. Míralo en la sección <strong>Dentro del ordenador</strong>." },
+      { keys: ["juego","fallout","doom","skyrim","bioshock","cyberpunk"], reply: "Sus favoritos: <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> y <strong>Cyberpunk 2077</strong>." },
+      { keys: ["gracias"], reply: "¡De nada! 😊" },
+      { keys: ["adios","bye"], reply: "¡Hasta luego! 👋" }
+    ];
 
-  /* ---------------------------------------------------------
-     Base de conocimiento del bot
-     Cada entrada tiene:
-     - keys: array de palabras clave que activan la respuesta
-     - reply: la respuesta del bot
-     --------------------------------------------------------- */
-  const knowledge = [
-    {
-      keys: ["hola", "hey", "buenas", "buenos dias", "buenas tardes", "buenas noches", "saludos"],
-      reply: "¡Hola! Soy el asistente de Javier. Puedo contarte sobre sus <strong>proyectos</strong>, <strong>estudios</strong>, su <strong>PC</strong>, sus <strong>juegos</strong> favoritos o cómo <strong>contactar</strong> con él."
-    },
-    {
-      keys: ["proyecto", "proyectos", "trabajo", "trabajos", "portfolio", "portafolio", "web"],
-      reply: "Javier ha desarrollado este <strong>portafolio web</strong> desde cero con HTML, CSS y JavaScript. Está estudiando DAM y sigue aprendiendo. ¿Quieres saber sobre sus <strong>estudios</strong> o su <strong>PC</strong>?"
-    },
-    {
-      keys: ["contacto", "contactar", "email", "correo", "escribir", "hablar", "whatsapp", "linkedin"],
-      reply: "Puedes contactar con Javier desde el <strong>formulario de contacto</strong> (abajo), por <strong>WhatsApp</strong>, o a través de su <strong>LinkedIn</strong>. Todos los enlaces están en la sección de contacto."
-    },
-    {
-      keys: ["estudio", "estudios", "formacion", "dam", "smx", "recorrido", "carrera", "daw"],
-      reply: "Javier terminó el <strong>Grado Medio de SMX</strong> y ahora estudia <strong>DAM</strong> (Desarrollo de Aplicaciones Multiplataforma). Además está mejorando su inglés. Puedes ver su recorrido completo en la sección <strong>Mi recorrido</strong>."
-    },
-    {
-      keys: ["pc", "ordenador", "computadora", "hardware", "grafica", "cpu", "ram", "montaje"],
-      reply: "Javier montó su propio <strong>PC gaming</strong> y le apasiona el hardware. En la sección <strong>Dentro del ordenador</strong> hay una foto con puntos interactivos sobre cada componente. ¡Pasa el ratón por encima!"
-    },
-    {
-      keys: ["juego", "juegos", "videojuego", "videojuegos", "gaming", "fallout", "doom", "skyrim", "bioshock", "cyberpunk"],
-      reply: "Sus juegos favoritos son <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> y <strong>Cyberpunk 2077</strong>. Puedes ver las carátulas en la sección <strong>Intereses</strong>."
-    },
-    {
-      keys: ["ingles", "inglés", "b1", "b2", "idioma"],
-      reply: "Javier está mejorando su <strong>inglés</strong> paso a paso: B1, B2 y los siguientes. Es uno de sus objetivos personales."
-    },
-    {
-      keys: ["entrena", "entrenar", "entrenamiento", "gimnasio", "deporte", "rutina"],
-      reply: "Javier entrena <strong>casi a diario</strong>. Es parte de su disciplina y le ayuda a mantener el compromiso con sus objetivos."
-    },
-    {
-      keys: ["gracias", "genial", "perfecto", "guay", "ok"],
-      reply: "¡De nada! 😊 Si necesitas algo más, aquí estoy."
-    },
-    {
-      keys: ["adios", "adiós", "bye", "hasta luego", "chao", "nos vemos"],
-      reply: "¡Hasta luego! Que tengas un buen día. 👋"
-    },
-    {
-      keys: ["quien eres", "quién eres", "que eres", "qué eres", "como te llamas", "cómo te llamas", "nombre"],
-      reply: "Soy el asistente virtual de Javier Sansano, creado para ayudarte a conocer mejor su portafolio. Pregúntame lo que quieras sobre él."
-    }
-  ];
-
-  /* ---------------------------------------------------------
-     Función que busca la mejor respuesta
-     --------------------------------------------------------- */
-  const findReply = (text) => {
-    const normalized = text
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, ""); // quita tildes
-
-    // Buscamos coincidencia por palabra clave
-    for (const item of knowledge) {
-      for (const key of item.keys) {
-        const keyNorm = key.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        if (normalized.includes(keyNorm)) return item.reply;
+    const findReply = (text) => {
+      const n = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      for (const item of knowledge) {
+        for (const k of item.keys) {
+          const kn = k.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          if (n.includes(kn)) return item.reply;
+        }
       }
-    }
+      return "No estoy seguro. Prueba con <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong> o <strong>juegos</strong>.";
+    };
 
-    // Respuesta por defecto si no encuentra nada
-    return "No estoy seguro de eso. Prueba con: <strong>proyectos</strong>, <strong>estudios</strong>, <strong>contacto</strong>, <strong>PC</strong> o <strong>juegos</strong>. También puedes usar los botones de abajo. 👇";
-  };
+    const addMessage = (text, type = "bot") => {
+      const msg = document.createElement("div");
+      msg.className = `chat__msg chat__msg--${type}`;
+      msg.innerHTML = text;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
 
-  /* ---------------------------------------------------------
-     Añadir un mensaje al chat
-     --------------------------------------------------------- */
-  const addMessage = (text, type = "bot") => {
-    const msg = document.createElement("div");
-    msg.className = `chat__msg chat__msg--${type}`;
-    msg.innerHTML = text;
-    chatMessages.appendChild(msg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  };
+    const botReply = (text) => {
+      const typing = document.createElement("div");
+      typing.className = "chat__typing";
+      typing.innerHTML = "<span></span><span></span><span></span>";
+      chatMessages.appendChild(typing);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      setTimeout(() => {
+        typing.remove();
+        addMessage(text, "bot");
+      }, 500 + Math.random() * 500);
+    };
 
-  /* ---------------------------------------------------------
-     Mostrar indicador "escribiendo..." y luego la respuesta
-     --------------------------------------------------------- */
-  const botReply = (text) => {
-    // Indicador de escritura
-    const typing = document.createElement("div");
-    typing.className = "chat__typing";
-    typing.innerHTML = "<span></span><span></span><span></span>";
-    chatMessages.appendChild(typing);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    const openChat = () => {
+      chat.classList.add("is-open");
+      chatToggle.setAttribute("aria-expanded", "true");
+      chatPanel.setAttribute("aria-hidden", "false");
+      safeSet("portfolio-chat-open", "true");
+      setTimeout(() => chatInput?.focus(), 350);
+    };
 
-    // Esperamos entre 500 y 1000ms (simula que "piensa")
-    const delay = 500 + Math.random() * 500;
+    const closeChat = () => {
+      chat.classList.remove("is-open");
+      chatToggle.setAttribute("aria-expanded", "false");
+      chatPanel.setAttribute("aria-hidden", "true");
+      safeSet("portfolio-chat-open", "false");
+    };
 
-    window.setTimeout(() => {
-      typing.remove();
-      addMessage(text, "bot");
-    }, delay);
-  };
-
-  /* ---------------------------------------------------------
-     Abrir / cerrar el chat
-     --------------------------------------------------------- */
-  const openChat = () => {
-    chat.classList.add("is-open");
-    chatToggle.setAttribute("aria-expanded", "true");
-    chatPanel.setAttribute("aria-hidden", "false");
-    safeSet("portfolio-chat-open", "true");
-    window.setTimeout(() => chatInput?.focus(), 350);
-  };
-
-  const closeChat = () => {
-    chat.classList.remove("is-open");
-    chatToggle.setAttribute("aria-expanded", "false");
-    chatPanel.setAttribute("aria-hidden", "true");
-    safeSet("portfolio-chat-open", "false");
-  };
-
-  chatToggle.addEventListener("click", openChat);
-  chatClose?.addEventListener("click", closeChat);
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && chat.classList.contains("is-open")) {
-      closeChat();
-    }
-  });
-
-  /* ---------------------------------------------------------
-     Mensaje de bienvenida (solo la primera vez que se abre)
-     --------------------------------------------------------- */
-  let welcomeShown = false;
-
-  const showWelcome = () => {
-    if (welcomeShown) return;
-    welcomeShown = true;
-    addMessage(
-      "¡Hola! 👋 Soy el asistente de <strong>Javier</strong>. ¿Sobre qué te gustaría saber?",
-      "bot"
-    );
-    addMessage(
-      "Puedes escribir tu pregunta o usar los botones de abajo. 👇",
-      "bot"
-    );
-  };
-
-  chatToggle.addEventListener("click", () => {
-    if (!welcomeShown) showWelcome();
-  });
-
-  /* ---------------------------------------------------------
-     Enviar mensaje desde el formulario
-     --------------------------------------------------------- */
-  chatForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const text = chatInput.value.trim();
-    if (!text) return;
-
-    addMessage(text, "user");
-    chatInput.value = "";
-
-    const reply = findReply(text);
-    botReply(reply);
-  });
-
-  /* ---------------------------------------------------------
-     Botones rápidos
-     --------------------------------------------------------- */
-  $$(".chat__quick-btn", chatQuick).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const text = btn.dataset.msg || btn.textContent;
-      addMessage(text, "user");
-      const reply = findReply(text);
-      botReply(reply);
+    let welcomeShown = false;
+    chatToggle.addEventListener("click", () => {
+      if (!welcomeShown) {
+        welcomeShown = true;
+        addMessage("¡Hola! 👋 Soy el asistente de <strong>Javier</strong>. ¿Sobre qué quieres saber?", "bot");
+        addMessage("Escribe tu pregunta o usa los botones de abajo 👇", "bot");
+      }
+      openChat();
     });
-  });
 
-  /* ---------------------------------------------------------
-     Si el chat estaba abierto, reabrirlo al cargar
-     --------------------------------------------------------- */
-  const storedChatOpen = safeGet("portfolio-chat-open");
-  if (storedChatOpen === "true") {
-    window.setTimeout(openChat, 800);
+    chatClose?.addEventListener("click", closeChat);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && chat.classList.contains("is-open")) closeChat();
+    });
+    chatForm?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      chatInput.value = "";
+      botReply(findReply(text));
+    });
+    $$(".chat__quick-btn", chatQuick || document).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const text = btn.dataset.msg || btn.textContent;
+        addMessage(text, "user");
+        botReply(findReply(text));
+      });
+    });
+
+    if (safeGet("portfolio-chat-open") === "true") {
+      setTimeout(openChat, 800);
+    }
   }
-    /* =========================================================
-     ÁRBOL DE REPOSITORIOS DE GITHUB
+
+  /* =========================================================
+     13. REPOS DE GITHUB
      ========================================================= */
-  const reposCounter = $("#counter-repos");
-  const reposHead = $(".counter__head", reposCounter);
   const reposList = $("#repos-list");
   const reposCount = $("#repos-count");
-
-  const setReposCounter = (open) => {
-    if (!reposCounter || !reposHead) return;
-    reposCounter.classList.toggle("is-open", open);
-    reposHead.setAttribute("aria-expanded", String(open));
-  };
-
-  reposHead?.addEventListener("click", () => {
-    setReposCounter(!reposCounter.classList.contains("is-open"));
-  });
 
   const GITHUB_USER = "javiersansano222";
   const REPOS_LIMIT = 6;
   const CACHE_KEY = "portfolio-github-repos";
-  const CACHE_TTL = 60 * 60 * 1000; // 1 hora
+  const CACHE_TTL = 60 * 60 * 1000;
 
   const colorForLang = (lang) => {
     const map = {
       JavaScript: "#f1e05a", TypeScript: "#3178c6", HTML: "#e34c26",
       CSS: "#563d7c", Java: "#b07219", Python: "#3572A5", PHP: "#4F5D95",
-      "C#": "#178600", "C++": "#f34b7d", C: "#555555", Shell: "#89e051",
-      Vue: "#41b883", Ruby: "#701516", Go: "#00ADD8", Rust: "#dea584",
-      Kotlin: "#A97BFF", Swift: "#ffac45"
+      "C#": "#178600", "C++": "#f34b7d", C: "#555555", Shell: "#89e051"
     };
     return map[lang] || "#d4a84b";
   };
 
   const renderTree = (repos) => {
     if (!reposList) return;
-
     if (!repos || repos.length === 0) {
-      reposList.innerHTML = `
-        <li class="tree__empty">
-          No he podido cargar los repositorios ahora mismo.<br>
-          Míralos directamente en
-          <a href="https://github.com/${GITHUB_USER}?tab=repositories"
-             target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-        </li>`;
+      reposList.innerHTML = `<li class="tree__empty">No se pudieron cargar los repos. <a href="https://github.com/${GITHUB_USER}?tab=repositories" target="_blank" rel="noopener">Ver en GitHub ↗</a></li>`;
       if (reposCount) reposCount.textContent = "00";
       return;
     }
-
     if (reposCount) {
       reposCount.textContent = String(repos.length).padStart(2, "0");
       reposCount.dataset.target = String(repos.length);
     }
-
     reposList.innerHTML = "";
-
     repos.forEach((repo) => {
       const li = document.createElement("li");
       li.className = "tree__item";
-
       const a = document.createElement("a");
       a.className = "tree__row";
       a.href = repo.html_url;
@@ -562,28 +460,22 @@
       a.rel = "noopener noreferrer";
       a.setAttribute("aria-label", `Abrir ${repo.name} en GitHub`);
 
-         const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        icon.setAttribute("viewBox", "0 0 16 16");
-        icon.setAttribute("width", "16");
-        icon.setAttribute("height", "16");
-        icon.setAttribute("class", "tree__icon");
-        icon.setAttribute("aria-hidden", "true");
-        icon.style.width = "16px";
-        icon.style.height = "16px";
-        icon.style.flexShrink = "0";
-        icon.innerHTML = `
-          <path d="M1.5 3.5 h4 l1.5 2 h7.5 v8.5 h-13 z"
-                fill="none" stroke="currentColor" stroke-width="1.2"
-                stroke-linejoin="round"/>
-          <line x1="1.5" y1="6" x2="14.5" y2="6"
-                stroke="currentColor" stroke-width="0.7" opacity="0.6"/>`;
+      const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      icon.setAttribute("viewBox", "0 0 16 16");
+      icon.setAttribute("width", "16");
+      icon.setAttribute("height", "16");
+      icon.setAttribute("class", "tree__icon");
+      icon.style.width = "16px";
+      icon.style.height = "16px";
+      icon.style.flexShrink = "0";
+      icon.innerHTML = `<path d="M1.5 3.5 h4 l1.5 2 h7.5 v8.5 h-13 z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><line x1="1.5" y1="6" x2="14.5" y2="6" stroke="currentColor" stroke-width="0.7" opacity="0.6"/>`;
+
       const name = document.createElement("span");
       name.className = "tree__name";
       name.textContent = repo.name;
 
       const meta = document.createElement("span");
       meta.className = "tree__meta";
-
       if (repo.language) {
         const lang = document.createElement("span");
         lang.className = "tree__lang";
@@ -595,28 +487,14 @@
         lang.appendChild(document.createTextNode(repo.language));
         meta.appendChild(lang);
       }
-
-      if (repo.stargazers_count > 0) {
-        const stars = document.createElement("span");
-        stars.className = "tree__stars";
-        stars.innerHTML = `
-          <svg viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M8 .25l2.36 4.78 5.28.77-3.82 3.72.9 5.26L8 12.3l-4.72 2.48.9-5.26L.36 5.8l5.28-.77L8 .25z"/>
-          </svg>`;
-        stars.appendChild(document.createTextNode(String(repo.stargazers_count)));
-        meta.appendChild(stars);
-      }
-
       const arrow = document.createElement("span");
       arrow.className = "tree__arrow";
-      arrow.setAttribute("aria-hidden", "true");
       arrow.textContent = "↗";
 
       a.appendChild(icon);
       a.appendChild(name);
       a.appendChild(meta);
       a.appendChild(arrow);
-
       li.appendChild(a);
       reposList.appendChild(li);
     });
@@ -624,38 +502,41 @@
 
   const loadRepos = async () => {
     if (!reposList) return;
-
-    // 1. Intentar caché
     try {
       const cached = JSON.parse(safeGet(CACHE_KEY) || "null");
       if (cached && Date.now() - cached.time < CACHE_TTL) {
         renderTree(cached.data);
         return;
       }
-    } catch { /* ignorar */ }
-
-    // 2. Fetch a la API
+    } catch {}
     try {
       const res = await fetch(
         `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`,
         { headers: { Accept: "application/vnd.github+json" } }
       );
-      if (!res.ok) throw new Error("GitHub API error " + res.status);
-
+      if (!res.ok) throw new Error("GitHub " + res.status);
       const all = await res.json();
       const filtered = all
         .filter((r) => !r.fork && !r.archived)
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
         .slice(0, REPOS_LIMIT);
-
       safeSet(CACHE_KEY, JSON.stringify({ time: Date.now(), data: filtered }));
       renderTree(filtered);
     } catch (err) {
-      console.warn("No se pudieron cargar los repos:", err);
+      console.warn("[script] Repos fallo:", err);
       renderTree(null);
     }
   };
-
   loadRepos();
 
+  /* =========================================================
+     14. SCENE READY
+     ========================================================= */
+  document.addEventListener("scene:ready", () => {
+    document.body.classList.add("scene-ready");
+    console.info("[script] Escena 3D lista.");
+  });
+
+  console.info("[script] Todo listo.");
 })();
+
