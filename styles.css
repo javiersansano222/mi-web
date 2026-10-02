@@ -1,6 +1,6 @@
 /* =========================================================
-   PORTAFOLIO JAVIER SANSANO — CSS COMPLETO LIMPIO
-   Estética Art Déco / Bioshock
+   PORTAFOLIO JAVIER SANSANO — CSS COMPLETO
+   Estética Art Déco / Bioshock + Experiencia 3D
    ========================================================= */
 
 /* ---------------------------------------------------------
@@ -75,6 +75,7 @@ body{
   overflow-x: hidden;
   transition: background .4s, color .4s;
 }
+body.is-loading{ overflow: hidden }
 a{ color: inherit; text-decoration: none }
 button, select{ font: inherit }
 button:focus-visible,
@@ -148,10 +149,10 @@ select:focus-visible{
 .bubble--two{ left:72%; width:8px; height:8px; animation-delay:-8s; animation-duration:24s }
 .bubble--three{ left:48%; width:5px; height:5px; animation-delay:-4s; animation-duration:17s }
 .bubble--four{ left:91%; width:16px; height:16px; animation-delay:-12s; animation-duration:27s }
-#particles{ position:absolute; inset:0; width:100%; height:100%; opacity:.55 }
+#particles{ position:absolute; inset:0; width:100%; height:100%; opacity:.55; z-index:1 }
 
 /* ---------------------------------------------------------
-   4. CIUDAD ANIMADA (fondo)
+   4. CIUDAD ANIMADA
    --------------------------------------------------------- */
 .city-bg{
   position: fixed; inset: 0; z-index: -2;
@@ -165,26 +166,15 @@ select:focus-visible{
   display: flex; align-items: flex-end; justify-content: space-around;
   width: 50%; height: 100%; flex-shrink: 0;
 }
-.city-layer--far{
-  height: 45%; opacity: .45;
-  animation: city-scroll 120s linear infinite;
-}
+.city-layer--far{ height: 45%; opacity: .45; animation: city-scroll 120s linear infinite }
 .city-layer--far .bld{
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--water) 90%, transparent), var(--bg-deep));
   filter: blur(1px);
 }
-.city-layer--mid{
-  height: 60%; opacity: .75;
-  animation: city-scroll 80s linear infinite;
-}
-.city-layer--mid .bld{
-  background: linear-gradient(180deg, #0d1220 0%, #050810 100%);
-}
-.city-layer--near{
-  height: 80%; opacity: 1;
-  animation: city-scroll 50s linear infinite;
-}
+.city-layer--mid{ height: 60%; opacity: .75; animation: city-scroll 80s linear infinite }
+.city-layer--mid .bld{ background: linear-gradient(180deg, #0d1220 0%, #050810 100%) }
+.city-layer--near{ height: 80%; opacity: 1; animation: city-scroll 50s linear infinite }
 .city-layer--near .bld{
   background: linear-gradient(180deg, #08080f 0%, #000 100%);
   box-shadow: 0 -6px 30px color-mix(in srgb, var(--ember) 15%, transparent);
@@ -369,7 +359,6 @@ select:focus-visible{
   pointer-events: none;
   text-shadow: 0 0 8px rgba(244, 217, 138, .8);
 }
-
 .theme-toggle{
   width: 40px; padding: 0;
   display: grid; place-items: center;
@@ -393,13 +382,14 @@ html[data-theme="dark"] .theme-toggle::before{
     0 0 8px color-mix(in srgb, var(--gold) 70%, transparent);
 }
 .theme-toggle:hover::before{ transform: scale(1.15) }
-
 .nav-toggle{ display: none }
+
 .section-shell{
   max-width: var(--content);
   margin-inline: auto;
   padding-inline: 34px;
 }
+
 /* ---------------------------------------------------------
    6. HERO
    --------------------------------------------------------- */
@@ -499,7 +489,7 @@ html[data-theme="dark"] .theme-toggle::before{
 }
 
 /* ---------------------------------------------------------
-   7. HERO ART (marco con ciudad interior)
+   7. HERO ART (fallback 2D)
    --------------------------------------------------------- */
 .hero-art{
   height: min(66vw, 620px);
@@ -546,7 +536,6 @@ html[data-theme="dark"] .theme-toggle::before{
   border-style: dashed;
   opacity: .5;
 }
-.hero-art__sun{ display: none }
 .hero-art__waterline{
   position: absolute; left: 5%; right: 5%; top: 82%;
   height: 1px;
@@ -911,7 +900,7 @@ html[data-theme="dark"] .theme-toggle::before{
 .projects-note span{ color: var(--gold); margin-right: 6px }
 
 /* ---------------------------------------------------------
-   10. GALERÍA DE VIDEOJUEGOS (con carátulas)
+   10. GALERÍA DE VIDEOJUEGOS
    --------------------------------------------------------- */
 .game-grid{
   display: grid;
@@ -1003,8 +992,9 @@ html[data-theme="dark"] .theme-toggle::before{
   letter-spacing: .04em;
 }
 .game__initial{ display: none }
+
 /* ---------------------------------------------------------
-   11. SECCIÓN DENTRO DEL ORDENADOR
+   11. DENTRO DEL ORDENADOR
    --------------------------------------------------------- */
 .inside{ padding-top: 95px; padding-bottom: 120px }
 .inside__stage{
@@ -1499,7 +1489,7 @@ html[data-theme="dark"] .theme-toggle::before{
 }
 
 /* ---------------------------------------------------------
-   17. CONTADOR "COSAS QUE HE HECHO"
+   17. CONTADOR
    --------------------------------------------------------- */
 .counter{
   margin-top: 40px;
@@ -1610,7 +1600,7 @@ html[data-theme="dark"] .theme-toggle::before{
 .counter.is-open .counter__list li:nth-child(6){ transition-delay: .30s }
 
 /* ---------------------------------------------------------
-   18. CURSOR PERSONALIZADO ART DÉCO
+   18. CURSOR PERSONALIZADO
    --------------------------------------------------------- */
 html, body{
   cursor:
@@ -1634,7 +1624,7 @@ input, textarea, [contenteditable]{
 }
 
 /* ---------------------------------------------------------
-   19. BARRA DE SCROLL PERSONALIZADA
+   19. BARRA DE SCROLL
    --------------------------------------------------------- */
 ::-webkit-scrollbar{ width: 12px; height: 12px }
 ::-webkit-scrollbar-track{
@@ -1684,7 +1674,7 @@ html{
 }
 
 /* ---------------------------------------------------------
-   20. CHATBOT FLOTANTE — ESTILO ART DÉCO
+   20. CHATBOT
    --------------------------------------------------------- */
 .chat{
   position: fixed;
@@ -1693,10 +1683,6 @@ html{
   z-index: 100;
   font-family: var(--sans);
 }
-
-/* ---------------------------------------------------------
-   Botón flotante (con el ojo Art Déco)
-   --------------------------------------------------------- */
 .chat__toggle{
   position: relative;
   width: 72px;
@@ -1704,9 +1690,7 @@ html{
   border-radius: 50%;
   border: 2px solid var(--gold-bright);
   background: radial-gradient(circle at 35% 30%,
-    #1a2a44 0%,
-    #0a1220 60%,
-    #050810 100%);
+    #1a2a44 0%, #0a1220 60%, #050810 100%);
   color: var(--gold-bright);
   cursor: pointer;
   display: grid;
@@ -1729,11 +1713,7 @@ html{
     0 0 60px color-mix(in srgb, var(--ember) 45%, transparent),
     0 14px 34px rgba(0, 0, 0, .6);
 }
-.chat__toggle:active{
-  transform: translateY(-1px) scale(1.02);
-}
-
-/* Aros girando */
+.chat__toggle:active{ transform: translateY(-1px) scale(1.02) }
 .chat__ring{
   position: absolute;
   border-radius: 50%;
@@ -1760,8 +1740,6 @@ html{
   animation-duration: 2s;
   border-color: var(--gold-bright);
 }
-
-/* Ondas de energía */
 .chat__wave{
   position: absolute;
   inset: 0;
@@ -1774,8 +1752,6 @@ html{
 .chat__wave--1{ animation: chat-wave 3s ease-out infinite }
 .chat__wave--2{ animation: chat-wave 3s ease-out infinite 1s }
 .chat__wave--3{ animation: chat-wave 3s ease-out infinite 2s }
-
-/* Partículas orbitando */
 .chat__spark{
   position: absolute;
   width: 5px;
@@ -1801,8 +1777,6 @@ html{
   top: 6px; right: 6px;
   animation: chat-spark-3 5s linear infinite;
 }
-
-/* El ojo Art Déco */
 .chat__toggle-icon{
   display: grid;
   place-items: center;
@@ -1828,16 +1802,16 @@ html{
 .chat-eye__iris{
   animation: chat-eye-pulse 2.4s ease-in-out infinite;
   transform-origin: 32px 32px;
+  transform-box: view-box;
 }
 .chat-eye__pupil{
   animation: chat-eye-look 6s ease-in-out infinite;
   transform-origin: 32px 32px;
+  transform-box: view-box;
 }
 .chat-eye__lid{
   animation: chat-eye-glow 3s ease-in-out infinite;
 }
-
-/* Badge "1" */
 .chat__toggle-badge{
   position: absolute;
   top: -4px;
@@ -1854,18 +1828,12 @@ html{
   animation: chat-badge-pulse 2s ease-in-out infinite;
   z-index: 5;
 }
-
-/* Ocultar cuando el panel está abierto */
 .chat.is-open .chat__toggle{
   opacity: 0;
   pointer-events: none;
   transform: scale(.6);
   animation: none;
 }
-
-/* ---------------------------------------------------------
-   Panel del chat
-   --------------------------------------------------------- */
 .chat__panel{
   position: absolute;
   bottom: 0;
@@ -1897,8 +1865,6 @@ html{
   visibility: visible;
   transform: translateY(0) scale(1);
 }
-
-/* Cabecera */
 .chat__header{
   display: flex;
   align-items: center;
@@ -1916,18 +1882,32 @@ html{
   height: 40px;
   border: 1px solid var(--gold);
   color: var(--gold-bright);
-  font: 700 13px var(--serif);
-  transform: rotate(45deg);
   flex-shrink: 0;
   position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+    color-mix(in srgb, var(--bg-deep) 60%, transparent) 100%);
 }
 .chat__avatar::after{
   content: "";
   position: absolute;
-  inset: 4px;
-  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  inset: 3px;
+  border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+  pointer-events: none;
 }
-.chat__avatar > *{ transform: rotate(-45deg) }
+.chat__avatar svg{
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--gold-bright);
+  overflow: visible;
+}
+.chat-avatar__wave{
+  transform-origin: 40px 38px;
+  transform-box: view-box;
+  animation: chat-wave-hello 0.9s ease-in-out infinite;
+}
 .chat__meta{
   flex: 1;
   display: flex;
@@ -1968,8 +1948,6 @@ html{
   color: #ffffff;
   transform: rotate(90deg);
 }
-
-/* Mensajes */
 .chat__messages{
   flex: 1;
   overflow-y: auto;
@@ -2018,8 +1996,6 @@ html{
 }
 .chat__msg strong{ color: var(--gold-bright); font-weight: 600 }
 .chat__msg--user strong{ color: #1a1208 }
-
-/* Indicador "escribiendo..." */
 .chat__typing{
   align-self: flex-start;
   display: flex;
@@ -2038,8 +2014,6 @@ html{
 }
 .chat__typing span:nth-child(2){ animation-delay: .2s }
 .chat__typing span:nth-child(3){ animation-delay: .4s }
-
-/* Botones rápidos */
 .chat__quick{
   display: flex;
   flex-wrap: wrap;
@@ -2064,8 +2038,6 @@ html{
   border-color: var(--gold-bright);
   color: #ffffff;
 }
-
-/* Input y botón enviar */
 .chat__form{
   display: flex;
   gap: 8px;
@@ -2120,12 +2092,8 @@ html{
 .project-card:nth-child(2){ transition-delay: .1s }
 .project-card:nth-child(3){ transition-delay: .2s }
 
-@keyframes rise{
-  to{ transform: translateY(-115vh) translateX(26px); opacity: 0 }
-}
-@keyframes glow-drift{
-  to{ transform: translate(14vw, 8vh) scale(1.2) }
-}
+@keyframes rise{ to{ transform: translateY(-115vh) translateX(26px); opacity: 0 } }
+@keyframes glow-drift{ to{ transform: translate(14vw, 8vh) scale(1.2) } }
 @keyframes blink{ to{ opacity: 0 } }
 @keyframes window-flicker{
   0%, 91%, 94%, 100%{ opacity: .92 }
@@ -2154,7 +2122,6 @@ html{
   }
 }
 @keyframes hotspot-spin{ to{ transform: rotate(360deg) } }
-
 @keyframes chat-bounce-in{
   0%{ opacity: 0; transform: translateY(120px) scale(.4) }
   60%{ opacity: 1; transform: translateY(-14px) scale(1.1) }
@@ -2218,7 +2185,25 @@ html{
 }
 @keyframes chat-spark-3{
   from{ transform: rotate(0deg) translateY(-34px) rotate(0deg) }
-  to{ transform: rotate(-360deg) translateY(-34px) rotate(360deg) }
+  to{ transform: rotate(-360deg) translateY(-34deg) rotate(360deg) }
+}
+@keyframes chat-wave-hello{
+  0%   { transform: rotate(0deg) }
+  15%  { transform: rotate(-22deg) }
+  30%  { transform: rotate(8deg) }
+  45%  { transform: rotate(-20deg) }
+  60%  { transform: rotate(6deg) }
+  75%  { transform: rotate(-16deg) }
+  100% { transform: rotate(0deg) }
+}
+@keyframes chat-body-sway{
+  0%, 100%{ transform: rotate(0deg) }
+  50%     { transform: rotate(1.5deg) }
+}
+@keyframes chat-head-nod{
+  0%, 100%{ transform: rotate(0deg) }
+  25%     { transform: rotate(-3deg) }
+  75%     { transform: rotate(3deg) }
 }
 
 /* ---------------------------------------------------------
@@ -2229,7 +2214,7 @@ html{
   .nav{ gap: 18px }
   .hero{ grid-template-columns: 1fr 1fr; padding-top: 65px }
   .hero h1{ font-size: clamp(48px, 7vw, 68px) }
-  .hero-art{ min-height: 380px }
+  .hero-art, .hero-scene{ min-height: 380px }
   .intro, .journey{ gap: 8% }
   .timeline-item{ grid-template-columns: 78px 1fr }
   .timeline-state{ grid-column: 2; justify-self: start }
@@ -2288,6 +2273,9 @@ html{
   .hero__intro{ font-size: 15px }
   .hero__note{ margin-top: 34px; font-size: 12px }
   .hero-art{ height: 400px; min-height: 0; margin: 5px -10px 0; outline-offset: 4px }
+  /* En móvil pequeño mostramos el fallback 2D y ocultamos el 3D por rendimiento */
+  .hero-scene{ display: none }
+  #hero-art-fallback{ display: block !important }
   .scroll-cue{ left: 22px; bottom: 20px; font-size: 8px }
   .intro, .journey{ padding-top: 88px; padding-bottom: 85px; grid-template-columns: 1fr; gap: 24px }
   .intro__body{ padding-top: 0 }
@@ -2387,7 +2375,7 @@ html{
 }
 
 /* ---------------------------------------------------------
-   23. ACCESIBILIDAD — Reduce motion
+   23. ACCESIBILIDAD — REDUCE MOTION
    --------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{
@@ -2414,11 +2402,12 @@ html{
   .chat__toggle-badge,
   .chat__status-dot,
   .chat__msg,
-  .chat__typing span{
-    animation: none !important;
-  }
+  .chat__typing span,
+  .chat-avatar__wave{ animation: none !important }
   .chat__panel{ transition: none }
+  .intro-overlay{ display: none !important }
 }
+
 /* =========================================================
    24. ICONOS SVG PROPIOS DE CONTACTO
    ========================================================= */
@@ -2429,126 +2418,188 @@ html{
   transition: transform .3s var(--ease), filter .3s;
   color: currentColor;
 }
-
 .contact-link:hover .contact-link__icon svg{
   transform: rotate(-6deg) scale(1.1);
   filter: drop-shadow(0 0 6px var(--gold-bright));
 }
+
 /* =========================================================
-   AVATAR DEL CHAT: PERSONA SALUDANDO (v2 más animado)
+   25. HERO SCENE — CANVAS 3D
    ========================================================= */
-
-.chat__avatar{
-  transform: none !important;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background: linear-gradient(180deg,
-    color-mix(in srgb, var(--gold) 8%, transparent) 0%,
-    color-mix(in srgb, var(--bg-deep) 60%, transparent) 100%);
-}
-
-.chat__avatar::after{
-  content: "" !important;
-  position: absolute;
-  inset: 3px;
+.hero-scene{
+  position: relative;
+  height: min(66vw, 620px);
+  min-height: 440px;
   border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
-  pointer-events: none;
+  outline: 1px solid color-mix(in srgb, var(--gold) 12%, transparent);
+  outline-offset: 7px;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 65%,
+      color-mix(in srgb, var(--ember) 40%, transparent), transparent 72%),
+    linear-gradient(180deg, #050810 0%, #0a0e1a 40%, #141a2a 75%, #050810 100%);
+  box-shadow:
+    inset 0 0 80px rgba(0, 0, 0, .6),
+    0 0 60px color-mix(in srgb, var(--ember) 18%, transparent);
 }
-
-.chat__avatar svg{
+.hero-scene::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    repeating-linear-gradient(0deg,
+      transparent 0,
+      transparent 3px,
+      color-mix(in srgb, var(--gold) 3%, transparent) 3px,
+      color-mix(in srgb, var(--gold) 3%, transparent) 4px);
+  mix-blend-mode: overlay;
+  opacity: .5;
+}
+.hero-scene::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(ellipse at 50% 50%,
+    transparent 45%,
+    rgba(0,0,0,.45) 100%);
+}
+.hero-scene canvas{
   display: block;
   width: 100%;
   height: 100%;
-  color: var(--gold-bright);
-  overflow: visible;
-  transform: none !important;
+  position: relative;
+  z-index: 1;
+  touch-action: pan-y;
+}
+.hero-scene__hud{
+  position: absolute;
+  z-index: 4;
+  left: 14px; right: 14px; bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: color-mix(in srgb, var(--gold) 75%, transparent);
+  font: 500 8px var(--serif);
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0,0,0,.9);
+  pointer-events: none;
+}
+.hero-scene__hud span:first-child::before{
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: #7bc9a0;
+  border-radius: 50%;
+  margin-right: 7px;
+  vertical-align: middle;
+  box-shadow: 0 0 8px #7bc9a0;
+  animation: blink 1.6s steps(2, start) infinite;
 }
 
-/* ----- Brazo saludando ----- */
-.chat-avatar__wave{
-  transform-origin: 40px 38px;
-  transform-box: view-box;
-  animation: chat-wave-hello 0.9s ease-in-out infinite;
-}
+/* Ocultar el fallback por defecto cuando el 3D está disponible */
+#hero-art-fallback{ display: none }
 
-@keyframes chat-wave-hello{
-  0%   { transform: rotate(0deg) }
-  15%  { transform: rotate(-22deg) }
-  30%  { transform: rotate(8deg) }
-  45%  { transform: rotate(-20deg) }
-  60%  { transform: rotate(6deg) }
-  75%  { transform: rotate(-16deg) }
-  100% { transform: rotate(0deg) }
-}
-
-/* ----- Cuerpo se balancea un poquito ----- */
-.chat__avatar svg > g:not(.chat-avatar__wave){
-  transform-origin: 32px 56px;
-  transform-box: view-box;
-  animation: chat-body-sway 1.6s ease-in-out infinite;
-}
-
-@keyframes chat-body-sway{
-  0%, 100%{ transform: rotate(0deg) }
-  50%     { transform: rotate(1.5deg) }
-}
-
-/* ----- Ojos parpadean ----- */
-.chat__avatar svg circle[cx="28"],
-.chat__avatar svg circle[cx="36"]{
-  transform-origin: center;
-  transform-box: fill-box;
-  animation: chat-eye-blink 4s ease-in-out infinite;
-}
-
-@keyframes chat-eye-blink{
-  0%, 90%, 100%{ transform: scaleY(1) }
-  92%          { transform: scaleY(.15) }
-  94%          { transform: scaleY(1) }
-}
-
-/* ----- Cabeza hace un gesto sutil ----- */
-.chat__avatar svg circle[cx="32"][cy="20"]{
-  transform-origin: 32px 30px;
-  transform-box: view-box;
-  animation: chat-head-nod 2.4s ease-in-out infinite;
-}
-
-@keyframes chat-head-nod{
-  0%, 100%{ transform: rotate(0deg) }
-  25%     { transform: rotate(-3deg) }
-  75%     { transform: rotate(3deg) }
-}
-
-/* ----- Brillo global ----- */
-.chat__avatar svg{
-  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 50%, transparent));
-  transition: filter .3s;
-}
-.chat.is-open .chat__avatar svg{
-  filter: drop-shadow(0 0 8px var(--gold-bright));
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce){
-  .chat-avatar__wave,
-  .chat__avatar svg > g,
-  .chat__avatar svg circle{
-    animation: none !important;
-  }
-}
 /* =========================================================
-   25. ÁRBOL DE REPOSITORIOS DE GITHUB
+   26. INTRO CINEMATOGRÁFICA
    ========================================================= */
-.counter--tree{
-  margin-top: 20px;
+.intro-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 50% 60%,
+      color-mix(in srgb, var(--ember) 18%, transparent), transparent 60%),
+    linear-gradient(180deg, #050810 0%, #0a1220 60%, #050810 100%);
+  color: var(--gold-bright);
+  transition: opacity 1s var(--ease), visibility 1s;
+  opacity: 1;
+  visibility: visible;
 }
-.counter--tree.is-open .counter__body{
-  max-height: 800px;
+.intro-overlay.is-hidden{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.intro-overlay__inner{
+  text-align: center;
+  padding: 30px;
+  max-width: 640px;
+}
+.intro-overlay__eyebrow{
+  font: 500 10px var(--serif);
+  letter-spacing: .55em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--gold) 85%, transparent);
+  margin: 0 0 28px;
+  opacity: 0;
+  animation: intro-fade 0.8s var(--ease) 0.15s forwards;
+}
+.intro-overlay__name{
+  font: 400 clamp(48px, 9vw, 96px)/0.95 var(--serif);
+  margin: 0 0 40px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow:
+    0 0 30px color-mix(in srgb, var(--gold) 50%, transparent),
+    0 0 60px color-mix(in srgb, var(--ember) 25%, transparent);
+}
+.intro-overlay__name-line{
+  display: block;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  animation: intro-reveal 1.1s var(--ease) forwards;
+}
+.intro-overlay__name-line:nth-child(1){ animation-delay: 0.25s }
+.intro-overlay__name-line:nth-child(2){
+  animation-delay: 0.55s;
+  color: var(--gold-bright);
+}
+.intro-overlay__progress{
+  width: 240px;
+  max-width: 70vw;
+  height: 1px;
+  margin: 0 auto 14px;
+  background: color-mix(in srgb, var(--gold) 25%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+.intro-overlay__bar{
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: linear-gradient(90deg,
+    var(--gold-deep), var(--gold-bright), var(--gold));
+  box-shadow: 0 0 12px var(--gold);
+  transition: width .15s linear;
+}
+.intro-overlay__percent{
+  font: 500 10px var(--serif);
+  letter-spacing: .35em;
+  color: color-mix(in srgb, var(--gold) 80%, transparent);
+  margin: 0;
+}
+@keyframes intro-fade{
+  to { opacity: 1 }
+}
+@keyframes intro-reveal{
+  to { clip-path: inset(0 0 0 0) }
 }
 
-/* ----- Lista tipo árbol ----- */
+/* =========================================================
+   27. ÁRBOL DE REPOSITORIOS GITHUB
+   ========================================================= */
+.counter--tree{ margin-top: 20px }
+.counter--tree.is-open .counter__body{ max-height: 800px }
+
 .tree{
   list-style: none;
   margin: 0;
@@ -2556,11 +2607,7 @@ html{
   font-family: var(--sans);
   position: relative;
 }
-.tree li{
-  list-style: none;
-}
-
-/* Cada rama hija */
+.tree li{ list-style: none }
 .tree__item{
   position: relative;
   padding-left: 34px;
@@ -2582,7 +2629,6 @@ html{
 .counter--tree.is-open .tree__item:nth-child(7){ transition-delay: .35s }
 .counter--tree.is-open .tree__item:nth-child(8){ transition-delay: .40s }
 
-/* Línea vertical del árbol */
 .tree__item::before{
   content: "";
   position: absolute;
@@ -2594,8 +2640,6 @@ html{
     color-mix(in srgb, var(--gold) 50%, transparent),
     color-mix(in srgb, var(--gold) 15%, transparent));
 }
-
-/* Codo horizontal (└─) */
 .tree__item::after{
   content: "";
   position: absolute;
@@ -2605,16 +2649,12 @@ html{
   height: 1px;
   background: color-mix(in srgb, var(--gold) 50%, transparent);
 }
-
-/* Último item: la línea vertical no sigue hacia abajo */
 .tree__item:last-child::before{
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--gold) 50%, transparent) 0%,
     color-mix(in srgb, var(--gold) 50%, transparent) 50%,
     transparent 50%);
 }
-
-/* ----- Fila del repo ----- */
 .tree__row{
   display: flex;
   align-items: center;
@@ -2631,15 +2671,11 @@ html{
   border-color: color-mix(in srgb, var(--gold) 35%, transparent);
   transform: translateX(3px);
 }
-.tree__row:hover .tree__name{
-  color: var(--gold-bright);
-}
+.tree__row:hover .tree__name{ color: var(--gold-bright) }
 .tree__row:hover .tree__arrow{
   color: #fff;
   transform: translate(3px, -3px);
 }
-
-/* Icono de carpeta */
 .tree__icon{
   flex-shrink: 0;
   width: 16px !important;
@@ -2647,8 +2683,6 @@ html{
   color: var(--gold-bright);
   filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 50%, transparent));
 }
-
-/* Nombre del repo */
 .tree__name{
   font: 500 13px var(--serif);
   letter-spacing: .04em;
@@ -2658,8 +2692,6 @@ html{
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-/* Meta a la derecha (lenguaje + estrellas) */
 .tree__meta{
   display: flex;
   align-items: center;
@@ -2691,16 +2723,12 @@ html{
   height: 11px;
   fill: currentColor;
 }
-
-/* Flecha ↗ */
 .tree__arrow{
   color: var(--gold);
   font-size: 13px;
   flex-shrink: 0;
   transition: color .2s, transform .2s;
 }
-
-/* ----- Estado cargando ----- */
 .tree__loading{
   display: flex;
   align-items: center;
@@ -2728,8 +2756,6 @@ html{
   0%, 60%, 100%{ opacity: .3; transform: translateY(0) }
   30%          { opacity: 1;  transform: translateY(-3px) }
 }
-
-/* ----- Estado vacío / error ----- */
 .tree__empty{
   padding: 16px 12px;
   color: #e0e6ee;
@@ -2740,8 +2766,6 @@ html{
   color: var(--gold-bright);
   text-decoration: underline;
 }
-
-/* ----- Botón "Ver todos" ----- */
 .repos-all{
   display: inline-flex;
   align-items: center;
@@ -2768,29 +2792,17 @@ html{
   box-shadow: 0 0 18px color-mix(in srgb, var(--gold) 40%, transparent);
 }
 
-/* ----- Responsive ----- */
 @media (max-width: 700px){
-  .tree{
-    padding: 16px 16px 8px;
-  }
-  .tree__meta{
-    gap: 8px;
-    font-size: 9px;
-  }
-  .tree__name{
-    font-size: 12px;
-  }
+  .tree{ padding: 16px 16px 8px }
+  .tree__meta{ gap: 8px; font-size: 9px }
+  .tree__name{ font-size: 12px }
   .repos-all{
     margin: 6px 16px 16px;
     width: calc(100% - 32px);
     justify-content: center;
   }
-  .counter--tree.is-open .counter__body{
-    max-height: 1200px;
-  }
+  .counter--tree.is-open .counter__body{ max-height: 1200px }
 }
 @media (max-width: 420px){
-  .tree__lang{
-    display: none;
-  }
+  .tree__lang{ display: none }
 }
