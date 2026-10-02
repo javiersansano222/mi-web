@@ -19,7 +19,7 @@
   const introBar = $("#intro-bar");
   const introPercent = $("#intro-percent");
 
-  const introAlreadySeen = safeGet("portfolio-intro-seen") === "true";
+  const introAlreadySeen = false;
   const skipIntro = prefersReducedMotion() || introAlreadySeen;
 
   console.info("[script] intro overlay:", !!introOverlay,
