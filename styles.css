@@ -2824,8 +2824,6 @@ html{
   outline-offset: 6px;
   overflow: hidden;
 }
-
-/* Rejilla de fondo estilo blueprint */
 .pc-diagram::before{
   content: "";
   position: absolute;
@@ -2853,14 +2851,13 @@ html{
   cursor: pointer;
 }
 
-/* Estado base: cada parte tiene su color tenue */
 .pc-part--case    { fill: #0d1220; stroke: color-mix(in srgb, var(--gold) 40%, transparent); stroke-width: 2 }
 .pc-part--mobo    { fill: #101828; stroke: color-mix(in srgb, var(--gold) 25%, transparent); stroke-width: 1.5 }
 .pc-part--cpu     { fill: #2a1f10; stroke: #ffd166; stroke-width: 1.5 }
 .pc-part--ram     { fill: #2a1020; stroke: #ff6b8a; stroke-width: 1.5 }
 .pc-part--gpu     { fill: #0f2422; stroke: #7fd8c8; stroke-width: 1.5 }
 .pc-part--storage { fill: #1f1030; stroke: #c9a0ff; stroke-width: 1.5 }
-.pc-part--cooling { fill: #0a1220; stroke: #a0c4ff; stroke-width: 1.5 }
+.pc-part--cooling { fill: none; stroke: none; }
 .pc-part--psu     { fill: #1a1208; stroke: var(--gold-bright); stroke-width: 1.5 }
 
 .pc-part__detail{
@@ -2869,47 +2866,66 @@ html{
   opacity: .4;
   fill: none;
 }
-.pc-part__fan{
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  opacity: .7;
-  transform-origin: center;
-}
+
+/* --- Ventiladores: marco, aro, aspas, centro --- */
 .pc-part__fan-frame{
   fill: color-mix(in srgb, var(--water) 40%, transparent);
-  stroke: currentColor;
+  stroke: #a0c4ff;
   stroke-width: 1;
   opacity: .5;
 }
+.pc-part__fan{
+  fill: none;
+  stroke: #a0c4ff;
+  stroke-width: 2;
+  opacity: .7;
+}
+.pc-part__blade{
+  fill: color-mix(in srgb, var(--water) 60%, transparent);
+  stroke: #a0c4ff;
+  stroke-width: 1;
+  opacity: .6;
+}
+.pc-part__hub{
+  fill: #0a1220;
+  stroke: #a0c4ff;
+  stroke-width: 1.5;
+}
 
-/* Animación de los ventiladores */
-.pc-part--cooling .pc-part__fan{
+/* 🔑 SOLO este grupo rota. Con transform-box: fill-box,
+   gira respecto a SU propio centro (no respecto al SVG entero). */
+.pc-fan__blades{
+  transform-box: fill-box;
+  transform-origin: center;
   animation: pc-fan-spin 3s linear infinite;
 }
+
 @keyframes pc-fan-spin{
   to { transform: rotate(360deg); }
 }
 
-/* --- Hover: la parte activa se ilumina y las demás se atenúan --- */
+/* En reduced-motion, sin giro */
+@media (prefers-reduced-motion: reduce){
+  .pc-fan__blades{ animation: none }
+}
+
+/* --- Hover: la parte activa se ilumina, las demás se atenúan --- */
 .pc-diagram.is-hovering .pc-part{
-  opacity: .35;
-  filter: grayscale(.6);
+  opacity: .3;
+  filter: grayscale(.7);
 }
 .pc-diagram.is-hovering .pc-part.is-active{
   opacity: 1;
   filter: grayscale(0) drop-shadow(0 0 12px currentColor);
 }
-
-/* Colores de brillo según la parte */
 .pc-part--cpu.is-active     { color: #ffd166 }
 .pc-part--ram.is-active     { color: #ff6b8a }
 .pc-part--gpu.is-active     { color: #7fd8c8 }
 .pc-part--storage.is-active { color: #c9a0ff }
-.pc-part--cooling.is-active { color: #a0c4ff }
+.pc-part--cooling.is-active { color: #a0c4ff; opacity: 1 !important; filter: grayscale(0) drop-shadow(0 0 12px #a0c4ff) }
 .pc-part--psu.is-active     { color: var(--gold-bright) }
 
-/* --- Tooltip flotante --- */
+/* --- Tooltip --- */
 .pc-tooltip{
   position: absolute;
   z-index: 10;
@@ -2957,7 +2973,7 @@ html{
   color: #e0e6ee;
 }
 
-/* --- Leyenda inferior --- */
+/* --- Leyenda --- */
 .pc-legend{
   list-style: none;
   margin: 20px 0 0;
@@ -3013,9 +3029,9 @@ html{
   .pc-legend__btn{ padding: 6px 10px; font-size: 9px }
 }
 
-/* Reducir movimiento: quieto todo */
+/* --- Reducir movimiento --- */
 @media (prefers-reduced-motion: reduce){
-  .pc-part--cooling .pc-part__fan{ animation: none }
+  .pc-fan__blades{ animation: none }
   .pc-part{ transition: none }
   .pc-tooltip{ transition: none }
 }
