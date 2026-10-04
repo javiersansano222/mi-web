@@ -19,7 +19,7 @@
   const introBar = $("#intro-bar");
   const introPercent = $("#intro-percent");
 
-  const introAlreadySeen = false;
+  const introAlreadySeen = safeGet("portfolio-intro-seen") === "true";
   const skipIntro = prefersReducedMotion() || introAlreadySeen;
 
   console.info("[script] intro overlay:", !!introOverlay,
@@ -538,5 +538,117 @@
   });
 
   console.info("[script] Todo listo.");
-})();
+  /* =========================================================
+   15. DIAGRAMA INTERACTIVO DEL PC
+   ========================================================= */
+const pcDiagram = document.querySelector(".pc-diagram");
+if (pcDiagram) {
+  const tooltip = pcDiagram.querySelector("#pc-tooltip");
+  const tooltipTitle = tooltip?.querySelector(".pc-tooltip__title");
+  const tooltipDesc = tooltip?.querySelector(".pc-tooltip__desc");
+  const allParts = pcDiagram.querySelectorAll("[data-part]");
+  const legendBtns = pcDiagram.querySelectorAll(".pc-legend__btn");
 
+  // Info de cada componente
+  const partsInfo = {
+    cpu: {
+      title: "CPU",
+      desc: "Procesador — el cerebro del PC. Ejecuta todas las instrucciones y coordina el resto de componentes."
+    },
+    ram: {
+      title: "RAM",
+      desc: "Memoria de acceso aleatorio — guarda temporalmente los datos que el PC está usando ahora mismo."
+    },
+    gpu: {
+      title: "GPU",
+      desc: "Tarjeta gráfica — se encarga de dibujar los gráficos, los juegos y acelerar tareas pesadas."
+    },
+    storage: {
+      title: "Almacenamiento",
+      desc: "SSD o disco duro — guarda de forma permanente tus archivos, programas y el sistema operativo."
+    },
+    cooling: {
+      title: "Refrigeración",
+      desc: "Ventiladores y radiador — mantienen fríos los componentes para que no se sobrecalienten."
+    },
+    psu: {
+      title: "Fuente de alimentación",
+      desc: "Transforma la corriente de la pared en la energía estable que necesitan todos los componentes."
+    },
+    mobo: {
+      title: "Placa base",
+      desc: "La columna vertebral del PC — conecta y comunica todos los componentes entre sí."
+    },
+    case: {
+      title: "Caja / Chasis",
+      desc: "Protege los componentes, guía el flujo de aire y define el aspecto de tu equipo."
+    }
+  };
+
+  // Mostrar tooltip en una posición (relativa al diagrama)
+  const showTooltip = (part, targetEl) => {
+    const info = partsInfo[part];
+    if (!info || !tooltip) return;
+
+    tooltipTitle.textContent = info.title;
+    tooltipDesc.textContent = info.desc;
+
+    // Posición relativa al diagrama
+    const diagramRect = pcDiagram.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width / 2 - diagramRect.left;
+    const y = targetRect.top - diagramRect.top;
+
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
+    tooltip.classList.add("is-visible");
+    tooltip.setAttribute("aria-hidden", "false");
+
+    // Marcar parte activa
+    pcDiagram.classList.add("is-hovering");
+    allParts.forEach((el) => {
+      el.classList.toggle("is-active", el.dataset.part === part);
+    });
+    legendBtns.forEach((btn) => {
+      btn.classList.toggle("is-active", btn.dataset.part === part);
+    });
+  };
+
+  const hideTooltip = () => {
+    if (!tooltip) return;
+    tooltip.classList.remove("is-visible");
+    tooltip.setAttribute("aria-hidden", "true");
+    pcDiagram.classList.remove("is-hovering");
+    allParts.forEach((el) => el.classList.remove("is-active"));
+    legendBtns.forEach((btn) => btn.classList.remove("is-active"));
+  };
+
+  // Eventos en cada parte del SVG
+  allParts.forEach((el) => {
+    el.addEventListener("mouseenter", () => showTooltip(el.dataset.part, el));
+    el.addEventListener("mouseleave", hideTooltip);
+    el.addEventListener("focus", () => showTooltip(el.dataset.part, el));
+    el.addEventListener("blur", hideTooltip);
+    el.addEventListener("click", () => showTooltip(el.dataset.part, el));
+  });
+
+  // Eventos en la leyenda (también interactiva)
+  legendBtns.forEach((btn) => {
+    btn.addEventListener("mouseenter", () => {
+      const part = btn.dataset.part;
+      const svgPart = pcDiagram.querySelector(`[data-part="${part}"]`);
+      if (svgPart) showTooltip(part, svgPart);
+    });
+    btn.addEventListener("mouseleave", hideTooltip);
+    btn.addEventListener("focus", () => {
+      const part = btn.dataset.part;
+      const svgPart = pcDiagram.querySelector(`[data-part="${part}"]`);
+      if (svgPart) showTooltip(part, svgPart);
+    });
+    btn.addEventListener("blur", hideTooltip);
+  });
+
+  // Ocultar al salir del diagrama completo
+  pcDiagram.addEventListener("mouseleave", hideTooltip);
+}
+})();
