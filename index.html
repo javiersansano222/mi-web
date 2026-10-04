@@ -115,7 +115,7 @@
     </span>
   </div>
 
-  <!-- HEADER CON EL LOGO JS -->
+  <!-- HEADER -->
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Javier Sansano, inicio">
       <span class="brand__seal"><span>JS</span></span>
@@ -380,147 +380,128 @@
       <p class="projects-note reveal"><span>✳</span> Los proyectos irán creciendo conmigo. Vuelve pronto para ver las novedades.</p>
     </section>
 
-  <!-- DENTRO DEL ORDENADOR -->
-<!-- DENTRO DEL ORDENADOR -->
-<section class="inside section-shell" id="dentro">
-  <div class="section-heading reveal">
-    <p class="eyebrow">03 / DENTRO DEL ORDENADOR</p>
-    <h2>Cada pieza,<br><em>una función.</em></h2>
-  </div>
-
-  <div class="inside__stage reveal">
-    <div class="pc-diagram" aria-label="Diagrama interactivo de un ordenador gaming con sus componentes">
-
-      <!-- SVG del PC -->
-      <svg class="pc-svg" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc">
-        <title id="pc-title">Componentes de un ordenador</title>
-        <desc id="pc-desc">Vista lateral de una torre gaming. Pasa el ratón por cada componente para ver su función.</desc>
-
-        <!-- Chasis -->
-        <rect class="pc-part pc-part--case" data-part="case" x="40" y="40" width="720" height="520" rx="8"/>
-
-        <!-- Placa base -->
-        <rect class="pc-part pc-part--mobo" data-part="mobo" x="80" y="80" width="480" height="440" rx="4"/>
-
-        <!-- CPU con disipador -->
-        <g class="pc-part pc-part--cpu" data-part="cpu">
-          <rect x="140" y="130" width="90" height="90" rx="4"/>
-          <circle cx="185" cy="175" r="30" class="pc-part__detail"/>
-          <line x1="185" y1="145" x2="185" y2="205" class="pc-part__detail"/>
-          <line x1="155" y1="175" x2="215" y2="175" class="pc-part__detail"/>
-        </g>
-
-        <!-- RAM: 2 módulos -->
-        <g class="pc-part pc-part--ram" data-part="ram">
-          <rect x="270" y="120" width="16" height="140" rx="2"/>
-          <rect x="295" y="120" width="16" height="140" rx="2"/>
-        </g>
-
-        <!-- GPU con 3 ventiladores -->
-        <g class="pc-part pc-part--gpu" data-part="gpu">
-          <rect x="120" y="320" width="340" height="60" rx="4"/>
-          <circle cx="180" cy="350" r="22" class="pc-part__fan"/>
-          <circle cx="280" cy="350" r="22" class="pc-part__fan"/>
-          <circle cx="380" cy="350" r="22" class="pc-part__fan"/>
-        </g>
-
-        <!-- SSD -->
-        <g class="pc-part pc-part--storage" data-part="storage">
-          <rect x="140" y="430" width="120" height="70" rx="3"/>
-          <line x1="150" y1="450" x2="250" y2="450" class="pc-part__detail"/>
-          <line x1="150" y1="465" x2="250" y2="465" class="pc-part__detail"/>
-          <line x1="150" y1="480" x2="200" y2="480" class="pc-part__detail"/>
-        </g>
-
-        <!-- Refrigeración: 3 ventiladores con aspas, DENTRO del chasis -->
-<g class="pc-part pc-part--cooling" data-part="cooling">
-  <!-- Ventilador 1 (arriba) -->
-  <g transform="translate(600, 150)">
-    <circle r="55" class="pc-part__fan-frame"/>
-    <circle r="45" class="pc-part__fan"/>
-    <g class="pc-fan__blades">
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
-    </g>
-    <circle r="6" class="pc-part__hub"/>
-  </g>
-
-  <!-- Ventilador 2 (centro) -->
-  <g transform="translate(600, 300)">
-    <circle r="55" class="pc-part__fan-frame"/>
-    <circle r="45" class="pc-part__fan"/>
-    <g class="pc-fan__blades">
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
-    </g>
-    <circle r="6" class="pc-part__hub"/>
-  </g>
-
-  <!-- Ventilador 3 (abajo) -->
-  <g transform="translate(600, 450)">
-    <circle r="55" class="pc-part__fan-frame"/>
-    <circle r="45" class="pc-part__fan"/>
-    <g class="pc-fan__blades">
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
-      <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
-    </g>
-    <circle r="6" class="pc-part__hub"/>
-  </g>
-</g>
-
-        <!-- Fuente de alimentación -->
-        <g class="pc-part pc-part--psu" data-part="psu">
-          <rect x="80" y="520" width="240" height="30" rx="2"/>
-        </g>
-
-        <!-- Decoración Art Déco -->
-        <g class="pc-deco" aria-hidden="true">
-          <line x1="40" y1="20" x2="760" y2="20"/>
-          <line x1="40" y1="580" x2="760" y2="580"/>
-          <circle cx="40" cy="40" r="4"/>
-          <circle cx="760" cy="40" r="4"/>
-          <circle cx="40" cy="560" r="4"/>
-          <circle cx="760" cy="560" r="4"/>
-        </g>
-      </svg>
-
-      <!-- Tooltip flotante -->
-      <div class="pc-tooltip" id="pc-tooltip" role="tooltip" aria-hidden="true">
-        <strong class="pc-tooltip__title"></strong>
-        <small class="pc-tooltip__desc"></small>
+    <!-- DENTRO DEL ORDENADOR -->
+    <section class="inside section-shell" id="dentro">
+      <div class="section-heading reveal">
+        <p class="eyebrow">03 / DENTRO DEL ORDENADOR</p>
+        <h2>Cada pieza,<br><em>una función.</em></h2>
       </div>
 
-      <!-- Leyenda interactiva -->
-      <ul class="pc-legend" aria-label="Lista de componentes">
-        <li><button type="button" class="pc-legend__btn" data-part="cpu"><span class="pc-legend__dot" style="--c:#ffd166"></span>CPU</button></li>
-        <li><button type="button" class="pc-legend__btn" data-part="ram"><span class="pc-legend__dot" style="--c:#ff6b8a"></span>RAM</button></li>
-        <li><button type="button" class="pc-legend__btn" data-part="gpu"><span class="pc-legend__dot" style="--c:#7fd8c8"></span>GPU</button></li>
-        <li><button type="button" class="pc-legend__btn" data-part="storage"><span class="pc-legend__dot" style="--c:#c9a0ff"></span>SSD</button></li>
-        <li><button type="button" class="pc-legend__btn" data-part="cooling"><span class="pc-legend__dot" style="--c:#a0c4ff"></span>Refrigeración</button></li>
-        <li><button type="button" class="pc-legend__btn" data-part="psu"><span class="pc-legend__dot" style="--c:#f4d98a"></span>Fuente</button></li>
-      </ul>
-    </div>
+      <div class="inside__stage reveal">
+        <div class="pc-diagram" aria-label="Diagrama interactivo de un ordenador gaming con sus componentes">
 
-    <div class="pc__caption">
-  <p class="pc__caption-line">Entender la máquina es el primer paso para programarla.</p>
-  <p class="pc__caption-body">
-    Desde la <strong>arquitectura de Von Neumann</strong> (1945) hasta los procesadores
-    actuales con miles de millones de transistores, la historia de la informática es la historia
-    de una idea: <strong>separar memoria y cálculo</strong> para poder automatizar tareas.
-    Montar un PC me enseñó que detrás de cada componente hay una decisión de ingeniería:
-    por qué la <strong>CPU</strong> va junto a la <strong>RAM</strong> para reducir latencia,
-    por qué la <strong>GPU</strong> tiene su propia memoria,
-    por qué el <strong>almacenamiento</strong> ahora es SSD y no disco mecánico,
-    o por qué la <strong>refrigeración</strong> importa tanto cuando subes de gama.
-    Entender esa arquitectura es lo que me motiva a estudiar
-    <strong>Desarrollo de Aplicaciones Multiplataforma</strong>: el software y el hardware
-    son dos caras de la misma moneda.
-  </p>
-</div>
-      
+          <svg class="pc-svg" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc">
+            <title id="pc-title">Componentes de un ordenador</title>
+            <desc id="pc-desc">Vista lateral de una torre gaming. Pasa el ratón por cada componente para ver su función.</desc>
+
+            <rect class="pc-part pc-part--case" data-part="case" x="40" y="40" width="720" height="520" rx="8"/>
+            <rect class="pc-part pc-part--mobo" data-part="mobo" x="80" y="80" width="480" height="440" rx="4"/>
+
+            <g class="pc-part pc-part--cpu" data-part="cpu">
+              <rect x="140" y="130" width="90" height="90" rx="4"/>
+              <circle cx="185" cy="175" r="30" class="pc-part__detail"/>
+              <line x1="185" y1="145" x2="185" y2="205" class="pc-part__detail"/>
+              <line x1="155" y1="175" x2="215" y2="175" class="pc-part__detail"/>
+            </g>
+
+            <g class="pc-part pc-part--ram" data-part="ram">
+              <rect x="270" y="120" width="16" height="140" rx="2"/>
+              <rect x="295" y="120" width="16" height="140" rx="2"/>
+            </g>
+
+            <g class="pc-part pc-part--gpu" data-part="gpu">
+              <rect x="120" y="320" width="340" height="60" rx="4"/>
+              <circle cx="180" cy="350" r="22" class="pc-part__fan"/>
+              <circle cx="280" cy="350" r="22" class="pc-part__fan"/>
+              <circle cx="380" cy="350" r="22" class="pc-part__fan"/>
+            </g>
+
+            <g class="pc-part pc-part--storage" data-part="storage">
+              <rect x="140" y="430" width="120" height="70" rx="3"/>
+              <line x1="150" y1="450" x2="250" y2="450" class="pc-part__detail"/>
+              <line x1="150" y1="465" x2="250" y2="465" class="pc-part__detail"/>
+              <line x1="150" y1="480" x2="200" y2="480" class="pc-part__detail"/>
+            </g>
+
+            <g class="pc-part pc-part--cooling" data-part="cooling">
+              <g transform="translate(600, 150)">
+                <circle r="55" class="pc-part__fan-frame"/>
+                <circle r="45" class="pc-part__fan"/>
+                <g class="pc-fan__blades">
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
+                </g>
+                <circle r="6" class="pc-part__hub"/>
+              </g>
+              <g transform="translate(600, 300)">
+                <circle r="55" class="pc-part__fan-frame"/>
+                <circle r="45" class="pc-part__fan"/>
+                <g class="pc-fan__blades">
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
+                </g>
+                <circle r="6" class="pc-part__hub"/>
+              </g>
+              <g transform="translate(600, 450)">
+                <circle r="55" class="pc-part__fan-frame"/>
+                <circle r="45" class="pc-part__fan"/>
+                <g class="pc-fan__blades">
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(120)"/>
+                  <path d="M 0,-40 Q 10,-15 0,0 Q -10,-15 0,-40 Z" class="pc-part__blade" transform="rotate(240)"/>
+                </g>
+                <circle r="6" class="pc-part__hub"/>
+              </g>
+            </g>
+
+            <g class="pc-part pc-part--psu" data-part="psu">
+              <rect x="80" y="520" width="240" height="30" rx="2"/>
+            </g>
+
+            <g class="pc-deco" aria-hidden="true">
+              <line x1="40" y1="20" x2="760" y2="20"/>
+              <line x1="40" y1="580" x2="760" y2="580"/>
+              <circle cx="40" cy="40" r="4"/>
+              <circle cx="760" cy="40" r="4"/>
+              <circle cx="40" cy="560" r="4"/>
+              <circle cx="760" cy="560" r="4"/>
+            </g>
+          </svg>
+
+          <div class="pc-tooltip" id="pc-tooltip" role="tooltip" aria-hidden="true">
+            <strong class="pc-tooltip__title"></strong>
+            <small class="pc-tooltip__desc"></small>
+          </div>
+
+          <ul class="pc-legend" aria-label="Lista de componentes">
+            <li><button type="button" class="pc-legend__btn" data-part="cpu"><span class="pc-legend__dot" style="--c:#ffd166"></span>CPU</button></li>
+            <li><button type="button" class="pc-legend__btn" data-part="ram"><span class="pc-legend__dot" style="--c:#ff6b8a"></span>RAM</button></li>
+            <li><button type="button" class="pc-legend__btn" data-part="gpu"><span class="pc-legend__dot" style="--c:#7fd8c8"></span>GPU</button></li>
+            <li><button type="button" class="pc-legend__btn" data-part="storage"><span class="pc-legend__dot" style="--c:#c9a0ff"></span>SSD</button></li>
+            <li><button type="button" class="pc-legend__btn" data-part="cooling"><span class="pc-legend__dot" style="--c:#a0c4ff"></span>Refrigeración</button></li>
+            <li><button type="button" class="pc-legend__btn" data-part="psu"><span class="pc-legend__dot" style="--c:#f4d98a"></span>Fuente</button></li>
+          </ul>
+        </div>
+
+        <div class="pc__caption">
+          <p class="pc__caption-line">Entender la máquina es el primer paso para programarla.</p>
+          <p class="pc__caption-body">
+            Desde la <strong>arquitectura de Von Neumann</strong> (1945) hasta los procesadores
+            actuales con miles de millones de transistores, la historia de la informática es la historia
+            de una idea: <strong>separar memoria y cálculo</strong> para poder automatizar tareas.
+            Montar un PC me enseñó que detrás de cada componente hay una decisión de ingeniería:
+            por qué la <strong>CPU</strong> va junto a la <strong>RAM</strong> para reducir latencia,
+            por qué la <strong>GPU</strong> tiene su propia memoria,
+            por qué el <strong>almacenamiento</strong> ahora es SSD y no disco mecánico,
+            o por qué la <strong>refrigeración</strong> importa tanto cuando subes de gama.
+            Entender esa arquitectura es lo que me motiva a estudiar
+            <strong>Desarrollo de Aplicaciones Multiplataforma</strong>: el software y el hardware
+            son dos caras de la misma moneda.
+          </p>
+        </div>
+      </div>
     </section>
 
     <!-- RECORRIDO -->
@@ -669,24 +650,24 @@
               </span>
             </a>
 
-            <a class="contact-link" href="#" aria-label="Próximo proyecto: gimnasio (en proceso)">
+            <a class="contact-link"
+               href="estate genoves.html"
+               aria-label="STATE GENOVES: startup inmobiliaria en desarrollo">
               <span class="contact-link__icon" aria-hidden="true">
                 <svg viewBox="0 0 48 48" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="14" y="23" width="20" height="2" fill="currentColor"/>
-                  <rect x="8" y="18" width="4" height="12" fill="currentColor"/>
-                  <rect x="12" y="20" width="3" height="8" fill="currentColor"/>
-                  <rect x="4" y="22" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
-                  <rect x="36" y="18" width="4" height="12" fill="currentColor"/>
-                  <rect x="33" y="20" width="3" height="8" fill="currentColor"/>
-                  <rect x="40" y="22" width="4" height="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
-                  <line x1="10" y1="20" x2="10" y2="28" stroke="#0a1220" stroke-width="0.6" opacity="0.6"/>
-                  <line x1="38" y1="20" x2="38" y2="28" stroke="#0a1220" stroke-width="0.6" opacity="0.6"/>
-                  <path d="M24 21 L26 24 L24 27 L22 24 Z" fill="currentColor" opacity="0.9"/>
+                  <path d="M8 24 L24 10 L40 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M12 24 L12 40 L36 40 L36 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                  <rect x="21" y="30" width="6" height="10" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                  <circle cx="25.5" cy="35" r="0.7" fill="currentColor"/>
+                  <rect x="30" y="14" width="4" height="6" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M32 12 Q 34 9 32 7 Q 30 5 32 3" fill="none" stroke="currentColor" stroke-width="0.9" opacity="0.7"/>
+                  <line x1="4" y1="40" x2="44" y2="40" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  <circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 3"/>
                 </svg>
               </span>
               <span class="contact-link__text">
-                <strong>Mi próximo proyecto</strong>
-                <small>(en proceso)</small>
+                <strong>ESTATE GENOVES</strong>
+                <small>Startup inmobiliaria · En desarrollo</small>
               </span>
             </a>
           </div>
