@@ -2806,3 +2806,216 @@ html{
 @media (max-width: 420px){
   .tree__lang{ display: none }
 }
+/* =========================================================
+   DIAGRAMA INTERACTIVO DEL PC (SVG)
+   ========================================================= */
+
+.pc-diagram{
+  position: relative;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(ellipse at 50% 40%,
+      color-mix(in srgb, var(--ember) 10%, transparent), transparent 70%),
+    linear-gradient(180deg, #050810 0%, #0a1220 100%);
+  outline: 1px solid color-mix(in srgb, var(--gold) 12%, transparent);
+  outline-offset: 6px;
+  overflow: hidden;
+}
+
+/* Rejilla de fondo estilo blueprint */
+.pc-diagram::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--gold) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--gold) 6%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+.pc-svg{
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, .5));
+}
+
+/* --- Partes del PC --- */
+.pc-part{
+  transition: filter .3s, opacity .3s;
+  cursor: pointer;
+}
+
+/* Estado base: cada parte tiene su color tenue */
+.pc-part--case    { fill: #0d1220; stroke: color-mix(in srgb, var(--gold) 40%, transparent); stroke-width: 2 }
+.pc-part--mobo    { fill: #101828; stroke: color-mix(in srgb, var(--gold) 25%, transparent); stroke-width: 1.5 }
+.pc-part--cpu     { fill: #2a1f10; stroke: #ffd166; stroke-width: 1.5 }
+.pc-part--ram     { fill: #2a1020; stroke: #ff6b8a; stroke-width: 1.5 }
+.pc-part--gpu     { fill: #0f2422; stroke: #7fd8c8; stroke-width: 1.5 }
+.pc-part--storage { fill: #1f1030; stroke: #c9a0ff; stroke-width: 1.5 }
+.pc-part--cooling { fill: #0a1220; stroke: #a0c4ff; stroke-width: 1.5 }
+.pc-part--psu     { fill: #1a1208; stroke: var(--gold-bright); stroke-width: 1.5 }
+
+.pc-part__detail{
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: .4;
+  fill: none;
+}
+.pc-part__fan{
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  opacity: .7;
+  transform-origin: center;
+}
+.pc-part__fan-frame{
+  fill: color-mix(in srgb, var(--water) 40%, transparent);
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: .5;
+}
+
+/* Animación de los ventiladores */
+.pc-part--cooling .pc-part__fan{
+  animation: pc-fan-spin 3s linear infinite;
+}
+@keyframes pc-fan-spin{
+  to { transform: rotate(360deg); }
+}
+
+/* --- Hover: la parte activa se ilumina y las demás se atenúan --- */
+.pc-diagram.is-hovering .pc-part{
+  opacity: .35;
+  filter: grayscale(.6);
+}
+.pc-diagram.is-hovering .pc-part.is-active{
+  opacity: 1;
+  filter: grayscale(0) drop-shadow(0 0 12px currentColor);
+}
+
+/* Colores de brillo según la parte */
+.pc-part--cpu.is-active     { color: #ffd166 }
+.pc-part--ram.is-active     { color: #ff6b8a }
+.pc-part--gpu.is-active     { color: #7fd8c8 }
+.pc-part--storage.is-active { color: #c9a0ff }
+.pc-part--cooling.is-active { color: #a0c4ff }
+.pc-part--psu.is-active     { color: var(--gold-bright) }
+
+/* --- Tooltip flotante --- */
+.pc-tooltip{
+  position: absolute;
+  z-index: 10;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--bg-deep) 96%, transparent);
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  outline-offset: 3px;
+  color: #fff;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -110%) translateY(6px);
+  transition: opacity .25s, transform .25s, visibility .25s;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .7);
+}
+.pc-tooltip.is-visible{
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -110%) translateY(0);
+}
+.pc-tooltip::after{
+  content: "";
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%) translateY(-1px) rotate(45deg);
+  width: 10px; height: 10px;
+  background: color-mix(in srgb, var(--bg-deep) 96%, transparent);
+  border-right: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+}
+.pc-tooltip__title{
+  display: block;
+  font: 600 12px var(--serif);
+  letter-spacing: .18em;
+  color: var(--gold-bright);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+.pc-tooltip__desc{
+  display: block;
+  font: 400 11px/1.5 var(--sans);
+  color: #e0e6ee;
+}
+
+/* --- Leyenda inferior --- */
+.pc-legend{
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.pc-legend__btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: #e0e6ee;
+  font: 500 10px var(--serif);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s, transform .2s;
+}
+.pc-legend__btn:hover,
+.pc-legend__btn.is-active{
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  border-color: var(--gold-bright);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.pc-legend__dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 8px var(--c);
+  flex-shrink: 0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px){
+  .pc-diagram{ padding: 12px }
+  .pc-tooltip{
+    min-width: 160px;
+    max-width: 200px;
+    padding: 9px 11px;
+  }
+  .pc-tooltip__title{ font-size: 10px }
+  .pc-tooltip__desc{ font-size: 9px }
+  .pc-legend{ gap: 6px; margin-top: 14px }
+  .pc-legend__btn{ padding: 6px 10px; font-size: 9px }
+}
+
+/* Reducir movimiento: quieto todo */
+@media (prefers-reduced-motion: reduce){
+  .pc-part--cooling .pc-part__fan{ animation: none }
+  .pc-part{ transition: none }
+  .pc-tooltip{ transition: none }
+}
