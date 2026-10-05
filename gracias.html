@@ -3,14 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mensaje enviado correctamente — Javier Sansano Martínez.">
   <meta name="theme-color" content="#0a1220">
   <title>Mensaje enviado — Javier Sansano</title>
 
+  <!-- Open Graph (para compartir) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mensaje enviado — Javier Sansano">
+  <meta property="og:description" content="Gracias por escribirme. Te responderé lo antes posible.">
+  <meta property="og:url" content="https://javiersansano222.github.io/mi-web/gracias.html">
+  <meta property="og:locale" content="es_ES">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <style>
     /* --- Estilos solo para esta página de gracias --- */
@@ -18,7 +27,7 @@
       min-height: 100svh;
       display: grid;
       place-items: center;
-      padding: 40px 20px;
+      padding: 60px 20px;
       text-align: center;
       position: relative;
       z-index: 1;
@@ -34,7 +43,6 @@
       position: relative;
       backdrop-filter: blur(10px);
     }
-    /* Esquinas Art Déco */
     .gracias-card::before,
     .gracias-card::after{
       content: "";
@@ -119,6 +127,41 @@
       border-color: var(--gold-bright);
       color: var(--gold-bright);
     }
+
+    /* Footer mínimo */
+    .gracias-footer{
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 20px 30px;
+      font: italic 12px var(--serif);
+      color: #e0e6ee;
+      letter-spacing: .06em;
+    }
+    .gracias-footer a{
+      color: var(--gold-bright);
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+      transition: color .2s, border-color .2s;
+    }
+    .gracias-footer a:hover{
+      color: #ffffff;
+      border-color: var(--gold-bright);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px){
+      .gracias-wrap{ padding: 40px 16px }
+      .gracias-card{ padding: 44px 24px }
+      .gracias-card h1{ font-size: clamp(28px, 8vw, 38px) }
+      .gracias-icon{ font-size: 36px }
+      .gracias-footer{ padding-bottom: 20px }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .gracias-icon{ animation: none }
+    }
   </style>
 </head>
 
@@ -134,17 +177,18 @@
     <div class="bubble bubble--four"></div>
   </div>
 
-  <main class="gracias-wrap">
+  <main class="gracias-wrap" aria-labelledby="gracias-title">
     <div class="gracias-card">
       <div class="gracias-icon" aria-hidden="true">✦</div>
 
-      <h1>Mensaje<br><em>enviado.</em></h1>
+      <h1 id="gracias-title">Mensaje<br><em>enviado.</em></h1>
 
       <div class="gracias-divider" aria-hidden="true"></div>
 
       <p>
         Gracias por escribirme. He recibido tu mensaje
-        y te responderé lo antes posible.
+        y te responderé lo antes posible, normalmente
+        en menos de 24 horas.
       </p>
 
       <div class="gracias-actions">
@@ -154,6 +198,13 @@
       </div>
     </div>
   </main>
+
+  <footer class="gracias-footer">
+    Mientras tanto, puedes ver mis
+    <a href="index.html#proyectos">intereses</a>,
+    <a href="index.html#dentro">mi PC</a>
+    o mi <a href="https://github.com/javiersansano222" target="_blank" rel="noopener noreferrer">GitHub ↗</a>.
+  </footer>
 
 </body>
 </html>
