@@ -1,5 +1,6 @@
 /* =========================================================
-   SCENE.JS — "La Ciudad Sumergida" (Art Déco 3D)
+   SCENE.JS — Rascacielos Art Déco
+   Un solo rascacielos monumental con detalle
    ========================================================= */
 
 (() => {
@@ -9,13 +10,9 @@
   const container = document.getElementById("hero-scene");
   const fallback = document.getElementById("hero-art-fallback");
 
-  if (!canvas || !container) {
-    console.warn("[scene] Falta #scene-3d o #hero-scene");
-    return;
-  }
+  if (!canvas || !container) return;
 
   if (typeof THREE === "undefined") {
-    console.warn("[scene] THREE no cargó. Mostrando fallback 2D.");
     container.style.display = "none";
     if (fallback) fallback.style.display = "block";
     return;
@@ -32,24 +29,16 @@
     } catch { return false; }
   })();
 
-  if (!hasWebGL) {
-    console.warn("[scene] WebGL no disponible.");
+  if (!hasWebGL || prefersReducedMotion) {
     container.style.display = "none";
     if (fallback) fallback.style.display = "block";
     return;
   }
 
-  if (prefersReducedMotion) {
-    console.info("[scene] Reduced-motion activo, se omite 3D.");
-    container.style.display = "none";
-    if (fallback) fallback.style.display = "block";
-    return;
-  }
-
-  console.info("[scene] Iniciando ciudad Art Déco…");
+  console.info("[scene] Iniciando Rascacielos Art Déco…");
 
   /* ---------------------------------------------------------
-     Paleta reactiva al tema
+     PALETA
      --------------------------------------------------------- */
   const readPalette = () => {
     const styles = getComputedStyle(document.documentElement);
@@ -74,7 +63,6 @@
       goldBright: parse(styles.getPropertyValue("--gold-bright") || "#f4d98a"),
       ember: parse(styles.getPropertyValue("--ember") || "#e08a3c"),
       bg: parse(styles.getPropertyValue("--bg-deep") || "#050810"),
-      bgLight: parse(styles.getPropertyValue("--bg") || "#0a1220"),
       water: parse(styles.getPropertyValue("--water") || "#1a2a44")
     };
   };
@@ -82,7 +70,7 @@
   let palette = readPalette();
 
   /* ---------------------------------------------------------
-     Renderer / Scene / Camera
+     RENDERER / SCENE / CAMERA
      --------------------------------------------------------- */
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -92,348 +80,375 @@
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.1;
+  renderer.toneMappingExposure = 1.15;
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(palette.bg.getHex(), 0.018);
+  scene.fog = new THREE.FogExp2(palette.bg.getHex(), 0.04);
 
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
-  camera.position.set(0, 4.5, 22);
-  camera.lookAt(0, 4, 0);
+  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  // Vista ligeramente desde abajo para dar grandeza
+  camera.position.set(0, -0.5, 8);
+  camera.lookAt(0, 1.5, 0);
 
   /* ---------------------------------------------------------
-     Iluminación
+     ILUMINACIÓN
      --------------------------------------------------------- */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.18));
+
   const hemi = new THREE.HemisphereLight(
     palette.goldBright.getHex(),
     palette.bg.getHex(),
-    0.55
+    0.35
   );
   scene.add(hemi);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.25);
-  scene.add(ambient);
+  // Key light frontal-derecha (ilumina las caras frontales y derechas)
+  const keyLight = new THREE.DirectionalLight(palette.goldBright.getHex(), 1.6);
+  keyLight.position.set(6, 8, 10);
+  scene.add(keyLight);
 
-  // Luna / foco cenital
-  const moon = new THREE.DirectionalLight(palette.goldBright.getHex(), 0.9);
-  moon.position.set(-15, 30, 20);
-  scene.add(moon);
+  // Rim light trasera (silueta contra el fondo)
+  const rimLight = new THREE.DirectionalLight(palette.ember.getHex(), 1.2);
+  rimLight.position.set(-4, 4, -10);
+  scene.add(rimLight);
 
-  // Contraluz cálida detrás de la ciudad
-  const backGlow = new THREE.PointLight(palette.ember.getHex(), 180, 60, 2);
-  backGlow.position.set(0, 8, -20);
-  scene.add(backGlow);
-
-  // Luz frontal suave
-  const frontLight = new THREE.PointLight(palette.goldBright.getHex(), 60, 40, 2);
-  frontLight.position.set(6, 12, 18);
-  scene.add(frontLight);
+  // Fill light tenue desde abajo (luces de la calle)
+  const fillLight = new THREE.DirectionalLight(palette.ember.getHex(), 0.35);
+  fillLight.position.set(0, -6, 4);
+  scene.add(fillLight);
 
   /* ---------------------------------------------------------
-     Cielo nocturno con estrellas
+     SKYBOX DE FONDO CON HALO DORADO
      --------------------------------------------------------- */
-  const skyGeo = new THREE.SphereGeometry(120, 32, 16);
+  const skyGeo = new THREE.SphereGeometry(60, 32, 16);
   const skyMat = new THREE.ShaderMaterial({
     side: THREE.BackSide,
+    depthWrite: false,
     uniforms: {
-      topColor: { value: palette.bg.getHex() === 0x050810 ? new THREE.Color(0x050810) : palette.bg.clone() },
-      bottomColor: { value: palette.water.clone() },
-      offset: { value: 8 },
-      exponent: { value: 0.7 }
+      topColor:    { value: palette.bg.clone().multiplyScalar(0.4) },
+      midColor:    { value: palette.bg.clone().multiplyScalar(1.1) },
+      glowColor:   { value: palette.ember.clone() },
+      bottomColor: { value: palette.bg.clone().multiplyScalar(0.5) }
     },
     vertexShader: `
       varying vec3 vWorldPosition;
       void main() {
-        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-        vWorldPosition = worldPosition.xyz;
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = wp.xyz;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }`,
     fragmentShader: `
       uniform vec3 topColor;
+      uniform vec3 midColor;
+      uniform vec3 glowColor;
       uniform vec3 bottomColor;
-      uniform float offset;
-      uniform float exponent;
       varying vec3 vWorldPosition;
       void main() {
-        float h = normalize(vWorldPosition + vec3(0.0, offset, 0.0)).y;
-        gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+        vec3 dir = normalize(vWorldPosition);
+        float h = dir.y;
+        vec3 col = mix(midColor, topColor, smoothstep(0.0, 0.7, h));
+        if (h < 0.0) col = mix(midColor, bottomColor, smoothstep(0.0, -0.4, h));
+        float glow = smoothstep(0.5, 0.0, abs(h)) * 0.6;
+        col += glowColor * glow * 0.35;
+        gl_FragColor = vec4(col, 1.0);
       }`
   });
   const sky = new THREE.Mesh(skyGeo, skyMat);
   scene.add(sky);
 
   // Estrellas
-  const starCount = isSmallScreen ? 200 : 500;
+  const starCount = isSmallScreen ? 100 : 250;
   const starPositions = new Float32Array(starCount * 3);
   for (let i = 0; i < starCount; i++) {
-    const r = 60 + Math.random() * 50;
+    const r = 40 + Math.random() * 15;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     starPositions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-    starPositions[i * 3 + 1] = Math.abs(r * Math.cos(phi)) * 0.5 + 8;
+    starPositions[i * 3 + 1] = Math.abs(r * Math.cos(phi)) * 0.6 + 5;
     starPositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
   }
   const starGeo = new THREE.BufferGeometry();
   starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
   const starMat = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: 0.6,
+    color: palette.goldBright.getHex(),
+    size: 0.15,
     sizeAttenuation: true,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.7,
     depthWrite: false
   });
   const stars = new THREE.Points(starGeo, starMat);
   scene.add(stars);
 
   /* ---------------------------------------------------------
-     MATERIALES COMPARTIDOS
+     MATERIALES
      --------------------------------------------------------- */
-  // Edificio: oscuro con bordes metálicos
-  const buildingMatFar = new THREE.MeshStandardMaterial({
-    color: palette.bg.clone().multiplyScalar(1.15),
-    metalness: 0.5,
-    roughness: 0.85,
-    emissive: palette.bg.clone().multiplyScalar(0.3),
-    emissiveIntensity: 1
-  });
-  const buildingMatMid = new THREE.MeshStandardMaterial({
-    color: palette.bg.clone().multiplyScalar(1.3),
-    metalness: 0.6,
-    roughness: 0.7,
-    emissive: palette.bg.clone().multiplyScalar(0.4),
-    emissiveIntensity: 1
-  });
-  const buildingMatNear = new THREE.MeshStandardMaterial({
-    color: palette.bg.clone().multiplyScalar(1.5),
-    metalness: 0.7,
-    roughness: 0.55,
-    emissive: palette.bg.clone().multiplyScalar(0.35),
-    emissiveIntensity: 1
+  // Cuerpo del edificio: piedra oscura con tinte azul profundo
+  const stoneMat = new THREE.MeshStandardMaterial({
+    color: 0x1a1e2e,
+    metalness: 0.25,
+    roughness: 0.75,
+    emissive: 0x05070d,
+    emissiveIntensity: 0.25
   });
 
-  // Corona dorada de los edificios
-  const crownMat = new THREE.MeshStandardMaterial({
+  // Variante más clara (para la base, que recibe más luz)
+  const stoneLightMat = new THREE.MeshStandardMaterial({
+    color: 0x252a3d,
+    metalness: 0.3,
+    roughness: 0.7,
+    emissive: 0x05070d,
+    emissiveIntensity: 0.3
+  });
+
+  // Detalles dorados (remates, cornisas)
+  const goldMat = new THREE.MeshStandardMaterial({
     color: palette.gold.getHex(),
     metalness: 1,
-    roughness: 0.2,
+    roughness: 0.18,
     emissive: palette.gold.getHex(),
-    emissiveIntensity: 0.6
+    emissiveIntensity: 0.55
   });
 
-  // Ventanas emisivas
-  const windowMatGold = new THREE.MeshBasicMaterial({
-    color: palette.goldBright.getHex()
+  // Puntas luminosas
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: palette.goldBright.getHex(),
+    toneMapped: false
+  });
+
+  // Ventanas encendidas (doradas, emisivas)
+  const windowLitMat = new THREE.MeshBasicMaterial({
+    color: palette.goldBright.getHex(),
+    toneMapped: false
+  });
+
+  // Ventanas apagadas (oscuras)
+  const windowDarkMat = new THREE.MeshStandardMaterial({
+    color: 0x0a0d18,
+    metalness: 0.5,
+    roughness: 0.5
   });
 
   /* ---------------------------------------------------------
-     FUNCIÓN: crear un edificio Art Déco
-     Genera un rascacielos con base + pisos escalonados + corona
+     GRUPO PRINCIPAL: el rascacielos
      --------------------------------------------------------- */
-  const createBuilding = (width, height, depth, tier, mat) => {
-    const building = new THREE.Group();
+  const building = new THREE.Group();
+  scene.add(building);
 
-    // Base principal (volumen del edificio)
-    const baseGeo = new THREE.BoxGeometry(width, height, depth);
-    const base = new THREE.Mesh(baseGeo, mat);
-    base.position.y = height / 2;
-    building.add(base);
+  // Referencias para animar luces
+  const litWindows = [];
 
-    // Pisos escalonados (silueta Art Déco)
-    const tiers = 2 + Math.floor(Math.random() * 2);
-    let currentWidth = width;
-    let currentDepth = depth;
-    let currentY = height;
+  /* ---------------------------------------------------------
+     FUNCIÓN: crear una fila de ventanas en una cara
+     --------------------------------------------------------- */
+  const addWindowGrid = (
+    width, height, depth, centerY,
+    cols, rows,
+    group,
+    litProbability = 0.3
+  ) => {
+    const maxPerLevel = isSmallScreen ? 60 : 150;
 
-    for (let t = 0; t < tiers; t++) {
-      currentWidth *= 0.72;
-      currentDepth *= 0.72;
-      const tierHeight = height * (0.12 + Math.random() * 0.08);
-      const tierGeo = new THREE.BoxGeometry(currentWidth, tierHeight, currentDepth);
-      const tierMesh = new THREE.Mesh(tierGeo, mat);
-      tierMesh.position.y = currentY + tierHeight / 2;
-      building.add(tierMesh);
-      currentY += tierHeight;
+    // Geometrías compartidas (todas las ventanas iguales)
+    const winW = width * 0.055;
+    const winH = height / rows * 0.55;
+    const winGeo = new THREE.PlaneGeometry(winW, winH);
+
+    const totalRequested = cols * rows * 4;
+    const skipFactor = Math.max(1, Math.ceil(totalRequested / maxPerLevel));
+
+    let count = 0;
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        count++;
+        if (count % skipFactor !== 0) continue;
+
+        const x = ((c + 0.5) / cols - 0.5) * width * 0.88;
+        const y = centerY + ((r + 0.5) / rows - 0.5) * height * 0.82;
+
+        // 4 caras
+        const faces = [
+          { px:  x,                pz:  depth / 2 + 0.005, ry: 0 },
+          { px: -x,                pz: -depth / 2 - 0.005, ry: Math.PI },
+          { px:  width / 2 + 0.005, pz: -x,               ry: Math.PI / 2 },
+          { px: -width / 2 - 0.005, pz:  x,               ry: -Math.PI / 2 }
+        ];
+
+        faces.forEach((f) => {
+          const isLit = Math.random() < litProbability;
+          const mat = isLit ? windowLitMat : windowDarkMat;
+          const win = new THREE.Mesh(winGeo, mat);
+          win.position.set(f.px, y, f.pz);
+          win.rotation.y = f.ry;
+          group.add(win);
+          if (isLit) {
+            win.userData.flickerPhase = Math.random() * Math.PI * 2;
+            litWindows.push(win);
+          }
+        });
+      }
     }
-
-    // Corona final (aguja Art Déco)
-    const spireHeight = height * (0.15 + Math.random() * 0.1);
-    const spireGeo = new THREE.ConeGeometry(currentWidth * 0.35, spireHeight, 6);
-    const spire = new THREE.Mesh(spireGeo, crownMat);
-    spire.position.y = currentY + spireHeight / 2;
-    building.add(spire);
-
-    // Punta luminosa
-    const tipGeo = new THREE.SphereGeometry(0.12, 8, 8);
-    const tip = new THREE.Mesh(tipGeo, windowMatGold);
-    tip.position.y = currentY + spireHeight + 0.05;
-    building.add(tip);
-
-    /* ----- VENTANAS ----- */
-    // Distribuidas por la fachada frontal y laterales
-    const cols = Math.max(2, Math.floor(width / 0.5));
-    const rows = Math.max(3, Math.floor(height / 0.7));
-    const windowGeo = new THREE.PlaneGeometry(0.12, 0.2);
-
-    const windowCount = isSmallScreen ? 6 : 12; // máx por edificio
-    const placedWindows = [];
-
-    for (let w = 0; w < windowCount; w++) {
-      const col = Math.floor(Math.random() * cols);
-      const row = Math.floor(Math.random() * rows);
-
-      const x = (col / (cols - 1) - 0.5) * width * 0.85;
-      const y = (row / (rows - 1)) * height * 0.85 + height * 0.05;
-
-      // Evitar duplicados
-      const key = `${col}-${row}`;
-      if (placedWindows.includes(key)) continue;
-      placedWindows.push(key);
-
-      // 4 fachadas
-      const positions = [
-        { pos: [x, y, depth / 2 + 0.01], rotY: 0 },
-        { pos: [-x, y, -depth / 2 - 0.01], rotY: Math.PI },
-        { pos: [width / 2 + 0.01, y, -x], rotY: Math.PI / 2 },
-        { pos: [-width / 2 - 0.01, y, x], rotY: -Math.PI / 2 }
-      ];
-
-      positions.forEach((p) => {
-        const w = new THREE.Mesh(windowGeo, windowMatGold.clone());
-        w.material.color = windowMatGold.color.clone();
-        w.material.opacity = 0.7 + Math.random() * 0.3;
-        w.material.transparent = true;
-        w.position.set(...p.pos);
-        w.rotation.y = p.rotY;
-        building.add(w);
-
-        // Parpadeo aleatorio (algunas ventanas)
-        if (Math.random() < 0.25) {
-          w.userData.flicker = true;
-          w.userData.flickerPhase = Math.random() * Math.PI * 2;
-          flickerWindows.push(w);
-        }
-      });
-    }
-
-    return building;
   };
 
-  const flickerWindows = [];
-
   /* ---------------------------------------------------------
-     GENERAR CIUDAD
+     CONSTRUCCIÓN DEL RASCACIELOS
      --------------------------------------------------------- */
-  const city = new THREE.Group();
-  scene.add(city);
 
-  const CITY_DEPTH = 90;         // profundidad total
-  const CITY_WIDTH = 50;         // ancho
-  const BUILDING_COUNT = isSmallScreen ? 32 : 60;
-  const towers = [];
+  // Dimensiones maestras
+  const BASE_W = 1.6;
+  const BASE_H = 0.8;
 
-  for (let i = 0; i < BUILDING_COUNT; i++) {
-    // Distribuir en 3 capas de profundidad
-    const layerRand = Math.random();
-    let z, scaleFactor, mat;
+  // ----- NIVEL 0: plataforma de entrada -----
+  const podiumGeo = new THREE.BoxGeometry(2.2, 0.35, 2.2);
+  const podium = new THREE.Mesh(podiumGeo, stoneLightMat);
+  podium.position.y = 0.175;
+  building.add(podium);
 
-    if (layerRand < 0.4) {
-      // Lejos
-      z = -30 - Math.random() * 30;
-      scaleFactor = 0.75;
-      mat = buildingMatFar;
-    } else if (layerRand < 0.75) {
-      // Medio
-      z = -10 - Math.random() * 20;
-      scaleFactor = 0.95;
-      mat = buildingMatMid;
-    } else {
-      // Cerca
-      z = 5 + Math.random() * 15;
-      scaleFactor = 1.15;
-      mat = buildingMatNear;
-    }
+  // Cornisa dorada de la plataforma
+  const podiumTrimGeo = new THREE.BoxGeometry(2.24, 0.04, 2.24);
+  const podiumTrim = new THREE.Mesh(podiumTrimGeo, goldMat);
+  podiumTrim.position.y = 0.35;
+  building.add(podiumTrim);
 
-    // Posición X aleatoria, evitando el centro exacto (para que se vea a través)
-    let x = (Math.random() - 0.5) * CITY_WIDTH;
+  // Ventanas del podio
+  addWindowGrid(2.2, 0.3, 2.2, 0.175, 5, 1, building, 0.4);
 
-    // Ancho, alto, profundidad
-    const w = (1.2 + Math.random() * 1.6) * scaleFactor;
-    const h = (3 + Math.random() * 10) * scaleFactor;
-    const d = (1.2 + Math.random() * 1.6) * scaleFactor;
+  // ----- NIVEL 1: base principal -----
+  const base1Geo = new THREE.BoxGeometry(BASE_W, BASE_H, BASE_W);
+  const base1 = new THREE.Mesh(base1Geo, stoneLightMat);
+  base1.position.y = 0.35 + BASE_H / 2;
+  building.add(base1);
 
-    const building = createBuilding(w, h, d, 0, mat);
-    building.position.set(x, 0, z);
-    building.rotation.y = (Math.random() - 0.5) * 0.15;
+  // Ventanas de la base principal
+  addWindowGrid(BASE_W, BASE_H, BASE_W, 0.35 + BASE_H / 2, 6, 5, building, 0.35);
 
-    // Guardar datos para animación
-    building.userData = {
-      baseZ: z,
-      speed: 0.02 + Math.random() * 0.04,
-      originalX: x
-    };
+  // Cornisa superior de la base
+  const base1TrimGeo = new THREE.BoxGeometry(BASE_W + 0.08, 0.06, BASE_W + 0.08);
+  const base1Trim = new THREE.Mesh(base1TrimGeo, goldMat);
+  base1Trim.position.y = 0.35 + BASE_H;
+  building.add(base1Trim);
 
-    city.add(building);
-    towers.push(building);
-  }
+  // ----- NIVEL 2: primer escalón -----
+  const L2_W = BASE_W * 0.82;
+  const L2_H = 1.4;
+  const L2_Y0 = 0.35 + BASE_H;
 
-  /* ---------------------------------------------------------
-     SUELO REFLECTANTE (agua/niebla)
-     --------------------------------------------------------- */
-  const groundGeo = new THREE.PlaneGeometry(200, 200);
-  const groundMat = new THREE.MeshStandardMaterial({
-    color: palette.bg.getHex(),
-    metalness: 0.95,
-    roughness: 0.15,
-    envMapIntensity: 1
-  });
-  const ground = new THREE.Mesh(groundGeo, groundMat);
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -0.02;
-  scene.add(ground);
+  const level2Geo = new THREE.BoxGeometry(L2_W, L2_H, L2_W);
+  const level2 = new THREE.Mesh(level2Geo, stoneMat);
+  level2.position.y = L2_Y0 + L2_H / 2;
+  building.add(level2);
 
-  // Brillo en el suelo (simulando agua/luces)
-  const groundGlowGeo = new THREE.PlaneGeometry(120, 30);
-  const groundGlowMat = new THREE.MeshBasicMaterial({
-    color: palette.ember.getHex(),
-    transparent: true,
-    opacity: 0.15,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-  });
-  const groundGlow = new THREE.Mesh(groundGlowGeo, groundGlowMat);
-  groundGlow.rotation.x = -Math.PI / 2;
-  groundGlow.position.y = 0.01;
-  scene.add(groundGlow);
+  addWindowGrid(L2_W, L2_H, L2_W, L2_Y0 + L2_H / 2, 5, 7, building, 0.3);
 
-  /* ---------------------------------------------------------
-     NIEBLA BAJA (nubes flotando entre edificios)
-     --------------------------------------------------------- */
-  const cloudGroup = new THREE.Group();
-  const cloudMat = new THREE.MeshBasicMaterial({
-    color: palette.gold.getHex(),
-    transparent: true,
-    opacity: 0.06,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  });
+  // Cornisa
+  const l2TrimGeo = new THREE.BoxGeometry(L2_W + 0.06, 0.05, L2_W + 0.06);
+  const l2Trim = new THREE.Mesh(l2TrimGeo, goldMat);
+  l2Trim.position.y = L2_Y0 + L2_H;
+  building.add(l2Trim);
 
-  for (let i = 0; i < 12; i++) {
-    const cloudGeo = new THREE.SphereGeometry(
-      6 + Math.random() * 8,
-      12, 8
+  // ----- NIVEL 3: segundo escalón -----
+  const L3_W = L2_W * 0.78;
+  const L3_H = 1.1;
+  const L3_Y0 = L2_Y0 + L2_H;
+
+  const level3Geo = new THREE.BoxGeometry(L3_W, L3_H, L3_W);
+  const level3 = new THREE.Mesh(level3Geo, stoneMat);
+  level3.position.y = L3_Y0 + L3_H / 2;
+  building.add(level3);
+
+  addWindowGrid(L3_W, L3_H, L3_W, L3_Y0 + L3_H / 2, 4, 6, building, 0.3);
+
+  const l3TrimGeo = new THREE.BoxGeometry(L3_W + 0.05, 0.045, L3_W + 0.05);
+  const l3Trim = new THREE.Mesh(l3TrimGeo, goldMat);
+  l3Trim.position.y = L3_Y0 + L3_H;
+  building.add(l3Trim);
+
+  // ----- NIVEL 4: tercer escalón (más estrecho) -----
+  const L4_W = L3_W * 0.72;
+  const L4_H = 0.8;
+  const L4_Y0 = L3_Y0 + L3_H;
+
+  const level4Geo = new THREE.BoxGeometry(L4_W, L4_H, L4_W);
+  const level4 = new THREE.Mesh(level4Geo, stoneMat);
+  level4.position.y = L4_Y0 + L4_H / 2;
+  building.add(level4);
+
+  addWindowGrid(L4_W, L4_H, L4_W, L4_Y0 + L4_H / 2, 3, 4, building, 0.35);
+
+  const l4TrimGeo = new THREE.BoxGeometry(L4_W + 0.05, 0.04, L4_W + 0.05);
+  const l4Trim = new THREE.Mesh(l4TrimGeo, goldMat);
+  l4Trim.position.y = L4_Y0 + L4_H;
+  building.add(l4Trim);
+
+  // ----- NIVEL 5: remate piramidal escalonado (tipo Chrysler) -----
+  const L5_Y0 = L4_Y0 + L4_H;
+
+  // Tres "arcos" o anillos escalonados en la parte superior
+  const crownLayers = [
+    { w: L4_W * 0.85, h: 0.22 },
+    { w: L4_W * 0.65, h: 0.22 },
+    { w: L4_W * 0.45, h: 0.22 }
+  ];
+  let crownY = L5_Y0;
+  crownLayers.forEach((layer) => {
+    const crownGeo = new THREE.CylinderGeometry(
+      layer.w * 0.5, layer.w * 0.55,
+      layer.h, 8
     );
-    const cloud = new THREE.Mesh(cloudGeo, cloudMat.clone());
-    cloud.position.set(
-      (Math.random() - 0.5) * 60,
-      2 + Math.random() * 5,
-      -20 + Math.random() * 40
-    );
-    cloud.scale.y = 0.25;
-    cloud.userData.speed = 0.1 + Math.random() * 0.15;
-    cloudGroup.add(cloud);
-  }
-  scene.add(cloudGroup);
+    const crownMesh = new THREE.Mesh(crownGeo, goldMat);
+    crownMesh.position.y = crownY + layer.h / 2;
+    building.add(crownMesh);
+    crownY += layer.h;
+  });
+
+  // ----- AGUJA FINAL -----
+  const spireH = 1.4;
+  const spireGeo = new THREE.ConeGeometry(L4_W * 0.18, spireH, 8);
+  const spire = new THREE.Mesh(spireGeo, goldMat);
+  spire.position.y = crownY + spireH / 2;
+  building.add(spire);
+
+  // Punta luminosa
+  const tipGeo = new THREE.SphereGeometry(0.05, 8, 8);
+  const tip = new THREE.Mesh(tipGeo, glowMat);
+  tip.position.y = crownY + spireH + 0.03;
+  building.add(tip);
+
+  // Pequeña esfera luminosa en la base de la aguja
+  const beaconGeo = new THREE.SphereGeometry(0.08, 12, 12);
+  const beaconMat = new THREE.MeshBasicMaterial({
+    color: palette.goldBright.getHex(),
+    toneMapped: false
+  });
+  const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+  beacon.position.y = crownY - 0.05;
+  building.add(beacon);
+
+  /* ---------------------------------------------------------
+     BASE DEL EDIFICIO: suelo bajo él
+     --------------------------------------------------------- */
+  const plinthGeo = new THREE.CylinderGeometry(2.6, 2.8, 0.15, 32);
+  const plinthMat = new THREE.MeshStandardMaterial({
+    color: 0x0a0d18,
+    metalness: 0.6,
+    roughness: 0.4
+  });
+  const plinth = new THREE.Mesh(plinthGeo, plinthMat);
+  plinth.position.y = 0;
+  building.add(plinth);
+
+  /* ---------------------------------------------------------
+     CÁMARA Y POSICIÓN
+     --------------------------------------------------------- */
+  // El edificio mide aproximadamente 6 unidades de alto.
+  // Centramos la cámara para que quepa entero.
+  const buildingHeight = 0.35 + BASE_H + 1.4 + 1.1 + 0.8 + 0.66 + spireH;
+
+  camera.position.set(0, buildingHeight * 0.45, 8);
+  camera.lookAt(0, buildingHeight * 0.42, 0);
+
+  // Rotamos ligeramente el edificio para verlo de tres cuartos
+  building.rotation.y = Math.PI / 6;
 
   /* ---------------------------------------------------------
      INTERACCIÓN CON RATÓN
@@ -457,8 +472,9 @@
     const h = Math.max(1, rect.height);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    camera.position.z = w < 520 ? 30 : 22;
-    camera.position.y = w < 520 ? 6 : 4.5;
+    // Ajustamos la distancia de cámara según proporción
+    const baseDistance = w < 520 ? 9.5 : 8;
+    camera.position.z = baseDistance;
     camera.updateProjectionMatrix();
   };
   if (window.ResizeObserver) {
@@ -475,21 +491,19 @@
     palette = readPalette();
     hemi.color.copy(palette.goldBright);
     hemi.groundColor.copy(palette.bg);
-    moon.color.copy(palette.goldBright);
-    backGlow.color.copy(palette.ember);
-    frontLight.color.copy(palette.goldBright);
-    buildingMatFar.color.copy(palette.bg.clone().multiplyScalar(1.15));
-    buildingMatMid.color.copy(palette.bg.clone().multiplyScalar(1.3));
-    buildingMatNear.color.copy(palette.bg.clone().multiplyScalar(1.5));
-    crownMat.color.copy(palette.gold);
-    crownMat.emissive.copy(palette.gold);
-    windowMatGold.color.copy(palette.goldBright);
-    flickerWindows.forEach((w) => w.material.color.copy(palette.goldBright));
-    groundMat.color.copy(palette.bg);
-    groundGlowMat.color.copy(palette.ember);
-    cloudMat.color.copy(palette.gold);
-    cloudGroup.children.forEach((c) => c.material.color.copy(palette.gold));
-    starMat.color.set(palette.goldBright.getHex() === 0xf4d98a ? 0xffffff : palette.goldBright.getHex());
+    keyLight.color.copy(palette.goldBright);
+    rimLight.color.copy(palette.ember);
+    fillLight.color.copy(palette.ember);
+    goldMat.color.copy(palette.gold);
+    goldMat.emissive.copy(palette.gold);
+    glowMat.color.copy(palette.goldBright);
+    windowLitMat.color.copy(palette.goldBright);
+    beaconMat.color.copy(palette.goldBright);
+    starMat.color.copy(palette.goldBright);
+    skyMat.uniforms.topColor.value.copy(palette.bg.clone().multiplyScalar(0.4));
+    skyMat.uniforms.midColor.value.copy(palette.bg.clone().multiplyScalar(1.1));
+    skyMat.uniforms.glowColor.value.copy(palette.ember);
+    skyMat.uniforms.bottomColor.value.copy(palette.bg.clone().multiplyScalar(0.5));
     scene.fog.color.copy(palette.bg);
   });
   themeObserver.observe(document.documentElement, {
@@ -508,7 +522,7 @@
   }
 
   /* ---------------------------------------------------------
-     LOOP DE ANIMACIÓN
+     LOOP
      --------------------------------------------------------- */
   const clock = new THREE.Clock();
   let frameCount = 0;
@@ -520,52 +534,36 @@
     const t = clock.elapsedTime;
 
     if (!document.hidden && isVisible) {
-      // Suavizado del puntero
       pointer.x += (pointer.tx - pointer.x) * 0.05;
       pointer.y += (pointer.ty - pointer.y) * 0.05;
 
-      // Cámara con parallax
-      camera.position.x = pointer.x * 3;
-      camera.position.y = 4.5 + pointer.y * 1.5;
-      camera.lookAt(pointer.x * 1.5, 4 + pointer.y * 1, 0);
+      // Rotación lenta y continua del edificio
+      building.rotation.y += dt * 0.12;
 
-      // Edificios: parallax + bucle infinito
-      towers.forEach((b) => {
-        const d = b.userData;
-        // Desplazar hacia la cámara lentamente
-        b.position.z += d.speed * dt * 8;
+      // Inclinación muy sutil siguiendo el ratón
+      building.rotation.x = pointer.y * 0.03;
 
-        // Cuando pasan la cámara, vuelven al fondo
-        if (b.position.z > 20) {
-          b.position.z = -CITY_DEPTH + Math.random() * 20;
-          b.position.x = (Math.random() - 0.5) * CITY_WIDTH;
-          d.originalX = b.position.x;
-        }
+      // La esfera luminosa de la aguja pulsa
+      const pulse = 0.9 + Math.sin(t * 2.2) * 0.15;
+      beacon.scale.setScalar(pulse);
+      tip.scale.setScalar(0.9 + Math.sin(t * 2.2) * 0.2);
 
-        // Ligero movimiento oscilante (respiración)
-        b.position.x = d.originalX + Math.sin(t * 0.5 + b.position.z * 0.1) * 0.3;
+      // Parpadeo aleatorio de ventanas encendidas
+      litWindows.forEach((win) => {
+        const phase = win.userData.flickerPhase || 0;
+        const flicker = Math.sin(t * 1.5 + phase) > 0.85 ? 0.3 : 1;
+        win.material = flicker > 0.5 ? windowLitMat : windowDarkMat;
       });
 
-      // Nubes flotando
-      cloudGroup.children.forEach((cloud) => {
-        cloud.position.x += cloud.userData.speed * dt;
-        if (cloud.position.x > 40) cloud.position.x = -40;
-      });
+      // Cámara con parallax muy suave
+      camera.position.x = pointer.x * 0.8;
+      camera.position.y = buildingHeight * 0.45 + pointer.y * 0.4;
+      camera.lookAt(0, buildingHeight * 0.42 + pointer.y * 0.15, 0);
 
-      // Parpadeo de ventanas
-      flickerWindows.forEach((w) => {
-        const phase = w.userData.flickerPhase || 0;
-        const flicker = Math.sin(t * 3 + phase) > 0.7 ? 0.2 : 1;
-        w.material.opacity = flicker * 0.9;
-      });
+      stars.rotation.y += dt * 0.004;
 
-      // Estrellas rotan muy lentamente
-      stars.rotation.y += dt * 0.005;
-
-      // Renderizar
       renderer.render(scene, camera);
 
-      // FPS
       frameCount++;
       fpsAccum += dt;
       if (fpsAccum >= 0.5) {
@@ -578,7 +576,6 @@
     requestAnimationFrame(animate);
   };
 
-  // Avisar a script.js
   window.setTimeout(() => {
     document.dispatchEvent(new CustomEvent("scene:ready"));
   }, 100);
