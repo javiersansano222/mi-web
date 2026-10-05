@@ -138,7 +138,15 @@
       <a href="#contacto">Objetivo</a>
     </nav>
 
-    <div class="header-tools">
+        <div class="header-tools">
+
+      <!-- Widget del tiempo (Open-Meteo) -->
+      <div class="weather" id="weather" aria-live="polite" hidden>
+        <span class="weather__icon" id="weather-icon" aria-hidden="true">☀</span>
+        <span class="weather__temp" id="weather-temp">--°C</span>
+        <span class="weather__city" id="weather-city">Villena</span>
+      </div>
+
       <label class="sr-only" for="era-select">Paleta visual</label>
       <select id="era-select" class="era-select" aria-label="Elegir paleta">
         <option value="oro-noche">Oro &amp; Noche</option>

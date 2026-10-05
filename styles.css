@@ -3035,3 +3035,75 @@ html{
   .pc-part{ transition: none }
   .pc-tooltip{ transition: none }
 }
+/* =========================================================
+   28. WIDGET DEL TIEMPO (Open-Meteo)
+   ========================================================= */
+.weather{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+    color-mix(in srgb, var(--bg-deep) 80%, transparent) 100%);
+  color: var(--gold-bright);
+  font: 500 11px var(--serif);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 15%, transparent),
+    0 2px 8px rgba(0, 0, 0, .25);
+  transition: border-color .3s, box-shadow .3s;
+  white-space: nowrap;
+}
+.weather::after{
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+  pointer-events: none;
+}
+.weather[hidden]{ display: none }
+
+.weather__icon{
+  font-size: 15px;
+  line-height: 1;
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 60%, transparent));
+}
+
+.weather__temp{
+  font-weight: 700;
+  color: #ffffff;
+  font-family: var(--serif);
+  letter-spacing: .06em;
+}
+
+.weather__city{
+  font-size: 9px;
+  letter-spacing: .18em;
+  color: var(--gold-bright);
+  opacity: .85;
+  padding-left: 4px;
+  border-left: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+}
+
+/* Responsive: en móvil, más compacto */
+@media (max-width: 900px){
+  .weather{
+    height: 34px;
+    padding: 0 10px;
+    gap: 6px;
+    font-size: 10px;
+  }
+  .weather__icon{ font-size: 13px }
+  .weather__city{ display: none }
+}
+@media (max-width: 700px){
+  .weather{
+    display: none; /* En móvil, mejor ocultarlo para no saturar */
+  }
+}
