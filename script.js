@@ -395,8 +395,8 @@
     setReposCounter(!reposCounter.classList.contains("is-open"));
   });
 
-  /* =========================================================
-     12. CHATBOT
+    /* =========================================================
+     12. CHATBOT MULTILINGÜE (ES · VA · EN · FR)
      ========================================================= */
   const chat = $("#chat");
   const chatToggle = $("#chat-toggle");
@@ -406,30 +406,389 @@
   const chatForm = $("#chat-form");
   const chatInput = $("#chat-input");
   const chatQuick = $("#chat-quick");
+  const chatLang = $("#chat-lang");
+  const chatLangBtns = $$(".chat__lang-btn", chatLang || document);
 
   if (chat && chatToggle && chatPanel) {
-    const knowledge = [
-      { keys: ["hola","buenas","hey"], reply: "¡Hola! Soy el asistente de Javier. Pregúntame por sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong>, <strong>juegos</strong> o <strong>contacto</strong>." },
-      { keys: ["proyecto","portfolio","web"], reply: "Javier ha creado este <strong>portafolio</strong> con HTML, CSS y JavaScript. Está estudiando DAM." },
-      { keys: ["contacto","whatsapp","linkedin","email"], reply: "Puedes contactarle por el <strong>formulario</strong>, <strong>WhatsApp</strong> o <strong>LinkedIn</strong>." },
-      { keys: ["estudio","dam","smx","formacion"], reply: "Terminó <strong>SMX</strong> y ahora estudia <strong>DAM</strong>." },
-      { keys: ["pc","ordenador","hardware"], reply: "Montó su propio <strong>PC gaming</strong>. Míralo en la sección <strong>Dentro del ordenador</strong>." },
-      { keys: ["juego","fallout","doom","skyrim","bioshock","cyberpunk"], reply: "Sus favoritos: <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> y <strong>Cyberpunk 2077</strong>." },
-      { keys: ["gracias"], reply: "¡De nada! 😊" },
-      { keys: ["adios","bye"], reply: "¡Hasta luego! 👋" }
-    ];
 
-    const findReply = (text) => {
-      const n = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      for (const item of knowledge) {
-        for (const k of item.keys) {
-          const kn = k.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          if (n.includes(kn)) return item.reply;
-        }
+    /* ---------------------------------------------------------
+       Diccionario multilingüe
+       --------------------------------------------------------- */
+    const knowledge = {
+      es: {
+        greeting: {
+          keys: ["hola", "buenas", "hey", "saludos", "buenos dias", "buenas tardes", "buenas noches"],
+          reply: [
+            "¡Hola! Soy el asistente de Javier. Pregúntame por sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong>, <strong>juegos</strong> o <strong>contacto</strong>.",
+            "¡Buenas! ¿Sobre qué te gustaría saber? Puedo contarte sobre sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong>, <strong>juegos</strong> o cómo <strong>contactar</strong>."
+          ]
+        },
+        projects: {
+          keys: ["proyecto", "proyectos", "portfolio", "portafolio", "web", "trabajo", "trabajos"],
+          reply: [
+            "Javier ha creado este <strong>portafolio web</strong> desde cero con HTML, CSS y JavaScript. Está estudiando DAM y sigue aprendiendo.",
+            "Su proyecto principal es este <strong>portafolio</strong>, hecho a mano con HTML, CSS y JavaScript."
+          ]
+        },
+        contact: {
+          keys: ["contacto", "contactar", "email", "correo", "escribir", "hablar", "whatsapp", "linkedin"],
+          reply: [
+            "Puedes contactar con Javier desde el <strong>formulario de contacto</strong>, por <strong>WhatsApp</strong> o a través de su <strong>LinkedIn</strong>.",
+            "Tienes varias formas: el <strong>formulario</strong> de la web, <strong>WhatsApp</strong> directo o <strong>LinkedIn</strong>."
+          ]
+        },
+        studies: {
+          keys: ["estudio", "estudios", "formacion", "dam", "smx", "recorrido", "carrera", "daw"],
+          reply: [
+            "Javier terminó el <strong>Grado Medio de SMX</strong> y ahora estudia <strong>DAM</strong> (Desarrollo de Aplicaciones Multiplataforma).",
+            "Estudió <strong>SMX</strong> y ahora está con <strong>DAM</strong>. También está mejorando su inglés."
+          ]
+        },
+        pc: {
+          keys: ["pc", "ordenador", "computadora", "hardware", "grafica", "cpu", "ram", "montaje"],
+          reply: [
+            "Javier montó su propio <strong>PC gaming</strong> y le apasiona el hardware. Míralo en la sección <strong>Dentro del ordenador</strong>.",
+            "Es un manitas del hardware: montó su <strong>PC gaming</strong> desde cero."
+          ]
+        },
+        games: {
+          keys: ["juego", "juegos", "videojuego", "videojuegos", "gaming", "fallout", "doom", "skyrim", "bioshock", "cyberpunk"],
+          reply: [
+            "Sus juegos favoritos son <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> y <strong>Cyberpunk 2077</strong>.",
+            "Le van los clásicos y las distopías: <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> y <strong>Cyberpunk 2077</strong>."
+          ]
+        },
+        thanks: {
+          keys: ["gracias", "genial", "perfecto", "guay", "ok"],
+          reply: [
+            "¡De nada! 😊 Si necesitas algo más, aquí estoy.",
+            "¡Un placer! 😊 Pregúntame lo que quieras."
+          ]
+        },
+        bye: {
+          keys: ["adios", "adiós", "bye", "hasta luego", "chao", "nos vemos"],
+          reply: [
+            "¡Hasta luego! Que tengas un buen día. 👋",
+            "¡Nos vemos! 👋 Gracias por pasarte."
+          ]
+        },
+        unknown: [
+          "No estoy seguro de eso. Prueba con <strong>proyectos</strong>, <strong>estudios</strong>, <strong>contacto</strong>, <strong>PC</strong> o <strong>juegos</strong>.",
+          "Hmm, no te he entendido del todo. Pregúntame por sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>contacto</strong>, <strong>PC</strong> o <strong>juegos</strong>."
+        ]
+      },
+
+      va: {
+        greeting: {
+          keys: ["hola", "bones", "bon dia", "bona vesprada", "bona nit", "salut"],
+          reply: [
+            "Hola! Soc l'assistent de Javier. Pregunta'm pels seus <strong>projectes</strong>, <strong>estudis</strong>, <strong>PC</strong>, <strong>jocs</strong> o <strong>contacte</strong>.",
+            "Bones! Sobre què vols saber? Puc contar-te sobre els seus <strong>projectes</strong>, <strong>estudis</strong>, <strong>PC</strong>, <strong>jocs</strong> o com <strong>contactar</strong>."
+          ]
+        },
+        projects: {
+          keys: ["projecte", "projectes", "portfolio", "web", "treball", "treballs"],
+          reply: [
+            "Javier ha creat aquest <strong>portfolio web</strong> des de zero amb HTML, CSS i JavaScript. Està estudiant DAM i continua aprenent.",
+            "El seu projecte principal és aquest <strong>portfolio</strong>, fet a mà amb HTML, CSS i JavaScript."
+          ]
+        },
+        contact: {
+          keys: ["contacte", "contactar", "email", "correu", "escriure", "parlar", "whatsapp", "linkedin"],
+          reply: [
+            "Pots contactar amb Javier des del <strong>formulari de contacte</strong>, per <strong>WhatsApp</strong> o pel seu <strong>LinkedIn</strong>.",
+            "Tens diverses formes: el <strong>formulari</strong> de la web, <strong>WhatsApp</strong> directe o <strong>LinkedIn</strong>."
+          ]
+        },
+        studies: {
+          keys: ["estudi", "estudis", "formacio", "dam", "smx", "recorregut", "carrera"],
+          reply: [
+            "Javier va acabar el <strong>Grau Mitjà de SMX</strong> i ara estudia <strong>DAM</strong> (Desenvolupament d'Aplicacions Multiplataforma).",
+            "Va estudiar <strong>SMX</strong> i ara està amb <strong>DAM</strong>. També millora el seu anglès pas a pas."
+          ]
+        },
+        pc: {
+          keys: ["pc", "ordinador", "hardware", "grafica", "cpu", "ram", "muntatge"],
+          reply: [
+            "Javier va muntar el seu propi <strong>PC gaming</strong> i li apassiona el maquinari. Mira-ho a la secció <strong>Dins de l'ordinador</strong>.",
+            "És un manetes del maquinari: va muntar el seu <strong>PC gaming</strong> des de zero."
+          ]
+        },
+        games: {
+          keys: ["joc", "jocs", "videojoc", "videojocs", "gaming", "fallout", "doom", "skyrim", "bioshock", "cyberpunk"],
+          reply: [
+            "Els seus jocs preferits són <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> i <strong>Cyberpunk 2077</strong>.",
+            "Li agraden els clàssics i les distopies: <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> i <strong>Cyberpunk 2077</strong>."
+          ]
+        },
+        thanks: {
+          keys: ["gracies", "grasies", "genial", "perfecte", "guai", "ok"],
+          reply: [
+            "De res! 😊 Si necessites alguna cosa més, ací estic.",
+            "Un plaer! 😊 Pregunta'm el que vulgues."
+          ]
+        },
+        bye: {
+          keys: ["adéu", "adeu", "bye", "fins despres", "fins després", "fins aviat", "xao"],
+          reply: [
+            "Fins després! Que tingues un bon dia. 👋",
+            "Ens veiem! 👋 Gràcies per passar-te."
+          ]
+        },
+        unknown: [
+          "No estic segur d'això. Prova amb <strong>projectes</strong>, <strong>estudis</strong>, <strong>contacte</strong>, <strong>PC</strong> o <strong>jocs</strong>.",
+          "Hmm, no t'he entès del tot. Pregunta'm pels seus <strong>projectes</strong>, <strong>estudis</strong>, <strong>contacte</strong>, <strong>PC</strong> o <strong>jocs</strong>."
+        ]
+      },
+
+      en: {
+        greeting: {
+          keys: ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "greetings"],
+          reply: [
+            "Hi! I'm Javier's assistant. Ask me about his <strong>projects</strong>, <strong>studies</strong>, <strong>PC</strong>, <strong>games</strong> or <strong>contact</strong>.",
+            "Hey there! What would you like to know? You can ask about his <strong>projects</strong>, <strong>studies</strong>, <strong>PC</strong>, <strong>games</strong> or how to <strong>contact</strong> him."
+          ]
+        },
+        projects: {
+          keys: ["project", "projects", "portfolio", "web", "work", "works"],
+          reply: [
+            "Javier built this <strong>portfolio website</strong> from scratch with HTML, CSS and JavaScript. He's studying DAM and keeps learning.",
+            "His main project is this <strong>portfolio</strong>, hand-coded with HTML, CSS and JavaScript."
+          ]
+        },
+        contact: {
+          keys: ["contact", "email", "write", "talk", "whatsapp", "linkedin", "message"],
+          reply: [
+            "You can reach Javier through the <strong>contact form</strong>, <strong>WhatsApp</strong> or his <strong>LinkedIn</strong>.",
+            "Several options: the <strong>form</strong>, <strong>WhatsApp</strong> or <strong>LinkedIn</strong>."
+          ]
+        },
+        studies: {
+          keys: ["study", "studies", "education", "dam", "smx", "career", "course"],
+          reply: [
+            "Javier finished <strong>SMX</strong> (vocational training in IT) and now studies <strong>DAM</strong> (Multiplatform App Development).",
+            "He completed <strong>SMX</strong> and is now doing <strong>DAM</strong>. He's also improving his English."
+          ]
+        },
+        pc: {
+          keys: ["pc", "computer", "hardware", "gpu", "cpu", "ram", "build"],
+          reply: [
+            "Javier built his own <strong>gaming PC</strong> and loves hardware. Check it out in the <strong>Inside the computer</strong> section.",
+            "He's a hardware guy: he built his <strong>gaming PC</strong> from scratch."
+          ]
+        },
+        games: {
+          keys: ["game", "games", "videogame", "videogames", "gaming", "fallout", "doom", "skyrim", "bioshock", "cyberpunk"],
+          reply: [
+            "His favorites are <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> and <strong>Cyberpunk 2077</strong>.",
+            "He likes classics and dystopias: <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> and <strong>Cyberpunk 2077</strong>."
+          ]
+        },
+        thanks: {
+          keys: ["thanks", "thank you", "great", "perfect", "cool", "ok"],
+          reply: [
+            "You're welcome! 😊 Anything else, just ask.",
+            "My pleasure! 😊 Ask me whatever you like."
+          ]
+        },
+        bye: {
+          keys: ["bye", "goodbye", "see you", "later", "cya"],
+          reply: [
+            "See you! Have a great day. 👋",
+            "Bye! 👋 Thanks for stopping by."
+          ]
+        },
+        unknown: [
+          "I'm not sure about that. Try <strong>projects</strong>, <strong>studies</strong>, <strong>contact</strong>, <strong>PC</strong> or <strong>games</strong>.",
+          "Hmm, I didn't quite get that. Ask me about his <strong>projects</strong>, <strong>studies</strong>, <strong>contact</strong>, <strong>PC</strong> or <strong>games</strong>."
+        ]
+      },
+
+      fr: {
+        greeting: {
+          keys: ["bonjour", "salut", "coucou", "bonsoir", "hey"],
+          reply: [
+            "Salut ! Je suis l'assistant de Javier. Demande-moi ses <strong>projets</strong>, <strong>études</strong>, <strong>PC</strong>, <strong>jeux</strong> ou <strong>contact</strong>.",
+            "Bonjour ! Que veux-tu savoir ? Tu peux demander ses <strong>projets</strong>, <strong>études</strong>, <strong>PC</strong>, <strong>jeux</strong> ou comment le <strong>contacter</strong>."
+          ]
+        },
+        projects: {
+          keys: ["projet", "projets", "portfolio", "site", "travail", "travaux"],
+          reply: [
+            "Javier a créé ce <strong>portfolio</strong> à partir de zéro avec HTML, CSS et JavaScript.",
+            "Son projet principal est ce <strong>portfolio</strong>, codé à la main en HTML, CSS et JavaScript."
+          ]
+        },
+        contact: {
+          keys: ["contact", "email", "écrire", "ecrire", "parler", "whatsapp", "linkedin"],
+          reply: [
+            "Tu peux contacter Javier via le <strong>formulaire de contact</strong>, <strong>WhatsApp</strong> ou son <strong>LinkedIn</strong>.",
+            "Plusieurs options : le <strong>formulaire</strong>, <strong>WhatsApp</strong> ou <strong>LinkedIn</strong>."
+          ]
+        },
+        studies: {
+          keys: ["étude", "etude", "études", "etudes", "formation", "dam", "smx", "cursus"],
+          reply: [
+            "Javier a terminé <strong>SMX</strong> et étudie maintenant <strong>DAM</strong> (développement d'applications multiplateformes).",
+            "Il a fait <strong>SMX</strong> et poursuit avec <strong>DAM</strong>. Il améliore aussi son anglais."
+          ]
+        },
+        pc: {
+          keys: ["pc", "ordinateur", "hardware", "carte graphique", "cpu", "ram", "montage"],
+          reply: [
+            "Javier a monté son propre <strong>PC gaming</strong> et adore le hardware.",
+            "C'est un passionné de hardware : il a monté son <strong>PC gaming</strong> de A à Z."
+          ]
+        },
+        games: {
+          keys: ["jeu", "jeux", "jeuvideo", "jeuxvideo", "gaming", "fallout", "doom", "skyrim", "bioshock", "cyberpunk"],
+          reply: [
+            "Ses préférés : <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> et <strong>Cyberpunk 2077</strong>.",
+            "Il aime les classiques et les dystopies : <strong>Fallout</strong>, <strong>Doom</strong>, <strong>Skyrim</strong>, <strong>Bioshock</strong> et <strong>Cyberpunk 2077</strong>."
+          ]
+        },
+        thanks: {
+          keys: ["merci", "super", "parfait", "cool", "ok"],
+          reply: [
+            "De rien ! 😊 Si tu as besoin d'autre chose, je suis là.",
+            "Avec plaisir ! 😊 Demande-moi ce que tu veux."
+          ]
+        },
+        bye: {
+          keys: ["au revoir", "bye", "à bientôt", "a bientot", "salut", "ciao"],
+          reply: [
+            "À bientôt ! Bonne journée. 👋",
+            "Au revoir ! 👋 Merci de ta visite."
+          ]
+        },
+        unknown: [
+          "Je ne suis pas sûr. Essaie <strong>projets</strong>, <strong>études</strong>, <strong>contact</strong>, <strong>PC</strong> ou <strong>jeux</strong>.",
+          "Hmm, je n'ai pas bien compris. Demande-moi ses <strong>projets</strong>, <strong>études</strong>, <strong>contact</strong>, <strong>PC</strong> ou <strong>jeux</strong>."
+        ]
       }
-      return "No estoy seguro. Prueba con <strong>proyectos</strong>, <strong>estudios</strong>, <strong>PC</strong> o <strong>juegos</strong>.";
     };
 
+    /* ---------------------------------------------------------
+       Textos de interfaz por idioma
+       --------------------------------------------------------- */
+    const ui = {
+      es: {
+        placeholder: "Escribe tu pregunta...",
+        quick: { projects: "Proyectos", contact: "Contacto", studies: "Estudios", pc: "PC", games: "Juegos" },
+        welcome: "¡Hola! 👋 Soy el asistente de Javier. ¿Sobre qué quieres saber?",
+        welcomeSub: "Escribe tu pregunta o usa los botones de abajo 👇"
+      },
+      va: {
+        placeholder: "Escriu la teua pregunta...",
+        quick: { projects: "Projectes", contact: "Contacte", studies: "Estudis", pc: "PC", games: "Jocs" },
+        welcome: "Hola! 👋 Soc l'assistent de Javier. Sobre què vols saber?",
+        welcomeSub: "Escriu la teua pregunta o usa els botons de davall 👇"
+      },
+      en: {
+        placeholder: "Type your question...",
+        quick: { projects: "Projects", contact: "Contact", studies: "Studies", pc: "PC", games: "Games" },
+        welcome: "Hi! 👋 I'm Javier's assistant. What would you like to know?",
+        welcomeSub: "Type your question or use the buttons below 👇"
+      },
+      fr: {
+        placeholder: "Écris ta question...",
+        quick: { projects: "Projets", contact: "Contact", studies: "Études", pc: "PC", games: "Jeux" },
+        welcome: "Salut ! 👋 Je suis l'assistant de Javier. Que veux-tu savoir ?",
+        welcomeSub: "Écris ta question ou utilise les boutons ci-dessous 👇"
+      }
+    };
+
+    /* ---------------------------------------------------------
+       Detector de idioma
+       --------------------------------------------------------- */
+    const detectLang = (text) => {
+      if (!text) return null;
+      const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      const hints = {
+        es: /\b(qué|que|cómo|como|dónde|donde|quién|quien|hola|buenas|gracias|por favor|está|esta)\b/,
+        va: /\b(què|com|on|qui|hola|bones|gracies|si us plau|està|estic|vull|puc|soc)\b/,
+        en: /\b(what|how|where|who|hello|hi|thanks|please|the|you|your|is|are|does)\b/,
+        fr: /\b(quoi|comment|où|qui|bonjour|salut|merci|s'il|vous|tu|est|sont|je)\b/
+      };
+
+      let scores = { es: 0, va: 0, en: 0, fr: 0 };
+      for (const lang in hints) {
+        const matches = t.match(hints[lang]);
+        if (matches) scores[lang] = matches.length;
+      }
+
+      if (/[ñ¿¡]/.test(text)) scores.es += 2;
+      if (/ç/.test(text)) { scores.va += 1; scores.fr += 1; }
+      if (/[àèù]/.test(text)) scores.fr += 1;
+      if (/\b(l'|d'|n'|s'|qu')/.test(t)) { scores.va += 1; scores.fr += 1; }
+
+      const best = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+      return scores[best] > 0 ? best : null;
+    };
+
+    /* ---------------------------------------------------------
+       Estado del idioma actual
+       --------------------------------------------------------- */
+    const storedLang = safeGet("portfolio-chat-lang");
+    let currentLang = (storedLang && ui[storedLang]) ? storedLang : null;
+
+    if (!currentLang) {
+      const navLang = (navigator.language || "es").toLowerCase();
+      if (navLang.startsWith("ca") || navLang.startsWith("va")) currentLang = "va";
+      else if (navLang.startsWith("en")) currentLang = "en";
+      else if (navLang.startsWith("fr")) currentLang = "fr";
+      else currentLang = "es";
+    }
+
+    /* ---------------------------------------------------------
+       Aplicar idioma a la interfaz
+       --------------------------------------------------------- */
+    const applyLangToUI = (lang) => {
+      const t = ui[lang] || ui.es;
+      if (chatInput) chatInput.placeholder = t.placeholder;
+      const quickBtns = $$(".chat__quick-btn", chatQuick || document);
+      const quickMap = ["projects", "contact", "studies", "pc", "games"];
+      quickBtns.forEach((btn, i) => {
+        const key = quickMap[i];
+        if (key && t.quick[key]) btn.textContent = t.quick[key];
+      });
+      chatLangBtns.forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.lang === lang);
+      });
+    };
+
+    applyLangToUI(currentLang);
+
+    /* ---------------------------------------------------------
+       Buscar respuesta
+       --------------------------------------------------------- */
+    const findReply = (text, lang) => {
+      const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const dict = knowledge[lang] || knowledge.es;
+
+      for (const key in dict) {
+        if (key === "unknown") continue;
+        const item = dict[key];
+        if (!item || !item.keys) continue;
+        for (const k of item.keys) {
+          const kn = k.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          if (t.includes(kn)) {
+            return Array.isArray(item.reply)
+              ? item.reply[Math.floor(Math.random() * item.reply.length)]
+              : item.reply;
+          }
+        }
+      }
+      const unknown = dict.unknown || knowledge.es.unknown;
+      return Array.isArray(unknown)
+        ? unknown[Math.floor(Math.random() * unknown.length)]
+        : unknown;
+    };
+
+    /* ---------------------------------------------------------
+       Añadir mensaje
+       --------------------------------------------------------- */
     const addMessage = (text, type = "bot") => {
       const msg = document.createElement("div");
       msg.className = `chat__msg chat__msg--${type}`;
@@ -450,6 +809,26 @@
       }, 500 + Math.random() * 500);
     };
 
+    /* ---------------------------------------------------------
+       Enviar mensaje con detección de idioma
+       --------------------------------------------------------- */
+    const handleUserMessage = (text) => {
+      if (!text) return;
+
+      const detected = detectLang(text);
+      if (detected && detected !== currentLang) {
+        currentLang = detected;
+        safeSet("portfolio-chat-lang", currentLang);
+        applyLangToUI(currentLang);
+      }
+
+      addMessage(text, "user");
+      botReply(findReply(text, currentLang));
+    };
+
+    /* ---------------------------------------------------------
+       Abrir / cerrar
+       --------------------------------------------------------- */
     const openChat = () => {
       chat.classList.add("is-open");
       chatToggle.setAttribute("aria-expanded", "true");
@@ -465,12 +844,16 @@
       safeSet("portfolio-chat-open", "false");
     };
 
+    /* ---------------------------------------------------------
+       Welcome
+       --------------------------------------------------------- */
     let welcomeShown = false;
     chatToggle.addEventListener("click", () => {
       if (!welcomeShown) {
         welcomeShown = true;
-        addMessage("¡Hola! 👋 Soy el asistente de <strong>Javier</strong>. ¿Sobre qué quieres saber?", "bot");
-        addMessage("Escribe tu pregunta o usa los botones de abajo 👇", "bot");
+        const t = ui[currentLang] || ui.es;
+        addMessage(t.welcome, "bot");
+        addMessage(t.welcomeSub, "bot");
       }
       openChat();
     });
@@ -479,22 +862,46 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && chat.classList.contains("is-open")) closeChat();
     });
+
+    /* ---------------------------------------------------------
+       Enviar desde el formulario
+       --------------------------------------------------------- */
     chatForm?.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = chatInput.value.trim();
       if (!text) return;
-      addMessage(text, "user");
       chatInput.value = "";
-      botReply(findReply(text));
+      handleUserMessage(text);
     });
+
+    /* ---------------------------------------------------------
+       Botones rápidos
+       --------------------------------------------------------- */
     $$(".chat__quick-btn", chatQuick || document).forEach((btn) => {
       btn.addEventListener("click", () => {
         const text = btn.dataset.msg || btn.textContent;
-        addMessage(text, "user");
-        botReply(findReply(text));
+        handleUserMessage(text);
       });
     });
 
+    /* ---------------------------------------------------------
+       Selector manual de idioma
+       --------------------------------------------------------- */
+    chatLangBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        if (!ui[lang]) return;
+        currentLang = lang;
+        safeSet("portfolio-chat-lang", lang);
+        applyLangToUI(lang);
+        const t = ui[lang];
+        addMessage(t.welcome, "bot");
+      });
+    });
+
+    /* ---------------------------------------------------------
+       Reabrir si estaba abierto
+       --------------------------------------------------------- */
     if (safeGet("portfolio-chat-open") === "true") {
       setTimeout(openChat, 800);
     }

@@ -3107,3 +3107,57 @@ html{
     display: none; /* En móvil, mejor ocultarlo para no saturar */
   }
 }
+/* =========================================================
+   29. SELECTOR DE IDIOMA DEL CHAT
+   ========================================================= */
+.chat__lang{
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  background: rgba(0, 0, 0, .35);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.chat__lang::after{
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid color-mix(in srgb, var(--gold) 15%, transparent);
+  pointer-events: none;
+}
+
+.chat__lang-btn{
+  padding: 4px 7px;
+  background: transparent;
+  border: none;
+  color: color-mix(in srgb, var(--gold-bright) 75%, transparent);
+  font: 600 9px var(--serif);
+  letter-spacing: .12em;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  position: relative;
+  z-index: 1;
+}
+
+.chat__lang-btn:hover{
+  color: #ffffff;
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.chat__lang-btn.is-active{
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  color: #1a1208;
+  font-weight: 700;
+}
+
+/* Responsive: en móvil, más compacto */
+@media (max-width: 500px){
+  .chat__lang-btn{
+    padding: 3px 5px;
+    font-size: 8px;
+    letter-spacing: .08em;
+  }
+}
