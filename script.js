@@ -1049,6 +1049,157 @@
     }
   }
 
+     /* =========================================================
+     12.5. NASA APOD (Astronomy Picture of the Day)
+     ========================================================= */
+  // 🔑 API key de NASA (demo gratuita, 1000 peticiones/hora)
+  const NASA_API_KEY = "STsrnenqw6mMNKQdq19HYWDUdkDKVD7QqNl11Wp3";
+
+  const apodLoader = $("#apod-loader");
+  const apodMedia = $("#apod-media");
+  const apodDate = $("#apod-date");
+  const apodType = $("#apod-type");
+  const apodTitle = $("#apod-title");
+  const apodExplanation = $("#apod-explanation");
+  const apodLink = $("#apod-link");
+  const apodDatePicker = $("#apod-date-picker");
+  const apodToday = $("#apod-today");
+
+  const mostrarApodError = (err) => {
+    if (apodLoader) apodLoader.classList.add("is-hidden");
+    if (apodMedia) {
+      apodMedia.innerHTML = `
+        <div class="apod__placeholder">
+          <span class="apod__placeholder-icon">✳</span>
+          <strong>El cosmos está en silencio</strong>
+          <small>La API de NASA no responde ahora mismo (error ${err.code || "desconocido"}). Mientras se recupera, puedes ver la galería completa en <a href="https://apod.nasa.gov/apod/archivepix.html" target="_blank" rel="noopener">apod.nasa.gov</a>.</small>
+          <button class="apod__retry" id="apod-retry" type="button">Reintentar</button>
+        </div>
+      `;
+      const retryBtn = document.getElementById("apod-retry");
+      retryBtn?.addEventListener("click", () => {
+        if (apodDatePicker && apodDatePicker.value) {
+          loadApod(apodDatePicker.value);
+        } else {
+          loadApod();
+        }
+      });
+    }
+    if (apodTitle) apodTitle.textContent = "Esperando al cosmos…";
+    if (apodExplanation) apodExplanation.textContent = "La NASA está actualizando su servicio. Puedes reintentar o consultar su web oficial.";
+    if (apodDate) apodDate.textContent = "—";
+    if (apodType) apodType.textContent = "Sin conexión";
+  };
+
+  const loadApod = async (date) => {
+    if (!apodMedia) return;
+
+    if (apodLoader) apodLoader.classList.remove("is-hidden");
+    if (apodTitle) apodTitle.textContent = "Cargando…";
+    if (apodExplanation) apodExplanation.textContent = "—";
+    if (apodDate) apodDate.textContent = "—";
+    if (apodType) apodType.textContent = "—";
+    if (apodMedia) apodMedia.innerHTML = "";
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    try {
+      let url = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&thumbs=true`;
+      if (date) url += `&date=${date}`;
+
+      console.info("[apod] Consultando:", date || "hoy");
+
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      const data = await res.json();
+
+      if (data.code && data.code !== 200) {
+        console.warn("[apod] NASA respondió con error:", data);
+
+        if (!date && (data.code === 500 || data.code === 503)) {
+          console.info("[apod] Reintentando con la foto de ayer…");
+          const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+          return loadApod(yesterday);
+        }
+
+        mostrarApodError(data);
+        return;
+      }
+
+      const apod = Array.isArray(data) ? data[0] : data;
+
+      const esPlaceholder = (apod.title === "NASA Science") ||
+                            (apod.url && apod.url.includes("nasa-logo"));
+
+      if (esPlaceholder) {
+        if (!date) {
+          console.info("[apod] Placeholder detectado. Probando ayer…");
+          const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+          return loadApod(yesterday);
+        }
+        mostrarApodError({ code: 503, msg: "APOD no disponible" });
+        return;
+      }
+
+      if (apodTitle) apodTitle.textContent = apod.title || "Sin título";
+      if (apodDate) apodDate.textContent = apod.date || "—";
+      if (apodType) apodType.textContent = apod.media_type === "video" ? "Vídeo" : "Imagen";
+      if (apodExplanation) apodExplanation.textContent = apod.explanation || "—";
+      if (apodLink) apodLink.href = apod.hdurl || apod.url || "#";
+
+      const media = apod.media_type === "video"
+        ? apod.url
+        : (apod.url || apod.hdurl);
+
+      if (apod.media_type === "video") {
+        if (media && media.includes("youtube")) {
+          const embedUrl = media.replace("watch?v=", "embed/").replace("http://", "https://");
+          apodMedia.innerHTML = `<iframe src="${embedUrl}" allowfullscreen loading="lazy" title="${apod.title}"></iframe>`;
+        } else {
+          apodMedia.innerHTML = `<video src="${media}" controls poster="${apod.thumbnail_url || ''}" preload="metadata"></video>`;
+        }
+      } else {
+        const img = document.createElement("img");
+        img.src = media;
+        img.alt = apod.title || "APOD";
+        img.loading = "lazy";
+        img.onerror = () => mostrarApodError({ code: 0, msg: "Imagen no disponible" });
+        apodMedia.appendChild(img);
+      }
+
+      if (apodLoader) apodLoader.classList.add("is-hidden");
+
+      console.info("[apod] Cargado:", apod.title);
+
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.warn("[apod] Error:", err);
+
+      if (!date && err.name === "AbortError") {
+        console.info("[apod] Timeout. Probando ayer…");
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+        return loadApod(yesterday);
+      }
+
+      mostrarApodError({ code: 0, msg: err.name === "AbortError" ? "Timeout" : "Sin conexión" });
+    }
+  };
+
+  // 🚀 Cargar APOD de hoy al arrancar + listeners
+  if (apodMedia) {
+    loadApod();
+
+    apodDatePicker?.addEventListener("change", () => {
+      if (apodDatePicker.value) loadApod(apodDatePicker.value);
+    });
+
+    apodToday?.addEventListener("click", () => {
+      if (apodDatePicker) apodDatePicker.value = "";
+      loadApod();
+    });
+  }
+
   /* =========================================================
      13. REPOS DE GITHUB
      ========================================================= */

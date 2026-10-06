@@ -279,6 +279,47 @@
         </div>
       </div>
     </section>
+        <!-- NASA APOD -->
+    <section class="apod section-shell" id="apod">
+      <div class="section-heading section-heading--row reveal">
+        <div>
+          <p class="eyebrow">01.5 / MIRANDO AL CIELO</p>
+          <h2>La foto del día<br><em>de la NASA.</em></h2>
+        </div>
+        <span class="section-index">APOD · DAILY</span>
+      </div>
+
+      <div class="apod__stage reveal">
+        <div class="apod__frame">
+          <div class="apod__loader" id="apod-loader">
+            <div class="apod__loader-dot"></div>
+            <div class="apod__loader-dot"></div>
+            <div class="apod__loader-dot"></div>
+            <span>Consultando al cosmos…</span>
+          </div>
+
+          <div class="apod__media" id="apod-media"></div>
+
+          <div class="apod__caption">
+            <div class="apod__meta">
+              <span class="apod__date" id="apod-date">—</span>
+              <span class="apod__type" id="apod-type">—</span>
+            </div>
+            <h3 class="apod__title" id="apod-title">Cargando…</h3>
+            <p class="apod__explanation" id="apod-explanation">—</p>
+            <a class="button button--gold apod__link" id="apod-link" href="#" target="_blank" rel="noopener noreferrer">
+              Ver en alta resolución <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="apod__controls">
+          <label for="apod-date-picker" class="sr-only">Elegir fecha</label>
+          <input type="date" id="apod-date-picker" class="apod__date-input" min="1995-06-16" />
+          <button class="apod__today" id="apod-today" type="button">Hoy</button>
+        </div>
+      </div>
+    </section>
 
     <!-- PROYECTOS -->
     <section class="projects section-shell" id="proyectos">
