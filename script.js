@@ -1048,6 +1048,158 @@
       setTimeout(openChat, 800);
     }
   }
+    /* =========================================================
+     12.4. TMDB — Cartelera personal de películas favoritas
+     ========================================================= */
+  // 🔑 PON AQUÍ TU API KEY DE TMDB
+  const TMDB_API_KEY = "eb84a38debac4f94c4f640978ca7a112";
+
+  const movieGrid = $("#movie-grid");
+  const movieTooltip = $("#movie-tooltip");
+  const movieTooltipTitle = movieTooltip?.querySelector(".movie-tooltip__title");
+  const movieTooltipDesc = movieTooltip?.querySelector(".movie-tooltip__desc");
+
+  // 🎬 Tus 5 películas favoritas
+  const FAVORITE_MOVIES = [
+    { title: "Gladiator", year: 2000 },
+    { title: "Star Wars: Episode VI - Return of the Jedi", year: 1983 },
+    { title: "The Silence of the Lambs", year: 1991 },
+    { title: "Se7en", year: 1995 },
+    { title: "Spider-Man", year: 2002 }
+  ];
+
+  const showMovieTooltip = (movie, targetEl) => {
+    if (!movieTooltip || !movie) return;
+    movieTooltipTitle.textContent = `${movie.title} (${movie.year})`;
+    movieTooltipDesc.textContent = movie.overview || "Sin sinopsis disponible.";
+
+    const cardRect = movieGrid.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+    const x = targetRect.left + targetRect.width / 2 - cardRect.left;
+    const y = targetRect.top - cardRect.top;
+
+    movieTooltip.style.left = x + "px";
+    movieTooltip.style.top = (y - 10) + "px";
+    movieTooltip.style.transform = "translate(-50%, -100%)";
+    movieTooltip.classList.add("is-visible");
+    movieTooltip.setAttribute("aria-hidden", "false");
+  };
+
+  const hideMovieTooltip = () => {
+    if (!movieTooltip) return;
+    movieTooltip.classList.remove("is-visible");
+    movieTooltip.setAttribute("aria-hidden", "true");
+  };
+
+  const loadMovies = async () => {
+    if (!movieGrid) return;
+
+    if (!TMDB_API_KEY || TMDB_API_KEY === "TU_API_KEY_DE_TMDB_AQUI") {
+      console.warn("[tmdb] Falta la API key de TMDB");
+      movieGrid.innerHTML = `
+        <div class="movie" style="grid-column: 1 / -1; aspect-ratio: auto; padding: 20px; text-align: center; border-color: var(--line-soft);">
+          <div class="movie__meta" style="position: static; background: none;">
+            <strong>Añade tu API key de TMDB</strong>
+            <small>Regístrate gratis en themoviedb.org</small>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    movieGrid.innerHTML = "";
+
+    try {
+      const promises = FAVORITE_MOVIES.map(async (fav) => {
+        let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=es-ES&query=${encodeURIComponent(fav.title)}`;
+        if (fav.year) url += `&year=${fav.year}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        const movie = data.results?.[0] || null;
+
+        if (!movie) return null;
+
+        return {
+          title: movie.title,
+          year: movie.release_date ? movie.release_date.split("-")[0] : "—",
+          rating: movie.vote_average ? movie.vote_average.toFixed(1) : "—",
+          poster: movie.poster_path
+            ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
+            : "",
+          overview: movie.overview || "Sin sinopsis disponible."
+        };
+      });
+
+      const movies = await Promise.all(promises);
+
+      movies.forEach((movie) => {
+        const div = document.createElement("div");
+        div.className = "movie";
+
+        if (!movie) {
+          div.innerHTML = `
+            <div class="movie__poster-skeleton"></div>
+            <div class="movie__meta">
+              <strong>No encontrada</strong>
+              <small>—</small>
+            </div>
+          `;
+          movieGrid.appendChild(div);
+          return;
+        }
+
+        div.innerHTML = `
+          ${movie.poster
+            ? `<img class="movie__poster" src="${movie.poster}" alt="${movie.title}" loading="lazy">`
+            : `<div class="movie__poster-skeleton"></div>`}
+          <div class="movie__meta">
+            <strong>${movie.title}</strong>
+            <small>${movie.year} · ⭐ ${movie.rating}</small>
+          </div>
+        `;
+
+        const img = div.querySelector("img.movie__poster");
+        if (img) {
+          img.onload = () => div.classList.add("is-loaded");
+          img.onerror = () => div.classList.add("is-loaded");
+        } else {
+          div.classList.add("is-loaded");
+        }
+
+        div.addEventListener("mouseenter", () => {
+          div.classList.add("is-hovering");
+          showMovieTooltip(movie, div);
+        });
+        div.addEventListener("mouseleave", () => {
+          div.classList.remove("is-hovering");
+          hideMovieTooltip();
+        });
+
+        div.addEventListener("touchstart", () => {
+          showMovieTooltip(movie, div);
+          setTimeout(hideMovieTooltip, 2500);
+        }, { passive: true });
+
+        movieGrid.appendChild(div);
+      });
+
+      console.info("[tmdb] Cartelera cargada ✅");
+
+    } catch (err) {
+      console.warn("[tmdb] Error:", err);
+      movieGrid.innerHTML = `
+        <div class="movie" style="grid-column: 1 / -1; aspect-ratio: auto; padding: 20px; text-align: center; border-color: var(--line-soft);">
+          <div class="movie__meta" style="position: static; background: none;">
+            <strong>No se pudieron cargar las películas</strong>
+            <small>Inténtalo más tarde</small>
+          </div>
+        </div>
+      `;
+    }
+  };
+
+  if (movieGrid) loadMovies();
 
      /* =========================================================
      12.5. NASA APOD (Astronomy Picture of the Day)

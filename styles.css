@@ -3502,3 +3502,165 @@ html{
   background: color-mix(in srgb, var(--gold) 22%, transparent);
   border-color: var(--gold-bright);
 }
+/* =========================================================
+   34. GALERÍA DE PELÍCULAS (TMDB)
+   ========================================================= */
+.movie-grid{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 8px 3px 10px;
+  position: relative;
+}
+
+.movie{
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gold) 8%, transparent) 0%,
+    color-mix(in srgb, var(--bg-deep) 95%, transparent) 100%);
+  cursor: pointer;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+
+.movie::before{
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 3px; left: 3px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  pointer-events: none;
+  z-index: 3;
+  transition: width .25s, height .25s;
+}
+
+.movie:hover{
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent),
+    0 10px 30px color-mix(in srgb, var(--gold) 25%, transparent);
+}
+
+.movie:hover::before{
+  width: 14px;
+  height: 14px;
+}
+
+.movie__poster{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform .5s, filter .5s;
+  filter: saturate(.95) contrast(1.05);
+  opacity: 0;
+}
+
+.movie.is-loaded .movie__poster{
+  opacity: 1;
+}
+
+.movie:hover .movie__poster{
+  transform: scale(1.08);
+  filter: saturate(1.15) contrast(1.08) brightness(1.1);
+}
+
+.movie__poster-skeleton{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--gold) 5%, transparent) 0%,
+    color-mix(in srgb, var(--gold) 18%, transparent) 50%,
+    color-mix(in srgb, var(--gold) 5%, transparent) 100%);
+  background-size: 200% 100%;
+  animation: movie-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes movie-shimmer{
+  0%   { background-position: 200% 0 }
+  100% { background-position: -200% 0 }
+}
+
+.movie__meta{
+  position: absolute;
+  left: 4px; right: 4px; bottom: 4px;
+  z-index: 2;
+  padding: 5px 4px;
+  text-align: center;
+  background: linear-gradient(180deg,
+    transparent,
+    color-mix(in srgb, var(--bg-deep) 90%, transparent));
+}
+
+.movie__meta strong{
+  display: block;
+  font: 500 8px/1.2 var(--serif);
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie__meta small{
+  display: block;
+  font: italic 7px/1.2 var(--serif);
+  color: #e0e6ee;
+  letter-spacing: .04em;
+}
+
+.movie-tooltip{
+  position: absolute;
+  z-index: 100;
+  max-width: 280px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--bg-deep) 96%, transparent);
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  outline-offset: 3px;
+  color: #ffffff;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s, visibility .25s;
+  box-shadow: 0 12px 40px rgba(0,0,0,.7);
+}
+
+.movie-tooltip.is-visible{
+  opacity: 1;
+  visibility: visible;
+}
+
+.movie-tooltip__title{
+  display: block;
+  font: 600 12px var(--serif);
+  color: var(--gold-bright);
+  letter-spacing: .14em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.movie-tooltip__desc{
+  display: block;
+  font: italic 11px/1.5 var(--serif);
+  color: #e0e6ee;
+}
+
+@media (max-width: 900px){
+  .movie-grid{ grid-template-columns: repeat(3, 1fr) }
+}
+@media (max-width: 500px){
+  .movie-grid{ grid-template-columns: repeat(2, 1fr); gap: 6px }
+  .movie__meta strong{ font-size: 7px }
+  .movie__meta small{ font-size: 6px }
+  .movie-tooltip{ display: none }
+}
