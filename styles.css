@@ -3161,3 +3161,24 @@ html{
     letter-spacing: .08em;
   }
 }
+
+ /* =========================================================
+   31. ENLACE ACTIVO EN EL MENÚ
+   ========================================================= */
+.nav a.is-active{
+  color: var(--gold-bright) !important;
+  opacity: 1;
+}
+
+.nav a.is-active::after{
+  left: 0;
+  width: 100%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+/* En móvil, también se ve bien */
+.nav.nav-open a.is-active{
+  color: var(--gold-bright) !important;
+  border-bottom-color: var(--gold-bright);
+}

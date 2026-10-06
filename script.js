@@ -226,6 +226,76 @@
     if (e.key === "Escape") setMenu(false);
   });
 
+    /* =========================================================
+     16. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
+     ========================================================= */
+  const navLinks = $$("a", mainNav || document).filter((a) => {
+    const href = a.getAttribute("href") || "";
+    return href.startsWith("#") && href.length > 1;
+  });
+
+  if (navLinks.length > 0 && "IntersectionObserver" in window) {
+    // Creamos un mapa: enlace → sección
+    const linkMap = new Map();
+    navLinks.forEach((link) => {
+      const id = link.getAttribute("href").slice(1);
+      const section = document.getElementById(id);
+      if (section) linkMap.set(section, link);
+    });
+
+    const sections = [...linkMap.keys()];
+
+    // Al hacer click en un enlace, marcar como activo inmediatamente
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.forEach((l) => l.classList.remove("is-active"));
+        link.classList.add("is-active");
+      });
+    });
+
+    // Detectar qué sección está visible
+    const setActive = (section) => {
+      navLinks.forEach((l) => l.classList.remove("is-active"));
+      const link = linkMap.get(section);
+      if (link) link.classList.add("is-active");
+    };
+
+    // IntersectionObserver: detecta las secciones visibles
+    const visibleSections = new Map(); // section → ratio visible
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target, entry.intersectionRatio);
+          } else {
+            visibleSections.delete(entry.target);
+          }
+        });
+
+        // Elegimos la sección con más visibilidad
+        if (visibleSections.size > 0) {
+          let bestSection = null;
+          let bestRatio = 0;
+          visibleSections.forEach((ratio, section) => {
+            if (ratio > bestRatio) {
+              bestRatio = ratio;
+              bestSection = section;
+            }
+          });
+          if (bestSection) setActive(bestSection);
+        }
+      },
+      {
+        // Detectamos cuando la sección cruza el centro de la pantalla
+        rootMargin: "-40% 0px -40% 0px",
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1]
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  }
+
   /* =========================================================
      6. BARRA DE PROGRESO SCROLL
      ========================================================= */
