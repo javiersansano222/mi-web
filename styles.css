@@ -3182,3 +3182,33 @@ html{
   color: var(--gold-bright) !important;
   border-bottom-color: var(--gold-bright);
 }
+
+/* =========================================================
+   32. EFECTO MATRIX (codificado → descodificar al hover)
+   ========================================================= */
+[data-matrix]{
+  position: relative;
+  display: inline-block;
+  transition: color .3s, text-shadow .3s;
+  letter-spacing: .15em;
+}
+
+/* Estado inicial: codificado, quieto */
+[data-matrix].is-coded{
+  color: color-mix(in srgb, var(--gold-bright) 55%, transparent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--gold) 20%, transparent);
+}
+
+/* Estado intermedio: descodificando (letra a letra) */
+[data-matrix].is-decoding{
+  color: var(--gold-bright) !important;
+  text-shadow:
+    0 0 8px color-mix(in srgb, var(--gold) 60%, transparent),
+    0 0 20px color-mix(in srgb, var(--ember) 40%, transparent);
+}
+
+/* Estado final: descodificado */
+[data-matrix].is-decoded{
+  color: inherit;
+  text-shadow: none;
+}

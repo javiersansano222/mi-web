@@ -225,7 +225,79 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setMenu(false);
   });
+    /* =========================================================
+     5.5. EFECTO MATRIX (codificado → descodificar al hover)
+     ========================================================= */
+  const matrixChars = "#@$%!*&?¿¡+=";
 
+  const generateRandomCode = (length) => {
+    let out = "";
+    for (let i = 0; i < length; i++) {
+      out += matrixChars[Math.floor(Math.random() * matrixChars.length)];
+    }
+    return out;
+  };
+
+  const initMatrixElement = (el) => {
+    // Guardamos el texto original
+    if (!el.dataset.matrixOriginal) {
+      el.dataset.matrixOriginal = el.textContent.trim();
+    }
+    const original = el.dataset.matrixOriginal;
+    const len = original.length;
+
+    // Estado inicial: codificado, QUIETO (no cambia solo)
+    el.textContent = generateRandomCode(len);
+    el.classList.add("is-coded");
+
+    // Función para descodificar letra a letra
+    const decode = () => {
+      if (el.dataset.matrixRunning === "true") return;
+      if (el.classList.contains("is-decoded")) return;
+
+      el.dataset.matrixRunning = "true";
+      el.classList.remove("is-coded");
+      el.classList.add("is-decoding");
+
+      const chars = original.split("");
+      const totalSteps = 12;
+      let step = 0;
+
+      const interval = setInterval(() => {
+        el.textContent = chars.map((ch, i) => {
+          if (ch === " ") return " ";
+          // Letra por letra: de izquierda a derecha
+          const threshold = (i / chars.length) * totalSteps;
+          if (step >= totalSteps - threshold) return ch;
+          return matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        }).join("");
+
+        step++;
+
+        if (step > totalSteps) {
+          clearInterval(interval);
+          el.textContent = original;
+          el.classList.remove("is-decoding");
+          el.classList.add("is-decoded");
+          el.dataset.matrixRunning = "false";
+        }
+      }, 50);
+    };
+
+    // Al pasar el ratón
+    el.addEventListener("mouseenter", decode);
+
+    // En móvil: al pulsar
+    el.addEventListener("touchstart", decode, { passive: true });
+
+    // Al recibir foco (accesibilidad teclado)
+    el.addEventListener("focus", decode);
+  };
+
+  // Aplicar a todos los enlaces con data-matrix
+  $$("[data-matrix]").forEach((el) => initMatrixElement(el));
+
+  // ⚠️ SIN setInterval "respirar" — los símbolos se quedan quietos
     /* =========================================================
      16. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
      ========================================================= */
