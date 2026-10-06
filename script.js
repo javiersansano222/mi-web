@@ -56,7 +56,7 @@
 
     try {
       
-        const url = `https://api.open-meteo.com/v1/forecast` +
+      const url = `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${WEATHER_LAT}` +
         `&longitude=${WEATHER_LON}` +
         `&current_weather=true` +
