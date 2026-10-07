@@ -31,7 +31,7 @@
 
   const WEATHER_LAT  = 38.6370;
   const WEATHER_LON  = -0.8658;
-  const WEATHER_CITY = "Villena";
+  const WEATHER_CITY = "Valencia";
 
   const weatherCodes = {
     0:  { icon: "☀️",  label: "Despejado" },
