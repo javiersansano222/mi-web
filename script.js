@@ -10,6 +10,17 @@
   const prefersReducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // --- Función de escape para prevenir XSS en innerHTML ---
+  const escapeHTML = (str) => {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
   /* =========================================================
      0. WIDGET DEL TIEMPO (Open-Meteo)
      ========================================================= */
@@ -18,12 +29,10 @@
   const weatherTemp = $("#weather-temp");
   const weatherCity = $("#weather-city");
 
-  // 📍 Coordenadas de Villena (Alicante) — cámbialas por las tuyas
   const WEATHER_LAT  = 38.6370;
   const WEATHER_LON  = -0.8658;
-  const WEATHER_CITY = "Valencia";
+  const WEATHER_CITY = "Villena";
 
-  // Mapeo de códigos WMO → emoji + descripción
   const weatherCodes = {
     0:  { icon: "☀️",  label: "Despejado" },
     1:  { icon: "🌤️", label: "Mayormente despejado" },
@@ -55,7 +64,6 @@
     if (!weatherBox) return;
 
     try {
-      
       const url = `https://api.open-meteo.com/v1/forecast` +
         `?latitude=${WEATHER_LAT}` +
         `&longitude=${WEATHER_LON}` +
@@ -104,10 +112,6 @@
   const introAlreadySeen = safeGet("portfolio-intro-seen") === "true";
   const skipIntro = prefersReducedMotion() || introAlreadySeen;
 
-  console.info("[script] intro overlay:", !!introOverlay,
-               "| ya vista:", introAlreadySeen,
-               "| reduced-motion:", prefersReducedMotion());
-
   const finishIntro = () => {
     document.body.classList.remove("is-loading");
     safeSet("portfolio-intro-seen", "true");
@@ -146,7 +150,6 @@
       }
     };
     requestAnimationFrame(step);
-    console.info("[script] Intro en marcha…");
   }
 
   window.setTimeout(() => {
@@ -212,6 +215,7 @@
     navToggle.setAttribute("aria-expanded", String(open));
     navToggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
     mainNav.classList.toggle("nav-open", open);
+    document.body.style.overflow = open ? 'hidden' : '';
   };
 
   navToggle?.addEventListener("click", () => {
@@ -225,80 +229,88 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") setMenu(false);
   });
-    /* =========================================================
-     5.5. EFECTO MATRIX (codificado → descodificar al hover)
-     ========================================================= */
-  const matrixChars = "#@$%!*&?¿¡+=";
 
-  const generateRandomCode = (length) => {
-    let out = "";
-    for (let i = 0; i < length; i++) {
-      out += matrixChars[Math.floor(Math.random() * matrixChars.length)];
-    }
-    return out;
+  /* =========================================================
+   5.5. EFECTO MATRIX (codificado → descodificar al hover)
+   Solo se activa en dispositivos con ratón (hover: hover) y
+   puntero fino. En móvil/táctil se deja el texto tal cual.
+   ========================================================= */
+const matrixChars = "#@$%!*&?¿¡+=";
+const finePointerForMatrix = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+const generateRandomCode = (length) => {
+  let out = "";
+  for (let i = 0; i < length; i++) {
+    out += matrixChars[Math.floor(Math.random() * matrixChars.length)];
+  }
+  return out;
+};
+
+const initMatrixElement = (el) => {
+  // Guardamos el texto original
+  if (!el.dataset.matrixOriginal) {
+    el.dataset.matrixOriginal = el.textContent.trim();
+  }
+  const original = el.dataset.matrixOriginal;
+  const len = original.length;
+
+  // Estado inicial: codificado, QUIETO (no cambia solo)
+  el.textContent = generateRandomCode(len);
+  el.classList.add("is-coded");
+
+  // Función para descodificar letra a letra
+  const decode = () => {
+    if (el.dataset.matrixRunning === "true") return;
+    if (el.classList.contains("is-decoded")) return;
+
+    el.dataset.matrixRunning = "true";
+    el.classList.remove("is-coded");
+    el.classList.add("is-decoding");
+
+    const chars = original.split("");
+    const totalSteps = 12;
+    let step = 0;
+
+    const interval = setInterval(() => {
+      el.textContent = chars.map((ch, i) => {
+        if (ch === " ") return " ";
+        const threshold = (i / chars.length) * totalSteps;
+        if (step >= totalSteps - threshold) return ch;
+        return matrixChars[Math.floor(Math.random() * matrixChars.length)];
+      }).join("");
+
+      step++;
+
+      if (step > totalSteps) {
+        clearInterval(interval);
+        el.textContent = original;
+        el.classList.remove("is-decoding");
+        el.classList.add("is-decoded");
+        el.dataset.matrixRunning = "false";
+      }
+    }, 50);
   };
 
-  const initMatrixElement = (el) => {
-    // Guardamos el texto original
+  el.addEventListener("mouseenter", decode);
+  el.addEventListener("touchstart", decode, { passive: true });
+  el.addEventListener("focus", decode);
+};
+
+// ⚠️ Solo aplicar efecto Matrix en dispositivos con ratón.
+// En móvil/táctil, dejamos el texto normal legible.
+if (finePointerForMatrix.matches && !prefersReducedMotion()) {
+  $$("[data-matrix]").forEach((el) => initMatrixElement(el));
+} else {
+  // En táctil: nos aseguramos de que el texto original está tal cual,
+  // y guardamos el original en dataset por si acaso.
+  $$("[data-matrix]").forEach((el) => {
     if (!el.dataset.matrixOriginal) {
       el.dataset.matrixOriginal = el.textContent.trim();
     }
-    const original = el.dataset.matrixOriginal;
-    const len = original.length;
-
-    // Estado inicial: codificado, QUIETO (no cambia solo)
-    el.textContent = generateRandomCode(len);
-    el.classList.add("is-coded");
-
-    // Función para descodificar letra a letra
-    const decode = () => {
-      if (el.dataset.matrixRunning === "true") return;
-      if (el.classList.contains("is-decoded")) return;
-
-      el.dataset.matrixRunning = "true";
-      el.classList.remove("is-coded");
-      el.classList.add("is-decoding");
-
-      const chars = original.split("");
-      const totalSteps = 12;
-      let step = 0;
-
-      const interval = setInterval(() => {
-        el.textContent = chars.map((ch, i) => {
-          if (ch === " ") return " ";
-          // Letra por letra: de izquierda a derecha
-          const threshold = (i / chars.length) * totalSteps;
-          if (step >= totalSteps - threshold) return ch;
-          return matrixChars[Math.floor(Math.random() * matrixChars.length)];
-        }).join("");
-
-        step++;
-
-        if (step > totalSteps) {
-          clearInterval(interval);
-          el.textContent = original;
-          el.classList.remove("is-decoding");
-          el.classList.add("is-decoded");
-          el.dataset.matrixRunning = "false";
-        }
-      }, 50);
-    };
-
-    // Al pasar el ratón
-    el.addEventListener("mouseenter", decode);
-
-    // En móvil: al pulsar
-    el.addEventListener("touchstart", decode, { passive: true });
-
-    // Al recibir foco (accesibilidad teclado)
-    el.addEventListener("focus", decode);
-  };
-
-  // Aplicar a todos los enlaces con data-matrix
-  $$("[data-matrix]").forEach((el) => initMatrixElement(el));
-
-  // ⚠️ SIN setInterval "respirar" — los símbolos se quedan quietos
-    /* =========================================================
+    el.textContent = el.dataset.matrixOriginal;
+  });
+}
+  /* =========================================================
      16. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
      ========================================================= */
   const navLinks = $$("a", mainNav || document).filter((a) => {
@@ -307,7 +319,6 @@
   });
 
   if (navLinks.length > 0 && "IntersectionObserver" in window) {
-    // Creamos un mapa: enlace → sección
     const linkMap = new Map();
     navLinks.forEach((link) => {
       const id = link.getAttribute("href").slice(1);
@@ -317,7 +328,6 @@
 
     const sections = [...linkMap.keys()];
 
-    // Al hacer click en un enlace, marcar como activo inmediatamente
     navLinks.forEach((link) => {
       link.addEventListener("click", () => {
         navLinks.forEach((l) => l.classList.remove("is-active"));
@@ -325,15 +335,13 @@
       });
     });
 
-    // Detectar qué sección está visible
     const setActive = (section) => {
       navLinks.forEach((l) => l.classList.remove("is-active"));
       const link = linkMap.get(section);
       if (link) link.classList.add("is-active");
     };
 
-    // IntersectionObserver: detecta las secciones visibles
-    const visibleSections = new Map(); // section → ratio visible
+    const visibleSections = new Map();
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -345,7 +353,6 @@
           }
         });
 
-        // Elegimos la sección con más visibilidad
         if (visibleSections.size > 0) {
           let bestSection = null;
           let bestRatio = 0;
@@ -359,7 +366,6 @@
         }
       },
       {
-        // Detectamos cuando la sección cruza el centro de la pantalla
         rootMargin: "-40% 0px -40% 0px",
         threshold: [0, 0.1, 0.25, 0.5, 0.75, 1]
       }
@@ -537,7 +543,7 @@
     setReposCounter(!reposCounter.classList.contains("is-open"));
   });
 
-    /* =========================================================
+  /* =========================================================
      12. CHATBOT MULTILINGÜE (ES · VA · EN · FR)
      ========================================================= */
   const chat = $("#chat");
@@ -553,9 +559,6 @@
 
   if (chat && chatToggle && chatPanel) {
 
-    /* ---------------------------------------------------------
-       Diccionario multilingüe
-       --------------------------------------------------------- */
     const knowledge = {
       es: {
         greeting: {
@@ -619,7 +622,6 @@
           "Hmm, no te he entendido del todo. Pregúntame por sus <strong>proyectos</strong>, <strong>estudios</strong>, <strong>contacto</strong>, <strong>PC</strong> o <strong>juegos</strong>."
         ]
       },
-
       va: {
         greeting: {
           keys: ["hola", "bones", "bon dia", "bona vesprada", "bona nit", "salut"],
@@ -682,7 +684,6 @@
           "Hmm, no t'he entès del tot. Pregunta'm pels seus <strong>projectes</strong>, <strong>estudis</strong>, <strong>contacte</strong>, <strong>PC</strong> o <strong>jocs</strong>."
         ]
       },
-
       en: {
         greeting: {
           keys: ["hello", "hi", "hey", "good morning", "good afternoon", "good evening", "greetings"],
@@ -745,7 +746,6 @@
           "Hmm, I didn't quite get that. Ask me about his <strong>projects</strong>, <strong>studies</strong>, <strong>contact</strong>, <strong>PC</strong> or <strong>games</strong>."
         ]
       },
-
       fr: {
         greeting: {
           keys: ["bonjour", "salut", "coucou", "bonsoir", "hey"],
@@ -810,9 +810,6 @@
       }
     };
 
-    /* ---------------------------------------------------------
-       Textos de interfaz por idioma
-       --------------------------------------------------------- */
     const ui = {
       es: {
         placeholder: "Escribe tu pregunta...",
@@ -840,9 +837,6 @@
       }
     };
 
-    /* ---------------------------------------------------------
-       Detector de idioma
-       --------------------------------------------------------- */
     const detectLang = (text) => {
       if (!text) return null;
       const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -869,9 +863,6 @@
       return scores[best] > 0 ? best : null;
     };
 
-    /* ---------------------------------------------------------
-       Estado del idioma actual
-       --------------------------------------------------------- */
     const storedLang = safeGet("portfolio-chat-lang");
     let currentLang = (storedLang && ui[storedLang]) ? storedLang : null;
 
@@ -883,9 +874,6 @@
       else currentLang = "es";
     }
 
-    /* ---------------------------------------------------------
-       Aplicar idioma a la interfaz
-       --------------------------------------------------------- */
     const applyLangToUI = (lang) => {
       const t = ui[lang] || ui.es;
       if (chatInput) chatInput.placeholder = t.placeholder;
@@ -902,9 +890,6 @@
 
     applyLangToUI(currentLang);
 
-    /* ---------------------------------------------------------
-       Buscar respuesta
-       --------------------------------------------------------- */
     const findReply = (text, lang) => {
       const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const dict = knowledge[lang] || knowledge.es;
@@ -928,13 +913,14 @@
         : unknown;
     };
 
-    /* ---------------------------------------------------------
-       Añadir mensaje
-       --------------------------------------------------------- */
     const addMessage = (text, type = "bot") => {
       const msg = document.createElement("div");
       msg.className = `chat__msg chat__msg--${type}`;
-      msg.innerHTML = text;
+      // Sanitizamos el HTML permitido (strong, em, br)
+      const allowed = text
+        .replace(/<(?!\/?(strong|em|br)\b)[^>]*>/gi, '')
+        .replace(/&(?!(amp|lt|gt|quot|#039);)/g, '&amp;');
+      msg.innerHTML = allowed;
       chatMessages.appendChild(msg);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     };
@@ -951,9 +937,6 @@
       }, 500 + Math.random() * 500);
     };
 
-    /* ---------------------------------------------------------
-       Enviar mensaje con detección de idioma
-       --------------------------------------------------------- */
     const handleUserMessage = (text) => {
       if (!text) return;
 
@@ -968,9 +951,6 @@
       botReply(findReply(text, currentLang));
     };
 
-    /* ---------------------------------------------------------
-       Abrir / cerrar
-       --------------------------------------------------------- */
     const openChat = () => {
       chat.classList.add("is-open");
       chatToggle.setAttribute("aria-expanded", "true");
@@ -986,9 +966,6 @@
       safeSet("portfolio-chat-open", "false");
     };
 
-    /* ---------------------------------------------------------
-       Welcome
-       --------------------------------------------------------- */
     let welcomeShown = false;
     chatToggle.addEventListener("click", () => {
       if (!welcomeShown) {
@@ -1005,9 +982,6 @@
       if (e.key === "Escape" && chat.classList.contains("is-open")) closeChat();
     });
 
-    /* ---------------------------------------------------------
-       Enviar desde el formulario
-       --------------------------------------------------------- */
     chatForm?.addEventListener("submit", (e) => {
       e.preventDefault();
       const text = chatInput.value.trim();
@@ -1016,9 +990,6 @@
       handleUserMessage(text);
     });
 
-    /* ---------------------------------------------------------
-       Botones rápidos
-       --------------------------------------------------------- */
     $$(".chat__quick-btn", chatQuick || document).forEach((btn) => {
       btn.addEventListener("click", () => {
         const text = btn.dataset.msg || btn.textContent;
@@ -1026,9 +997,6 @@
       });
     });
 
-    /* ---------------------------------------------------------
-       Selector manual de idioma
-       --------------------------------------------------------- */
     chatLangBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const lang = btn.dataset.lang;
@@ -1041,14 +1009,12 @@
       });
     });
 
-    /* ---------------------------------------------------------
-       Reabrir si estaba abierto
-       --------------------------------------------------------- */
     if (safeGet("portfolio-chat-open") === "true") {
       setTimeout(openChat, 800);
     }
   }
-    /* =========================================================
+
+  /* =========================================================
      12.4. TMDB — Cartelera personal de películas favoritas
      ========================================================= */
   // 🔑 PON AQUÍ TU API KEY DE TMDB
@@ -1059,7 +1025,6 @@
   const movieTooltipTitle = movieTooltip?.querySelector(".movie-tooltip__title");
   const movieTooltipDesc = movieTooltip?.querySelector(".movie-tooltip__desc");
 
-  // 🎬 Tus 5 películas favoritas
   const FAVORITE_MOVIES = [
     { title: "Gladiator", year: 2000 },
     { title: "Star Wars: Episode VI - Return of the Jedi", year: 1983 },
@@ -1151,11 +1116,11 @@
 
         div.innerHTML = `
           ${movie.poster
-            ? `<img class="movie__poster" src="${movie.poster}" alt="${movie.title}" loading="lazy">`
+            ? `<img class="movie__poster" src="${escapeHTML(movie.poster)}" alt="${escapeHTML(movie.title)}" loading="lazy">`
             : `<div class="movie__poster-skeleton"></div>`}
           <div class="movie__meta">
-            <strong>${movie.title}</strong>
-            <small>${movie.year} · ⭐ ${movie.rating}</small>
+            <strong>${escapeHTML(movie.title)}</strong>
+            <small>${escapeHTML(movie.year)} · ⭐ ${escapeHTML(movie.rating)}</small>
           </div>
         `;
 
@@ -1201,10 +1166,9 @@
 
   if (movieGrid) loadMovies();
 
-     /* =========================================================
-     12.5. NASA APOD (Astronomy Picture of the Day)
+  /* =========================================================
+     12.5. NASA APOD
      ========================================================= */
-  // 🔑 API key de NASA (demo gratuita, 1000 peticiones/hora)
   const NASA_API_KEY = "STsrnenqw6mMNKQdq19HYWDUdkDKVD7QqNl11Wp3";
 
   const apodLoader = $("#apod-loader");
@@ -1224,7 +1188,7 @@
         <div class="apod__placeholder">
           <span class="apod__placeholder-icon">✳</span>
           <strong>El cosmos está en silencio</strong>
-          <small>La API de NASA no responde ahora mismo (error ${err.code || "desconocido"}). Mientras se recupera, puedes ver la galería completa en <a href="https://apod.nasa.gov/apod/archivepix.html" target="_blank" rel="noopener">apod.nasa.gov</a>.</small>
+          <small>La API de NASA no responde ahora mismo (error ${escapeHTML(String(err.code || "desconocido"))}). Mientras se recupera, puedes ver la galería completa en <a href="https://apod.nasa.gov/apod/archivepix.html" target="_blank" rel="noopener">apod.nasa.gov</a>.</small>
           <button class="apod__retry" id="apod-retry" type="button">Reintentar</button>
         </div>
       `;
@@ -1307,9 +1271,9 @@
       if (apod.media_type === "video") {
         if (media && media.includes("youtube")) {
           const embedUrl = media.replace("watch?v=", "embed/").replace("http://", "https://");
-          apodMedia.innerHTML = `<iframe src="${embedUrl}" allowfullscreen loading="lazy" title="${apod.title}"></iframe>`;
+          apodMedia.innerHTML = `<iframe src="${escapeHTML(embedUrl)}" allowfullscreen loading="lazy" title="${escapeHTML(apod.title)}"></iframe>`;
         } else {
-          apodMedia.innerHTML = `<video src="${media}" controls poster="${apod.thumbnail_url || ''}" preload="metadata"></video>`;
+          apodMedia.innerHTML = `<video src="${escapeHTML(media)}" controls poster="${escapeHTML(apod.thumbnail_url || '')}" preload="metadata"></video>`;
         }
       } else {
         const img = document.createElement("img");
@@ -1338,7 +1302,6 @@
     }
   };
 
-  // 🚀 Cargar APOD de hoy al arrancar + listeners
   if (apodMedia) {
     loadApod();
 
@@ -1483,38 +1446,14 @@
     const legendBtns = pcDiagram.querySelectorAll(".pc-legend__btn");
 
     const partsInfo = {
-      cpu: {
-        title: "CPU",
-        desc: "Procesador — el cerebro del PC. Ejecuta todas las instrucciones y coordina el resto de componentes."
-      },
-      ram: {
-        title: "RAM",
-        desc: "Memoria de acceso aleatorio — guarda temporalmente los datos que el PC está usando ahora mismo."
-      },
-      gpu: {
-        title: "GPU",
-        desc: "Tarjeta gráfica — se encarga de dibujar los gráficos, los juegos y acelerar tareas pesadas."
-      },
-      storage: {
-        title: "Almacenamiento",
-        desc: "SSD o disco duro — guarda de forma permanente tus archivos, programas y el sistema operativo."
-      },
-      cooling: {
-        title: "Refrigeración",
-        desc: "Ventiladores y radiador — mantienen fríos los componentes para que no se sobrecalienten."
-      },
-      psu: {
-        title: "Fuente de alimentación",
-        desc: "Transforma la corriente de la pared en la energía estable que necesitan todos los componentes."
-      },
-      mobo: {
-        title: "Placa base",
-        desc: "La columna vertebral del PC — conecta y comunica todos los componentes entre sí."
-      },
-      case: {
-        title: "Caja / Chasis",
-        desc: "Protege los componentes, guía el flujo de aire y define el aspecto de tu equipo."
-      }
+      cpu: { title: "CPU", desc: "Procesador — el cerebro del PC. Ejecuta todas las instrucciones y coordina el resto de componentes." },
+      ram: { title: "RAM", desc: "Memoria de acceso aleatorio — guarda temporalmente los datos que el PC está usando ahora mismo." },
+      gpu: { title: "GPU", desc: "Tarjeta gráfica — se encarga de dibujar los gráficos, los juegos y acelerar tareas pesadas." },
+      storage: { title: "Almacenamiento", desc: "SSD o disco duro — guarda de forma permanente tus archivos, programas y el sistema operativo." },
+      cooling: { title: "Refrigeración", desc: "Ventiladores y radiador — mantienen fríos los componentes para que no se sobrecalienten." },
+      psu: { title: "Fuente de alimentación", desc: "Transforma la corriente de la pared en la energía estable que necesitan todos los componentes." },
+      mobo: { title: "Placa base", desc: "La columna vertebral del PC — conecta y comunica todos los componentes entre sí." },
+      case: { title: "Caja / Chasis", desc: "Protege los componentes, guía el flujo de aire y define el aspecto de tu equipo." }
     };
 
     const showTooltip = (part, targetEl) => {
@@ -1576,6 +1515,26 @@
     });
 
     pcDiagram.addEventListener("mouseleave", hideTooltip);
+  }
+
+  /* =========================================================
+     16. FORMULARIO DE CONTACTO
+     ========================================================= */
+  const contactForm = document.querySelector('.contact-form');
+  if (contactForm) {
+    const submitBtn = contactForm.querySelector('.contact-form__submit');
+    contactForm.addEventListener('submit', (e) => {
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Enviando... <span aria-hidden="true">⏳</span>';
+        // Re-habilitar tras 5 segundos por si falla la red
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }, 5000);
+      }
+    });
   }
 
   console.info("[script] Todo listo.");
