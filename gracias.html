@@ -20,149 +20,6 @@
 
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <style>
-    /* --- Estilos solo para esta página de gracias --- */
-    .gracias-wrap{
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 60px 20px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .gracias-card{
-      max-width: 560px;
-      width: 100%;
-      padding: 60px 40px;
-      border: 1px solid var(--gold);
-      outline: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
-      outline-offset: 6px;
-      background: var(--panel);
-      position: relative;
-      backdrop-filter: blur(10px);
-    }
-    .gracias-card::before,
-    .gracias-card::after{
-      content: "";
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      pointer-events: none;
-    }
-    .gracias-card::before{
-      top: 6px; left: 6px;
-      border-top: 1px solid var(--gold);
-      border-left: 1px solid var(--gold);
-    }
-    .gracias-card::after{
-      bottom: 6px; right: 6px;
-      border-bottom: 1px solid var(--gold);
-      border-right: 1px solid var(--gold);
-    }
-
-    .gracias-icon{
-      font-size: 44px;
-      color: var(--gold-bright);
-      margin-bottom: 22px;
-      text-shadow:
-        0 0 12px var(--gold),
-        0 0 28px color-mix(in srgb, var(--ember) 60%, transparent);
-      animation: gracias-pulse 2.6s ease-in-out infinite;
-    }
-    @keyframes gracias-pulse{
-      0%, 100%{ transform: scale(1); opacity: 1 }
-      50%     { transform: scale(1.08); opacity: .85 }
-    }
-
-    .gracias-card h1{
-      font: 400 clamp(32px, 5vw, 48px)/1.1 var(--serif);
-      text-transform: uppercase;
-      letter-spacing: .03em;
-      margin: 0 0 18px;
-      color: #ffffff;
-    }
-    .gracias-card h1 em{
-      color: var(--gold-bright);
-      font-style: normal;
-      font-weight: 500;
-    }
-
-    .gracias-card p{
-      font-size: 15px;
-      line-height: 1.9;
-      color: #e0e6ee;
-      margin: 0 0 32px;
-    }
-
-    .gracias-divider{
-      width: 60px;
-      height: 1px;
-      background: var(--gold);
-      margin: 0 auto 26px;
-      box-shadow: 0 0 8px var(--gold);
-    }
-
-    .gracias-actions{
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .gracias-back{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font: 500 10px var(--serif);
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      transition: border-color .25s, color .25s;
-    }
-    .gracias-back:hover{
-      border-color: var(--gold-bright);
-      color: var(--gold-bright);
-    }
-
-    /* Footer mínimo */
-    .gracias-footer{
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 0 20px 30px;
-      font: italic 12px var(--serif);
-      color: #e0e6ee;
-      letter-spacing: .06em;
-    }
-    .gracias-footer a{
-      color: var(--gold-bright);
-      text-decoration: none;
-      border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
-      transition: color .2s, border-color .2s;
-    }
-    .gracias-footer a:hover{
-      color: #ffffff;
-      border-color: var(--gold-bright);
-    }
-
-    /* Responsive */
-    @media (max-width: 600px){
-      .gracias-wrap{ padding: 40px 16px }
-      .gracias-card{ padding: 44px 24px }
-      .gracias-card h1{ font-size: clamp(28px, 8vw, 38px) }
-      .gracias-icon{ font-size: 36px }
-      .gracias-footer{ padding-bottom: 20px }
-    }
-
-    /* Reduce motion */
-    @media (prefers-reduced-motion: reduce){
-      .gracias-icon{ animation: none }
-    }
-  </style>
 </head>
 
 <body>
@@ -177,21 +34,21 @@
     <div class="bubble bubble--four"></div>
   </div>
 
-  <main class="gracias-wrap" aria-labelledby="gracias-title">
-    <div class="gracias-card">
-      <div class="gracias-icon" aria-hidden="true">✦</div>
+  <main class="info-page-wrap" aria-labelledby="gracias-title">
+    <div class="info-page-card info-page-card--narrow">
+      <div class="info-page-icon" aria-hidden="true">✦</div>
 
       <h1 id="gracias-title">Mensaje<br><em>enviado.</em></h1>
 
-      <div class="gracias-divider" aria-hidden="true"></div>
+      <div class="info-page-divider" aria-hidden="true"></div>
 
-      <p>
+      <p class="info-page-text">
         Gracias por escribirme. He recibido tu mensaje
         y te responderé lo antes posible, normalmente
         en menos de 24 horas.
       </p>
 
-      <div class="gracias-actions">
+      <div class="info-page-actions">
         <a class="button button--gold" href="index.html">
           Volver al inicio <span aria-hidden="true">←</span>
         </a>
@@ -199,7 +56,7 @@
     </div>
   </main>
 
-  <footer class="gracias-footer">
+  <footer class="info-page-footer">
     Mientras tanto, puedes ver mis
     <a href="index.html#proyectos">intereses</a>,
     <a href="index.html#dentro">mi PC</a>
