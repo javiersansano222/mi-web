@@ -80,7 +80,9 @@ a{ color: inherit; text-decoration: none }
 button, select{ font: inherit }
 button:focus-visible,
 a:focus-visible,
-select:focus-visible{
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible{
   outline: 2px solid var(--gold-bright);
   outline-offset: 4px;
 }
@@ -94,6 +96,7 @@ select:focus-visible{
   transform: translateY(-150%);
   background: var(--gold); color: #111;
   padding: 10px 16px;
+  transition: transform .3s;
 }
 .skip-link:focus{ transform: none }
 .scroll-progress{
@@ -1352,6 +1355,11 @@ html[data-theme="dark"] .theme-toggle::before{
     inset 0 0 0 3px rgba(26, 18, 8, .12),
     0 12px 30px color-mix(in srgb, var(--gold) 50%, transparent);
 }
+.contact-form__submit:disabled{
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
 .contact-form__submit span{
   font-size: 15px;
   transition: transform .25s;
@@ -2221,14 +2229,19 @@ html{
   .timeline-marker{ left: -29px }
   .game-grid{ grid-template-columns: repeat(3, 1fr) }
 }
+
 @media (max-width: 700px){
   .site-header{ height: 70px; padding: 0 20px; gap: 12px }
   .welcome-bar{ height: 30px; padding: 0 16px }
   .welcome-bar__text{ font-size: 9px; letter-spacing: .4em; gap: 9px }
   .welcome-bar__star{ font-size: 8px }
+
+  /* Botón hamburguesa */
   .nav-toggle{
-    display: flex; margin-left: auto;
-    width: 36px; height: 36px;
+    display: flex;
+    margin-left: auto;
+    width: 36px;
+    height: 36px;
     border: 1px solid var(--line-soft);
     background: transparent;
     flex-direction: column;
@@ -2239,7 +2252,8 @@ html{
     cursor: pointer;
   }
   .nav-toggle span{
-    width: 15px; height: 1px;
+    width: 15px;
+    height: 1px;
     background: #ffffff;
     transition: transform .2s;
   }
@@ -2249,23 +2263,59 @@ html{
   .nav-toggle[aria-expanded="true"] span:last-child{
     transform: translateY(-3px) rotate(-45deg);
   }
+
+  /* Herramientas del header */
   .header-tools{ order: 3; gap: 8px }
+
+  /* Menú de navegación móvil */
   .nav{
     display: none;
-    position: absolute; top: 69px; left: 0; right: 0;
+    position: absolute;
+    top: 69px;
+    left: 0;
+    right: 0;
     padding: 14px 22px 20px;
     background: var(--panel-solid);
     border-bottom: 1px solid var(--line);
-    flex-direction: column; gap: 0;
+    flex-direction: column;
+    gap: 0;
   }
-  .nav.nav-open{ display: flex }
-  .nav a{ padding: 13px 0; border-bottom: 1px solid var(--line-soft); color: #ffffff !important }
+  .nav.nav-open{
+    display: flex;
+    background: var(--panel-solid);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 20px 40px rgba(0,0,0,.6);
+  }
+  .nav a{
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--line-soft);
+    color: #ffffff !important;
+    opacity: 1 !important;
+    font-size: 12px;
+    letter-spacing: .2em;
+    display: block;
+  }
+  .nav a:last-child{
+    border-bottom: 0;
+  }
+  .nav a.is-active{
+    color: var(--gold-bright) !important;
+    border-bottom-color: var(--gold-bright);
+    padding-left: 12px;
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--gold) 12%, transparent),
+      transparent);
+  }
+
+  /* Selector de era y toggle tema */
   .era-select{ height: 34px; padding: 0 30px 0 12px; max-width: 170px; font-size: 10px }
   .theme-toggle{ width: 34px; height: 34px }
   .theme-toggle::before{ width: 12px; height: 12px }
   .header-tools::after{ right: 52px; font-size: 10px }
   .brand__name{ font-size: 9px }
   .brand__seal{ width: 30px; height: 30px; font-size: 11px }
+
+  /* Layout general */
   .section-shell{ padding-inline: 22px }
   .hero{ min-height: auto; padding-top: 72px; padding-bottom: 75px; grid-template-columns: 1fr }
   .hero__copy{ padding-bottom: 0 }
@@ -2273,7 +2323,6 @@ html{
   .hero__intro{ font-size: 15px }
   .hero__note{ margin-top: 34px; font-size: 12px }
   .hero-art{ height: 400px; min-height: 0; margin: 5px -10px 0; outline-offset: 4px }
-  /* En móvil pequeño mostramos el fallback 2D y ocultamos el 3D por rendimiento */
   .hero-scene{ display: none }
   #hero-art-fallback{ display: block !important }
   .scroll-cue{ left: 22px; bottom: 20px; font-size: 8px }
@@ -2357,12 +2406,14 @@ html{
   .chat__quick{ padding: 8px 10px }
   .chat__quick-btn{ padding: 5px 9px; font-size: 9px }
 }
+
 @media (max-width: 500px){
   .game-grid{ grid-template-columns: repeat(2, 1fr); gap: 6px }
   .game__meta strong{ font-size: 8px }
   .game__meta small{ font-size: 6px }
   .hotspot__tip{ left: 50vw; max-width: calc(100vw - 40px) }
 }
+
 @media (max-width: 380px){
   .brand{ gap: 8px }
   .brand__name{ letter-spacing: .12em }
@@ -2806,6 +2857,7 @@ html{
 @media (max-width: 420px){
   .tree__lang{ display: none }
 }
+
 /* =========================================================
    DIAGRAMA INTERACTIVO DEL PC (SVG)
    ========================================================= */
@@ -2892,8 +2944,6 @@ html{
   stroke-width: 1.5;
 }
 
-/* 🔑 SOLO este grupo rota. Con transform-box: fill-box,
-   gira respecto a SU propio centro (no respecto al SVG entero). */
 .pc-fan__blades{
   transform-box: fill-box;
   transform-origin: center;
@@ -2904,7 +2954,6 @@ html{
   to { transform: rotate(360deg); }
 }
 
-/* En reduced-motion, sin giro */
 @media (prefers-reduced-motion: reduce){
   .pc-fan__blades{ animation: none }
 }
@@ -3035,6 +3084,7 @@ html{
   .pc-part{ transition: none }
   .pc-tooltip{ transition: none }
 }
+
 /* =========================================================
    28. WIDGET DEL TIEMPO (Open-Meteo)
    ========================================================= */
@@ -3091,7 +3141,6 @@ html{
   border-left: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
 }
 
-/* Responsive: en móvil, más compacto */
 @media (max-width: 900px){
   .weather{
     height: 34px;
@@ -3104,9 +3153,10 @@ html{
 }
 @media (max-width: 700px){
   .weather{
-    display: none; /* En móvil, mejor ocultarlo para no saturar */
+    display: none;
   }
 }
+
 /* =========================================================
    29. SELECTOR DE IDIOMA DEL CHAT
    ========================================================= */
@@ -3153,7 +3203,6 @@ html{
   font-weight: 700;
 }
 
-/* Responsive: en móvil, más compacto */
 @media (max-width: 500px){
   .chat__lang-btn{
     padding: 3px 5px;
@@ -3162,7 +3211,7 @@ html{
   }
 }
 
- /* =========================================================
+/* =========================================================
    31. ENLACE ACTIVO EN EL MENÚ
    ========================================================= */
 .nav a.is-active{
@@ -3177,7 +3226,6 @@ html{
   box-shadow: 0 0 8px var(--gold);
 }
 
-/* En móvil, también se ve bien */
 .nav.nav-open a.is-active{
   color: var(--gold-bright) !important;
   border-bottom-color: var(--gold-bright);
@@ -3193,13 +3241,11 @@ html{
   letter-spacing: .15em;
 }
 
-/* Estado inicial: codificado, quieto */
 [data-matrix].is-coded{
   color: color-mix(in srgb, var(--gold-bright) 55%, transparent);
   text-shadow: 0 0 6px color-mix(in srgb, var(--gold) 20%, transparent);
 }
 
-/* Estado intermedio: descodificando (letra a letra) */
 [data-matrix].is-decoding{
   color: var(--gold-bright) !important;
   text-shadow:
@@ -3207,12 +3253,10 @@ html{
     0 0 20px color-mix(in srgb, var(--ember) 40%, transparent);
 }
 
-/* Estado final: descodificado */
 [data-matrix].is-decoded{
   color: inherit;
   text-shadow: none;
 }
-
 
 /* =========================================================
    33. SECCIÓN NASA APOD
@@ -3331,7 +3375,6 @@ html{
   line-height: 1.9;
   color: #e0e6ee;
   margin: 0;
-  /* Limitar altura con scroll interno */
   max-height: 240px;
   overflow-y: auto;
   padding-right: 6px;
@@ -3386,7 +3429,6 @@ html{
   border-color: var(--gold-bright);
 }
 
-/* Responsive */
 @media (max-width: 900px){
   .apod__frame{
     grid-template-columns: 1fr;
@@ -3404,7 +3446,6 @@ html{
   .apod__today{ width: 100%; text-align: center; justify-content: center }
 }
 
-/* Placeholder cuando NASA falla */
 .apod__placeholder{
   position: absolute;
   inset: 0;
@@ -3442,48 +3483,6 @@ html{
   text-decoration: underline;
 }
 
-/* Placeholder cuando NASA falla */
-.apod__placeholder{
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 30px;
-  text-align: center;
-  background: radial-gradient(ellipse at center,
-    color-mix(in srgb, var(--water) 40%, transparent),
-    var(--bg-deep) 80%);
-}
-
-.apod__placeholder-icon{
-  font-size: 42px;
-  color: var(--gold-bright);
-  animation: blink 2s steps(2, start) infinite;
-  text-shadow: 0 0 12px var(--gold);
-}
-
-.apod__placeholder strong{
-  font: 500 15px var(--serif);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gold-bright);
-}
-
-.apod__placeholder small{
-  font: italic 12px var(--serif);
-  color: #e0e6ee;
-  max-width: 340px;
-  line-height: 1.7;
-}
-
-.apod__placeholder a{
-  color: var(--gold-bright);
-  text-decoration: underline;
-}
-
 .apod__retry{
   margin-top: 6px;
   padding: 10px 22px;
@@ -3502,6 +3501,7 @@ html{
   background: color-mix(in srgb, var(--gold) 22%, transparent);
   border-color: var(--gold-bright);
 }
+
 /* =========================================================
    34. GALERÍA DE PELÍCULAS (TMDB)
    ========================================================= */
@@ -3663,4 +3663,261 @@ html{
   .movie__meta strong{ font-size: 7px }
   .movie__meta small{ font-size: 6px }
   .movie-tooltip{ display: none }
+}
+
+/* ---------------------------------------------------------
+   35. PÁGINAS DE ESTADO (404, GRACIAS)
+   --------------------------------------------------------- */
+.info-page-wrap{
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 60px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.info-page-card{
+  max-width: 680px;
+  width: 100%;
+  padding: 60px 40px;
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+  outline-offset: 6px;
+  background: var(--panel);
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.info-page-card--narrow{ max-width: 560px }
+.info-page-card::before,
+.info-page-card::after{
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+.info-page-card::before{
+  top: 6px; left: 6px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+}
+.info-page-card::after{
+  bottom: 6px; right: 6px;
+  border-bottom: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+}
+.info-page-code{
+  font: 400 clamp(80px, 14vw, 140px)/1 var(--serif);
+  letter-spacing: .04em;
+  color: var(--gold-bright);
+  margin: 0 0 10px;
+  text-shadow:
+    0 0 30px color-mix(in srgb, var(--gold) 50%, transparent),
+    0 0 60px color-mix(in srgb, var(--ember) 25%, transparent);
+  position: relative;
+  z-index: 1;
+}
+.info-page-code span{
+  color: #ffffff;
+  font-style: italic;
+  font-weight: 700;
+}
+.info-page-icon{
+  font-size: 44px;
+  color: var(--gold-bright);
+  margin-bottom: 22px;
+  text-shadow:
+    0 0 12px var(--gold),
+    0 0 28px color-mix(in srgb, var(--ember) 60%, transparent);
+  animation: gracias-pulse 2.6s ease-in-out infinite;
+}
+@keyframes gracias-pulse{
+  0%, 100%{ transform: scale(1); opacity: 1 }
+  50%     { transform: scale(1.08); opacity: .85 }
+}
+.info-page-eyebrow{
+  font: 500 10px var(--serif);
+  letter-spacing: .45em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin: 0 0 18px;
+  position: relative;
+  z-index: 1;
+}
+.info-page-card h1{
+  font: 400 clamp(28px, 4.5vw, 42px)/1.1 var(--serif);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  margin: 0 0 20px;
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+}
+.info-page-card h1 em{
+  color: var(--gold-bright);
+  font-style: normal;
+  font-weight: 500;
+}
+.info-page-text{
+  font-size: 15px;
+  line-height: 1.9;
+  color: #e0e6ee;
+  margin: 0 auto 32px;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+}
+.info-page-divider{
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 26px;
+  box-shadow: 0 0 8px var(--gold);
+}
+.info-page-actions{
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.info-page-links{
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--line-soft);
+  position: relative;
+  z-index: 1;
+}
+.info-page-links p{
+  font: italic 12px var(--serif);
+  color: #e0e6ee;
+  letter-spacing: .06em;
+  margin: 0 0 14px;
+}
+.info-page-links-row{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.info-page-links-row a{
+  font: 500 10px var(--serif);
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  background: color-mix(in srgb, var(--gold) 6%, transparent);
+  transition: background .2s, border-color .2s, color .2s;
+}
+.info-page-links-row a:hover{
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  border-color: var(--gold-bright);
+  color: #ffffff;
+}
+.info-page-footer{
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 20px 30px;
+  font: italic 12px var(--serif);
+  color: #e0e6ee;
+  letter-spacing: .06em;
+}
+.info-page-footer a{
+  color: var(--gold-bright);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+  transition: color .2s, border-color .2s;
+}
+.info-page-footer a:hover{
+  color: #ffffff;
+  border-color: var(--gold-bright);
+}
+.info-page-back{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: 500 10px var(--serif);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  transition: border-color .25s, color .25s;
+}
+.info-page-back:hover{
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
+@media (max-width: 600px){
+  .info-page-wrap{ padding: 40px 16px }
+  .info-page-card{ padding: 44px 24px }
+  .info-page-card h1{ font-size: clamp(28px, 8vw, 38px) }
+  .info-page-icon{ font-size: 36px }
+  .info-page-footer{ padding-bottom: 20px }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .info-page-icon{ animation: none }
+}
+
+/* =========================================================
+   EFECTO MATRIX — solo aplicable en dispositivos con ratón
+   ========================================================= */
+[data-matrix]{
+  position: relative;
+  display: inline-block;
+  transition: color .3s, text-shadow .3s;
+  letter-spacing: .15em;
+}
+
+[data-matrix].is-coded{
+  color: color-mix(in srgb, var(--gold-bright) 55%, transparent);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--gold) 20%, transparent);
+}
+
+[data-matrix].is-decoding{
+  color: var(--gold-bright) !important;
+  text-shadow:
+    0 0 8px color-mix(in srgb, var(--gold) 60%, transparent),
+    0 0 20px color-mix(in srgb, var(--ember) 40%, transparent);
+}
+
+[data-matrix].is-decoded{
+  color: inherit;
+  text-shadow: none;
+}
+
+/* En móvil/táctil: aseguramos legibilidad total del menú */
+@media (hover: none), (pointer: coarse){
+  [data-matrix]{
+    color: #ffffff !important;
+    text-shadow: none !important;
+    letter-spacing: .15em;
+  }
+  [data-matrix].is-coded,
+  [data-matrix].is-decoding{
+    color: #ffffff !important;
+    text-shadow: none !important;
+  }
+}
+
+/* Red de seguridad: si por lo que sea JS añade .is-coded en móvil,
+   lo neutralizamos visualmente */
+@media (hover: none), (pointer: coarse){
+  .nav a[data-matrix]{
+    color: #ffffff !important;
+    text-shadow: none !important;
+  }
+  .nav a[data-matrix].is-coded,
+  .nav a[data-matrix].is-decoding,
+  .nav a[data-matrix].is-decoded{
+    color: inherit !important;
+    text-shadow: none !important;
+  }
 }
