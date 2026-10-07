@@ -13,149 +13,6 @@
 
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-  <style>
-    .notfound-wrap{
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 60px 20px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-    .notfound-card{
-      max-width: 680px;
-      width: 100%;
-      padding: 60px 40px;
-      border: 1px solid var(--gold);
-      outline: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
-      outline-offset: 6px;
-      background: var(--panel);
-      position: relative;
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-    }
-    .notfound-card::before,
-    .notfound-card::after{
-      content: "";
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      pointer-events: none;
-    }
-    .notfound-card::before{
-      top: 6px; left: 6px;
-      border-top: 1px solid var(--gold);
-      border-left: 1px solid var(--gold);
-    }
-    .notfound-card::after{
-      bottom: 6px; right: 6px;
-      border-bottom: 1px solid var(--gold);
-      border-right: 1px solid var(--gold);
-    }
-
-    .notfound-code{
-      font: 400 clamp(80px, 14vw, 140px)/1 var(--serif);
-      letter-spacing: .04em;
-      color: var(--gold-bright);
-      margin: 0 0 10px;
-      text-shadow:
-        0 0 30px color-mix(in srgb, var(--gold) 50%, transparent),
-        0 0 60px color-mix(in srgb, var(--ember) 25%, transparent);
-      position: relative;
-      z-index: 1;
-    }
-    .notfound-code span{
-      color: #ffffff;
-      font-style: italic;
-      font-weight: 700;
-    }
-
-    .notfound-eyebrow{
-      font: 500 10px var(--serif);
-      letter-spacing: .45em;
-      text-transform: uppercase;
-      color: var(--gold-bright);
-      margin: 0 0 18px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .notfound-card h1{
-      font: 400 clamp(28px, 4.5vw, 42px)/1.1 var(--serif);
-      text-transform: uppercase;
-      letter-spacing: .03em;
-      margin: 0 0 20px;
-      color: #ffffff;
-      position: relative;
-      z-index: 1;
-    }
-    .notfound-card h1 em{
-      color: var(--gold-bright);
-      font-style: normal;
-      font-weight: 500;
-    }
-
-    .notfound-text{
-      font-size: 15px;
-      line-height: 1.9;
-      color: #e0e6ee;
-      margin: 0 auto 32px;
-      max-width: 480px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .notfound-actions{
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    .notfound-links{
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px dashed var(--line-soft);
-      position: relative;
-      z-index: 1;
-    }
-    .notfound-links p{
-      font: italic 12px var(--serif);
-      color: #e0e6ee;
-      letter-spacing: .06em;
-      margin: 0 0 14px;
-    }
-    .notfound-links-row{
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .notfound-links-row a{
-      font: 500 10px var(--serif);
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--gold-bright);
-      padding: 6px 12px;
-      border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent);
-      background: color-mix(in srgb, var(--gold) 6%, transparent);
-      transition: background .2s, border-color .2s, color .2s;
-    }
-    .notfound-links-row a:hover{
-      background: color-mix(in srgb, var(--gold) 18%, transparent);
-      border-color: var(--gold-bright);
-      color: #ffffff;
-    }
-
-    @media (max-width: 600px){
-      .notfound-wrap{ padding: 40px 16px }
-      .notfound-card{ padding: 44px 24px }
-    }
-  </style>
 </head>
 
 <body>
@@ -169,26 +26,26 @@
     <div class="bubble bubble--four"></div>
   </div>
 
-  <main class="notfound-wrap" aria-labelledby="notfound-title">
-    <div class="notfound-card">
-      <p class="notfound-code">4<span>0</span>4</p>
-      <p class="notfound-eyebrow">RUTA NO ENCONTRADA</p>
+  <main class="info-page-wrap" aria-labelledby="notfound-title">
+    <div class="info-page-card">
+      <p class="info-page-code">4<span>0</span>4</p>
+      <p class="info-page-eyebrow">RUTA NO ENCONTRADA</p>
       <h1 id="notfound-title">Esta página<br><em>no existe.</em></h1>
-      <p class="notfound-text">
+      <p class="info-page-text">
         Parece que has llegado a un callejón sin salida.
         La página que buscas no está aquí (o nunca lo estuvo).
         Vuelve al inicio y sigue explorando.
       </p>
 
-      <div class="notfound-actions">
+      <div class="info-page-actions">
         <a class="button button--gold" href="index.html">
           Volver al inicio <span aria-hidden="true">←</span>
         </a>
       </div>
 
-      <div class="notfound-links">
+      <div class="info-page-links">
         <p>O ve directamente a:</p>
-        <div class="notfound-links-row">
+        <div class="info-page-links-row">
           <a href="index.html#sobre-mi">Perfil</a>
           <a href="index.html#proyectos">Intereses</a>
           <a href="index.html#dentro">Ordenador</a>
