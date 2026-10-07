@@ -86,7 +86,6 @@
   scene.fog = new THREE.FogExp2(palette.bg.getHex(), 0.04);
 
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
-  // Vista ligeramente desde abajo para dar grandeza
   camera.position.set(0, -0.5, 8);
   camera.lookAt(0, 1.5, 0);
 
@@ -102,17 +101,14 @@
   );
   scene.add(hemi);
 
-  // Key light frontal-derecha (ilumina las caras frontales y derechas)
   const keyLight = new THREE.DirectionalLight(palette.goldBright.getHex(), 1.6);
   keyLight.position.set(6, 8, 10);
   scene.add(keyLight);
 
-  // Rim light trasera (silueta contra el fondo)
   const rimLight = new THREE.DirectionalLight(palette.ember.getHex(), 1.2);
   rimLight.position.set(-4, 4, -10);
   scene.add(rimLight);
 
-  // Fill light tenue desde abajo (luces de la calle)
   const fillLight = new THREE.DirectionalLight(palette.ember.getHex(), 0.35);
   fillLight.position.set(0, -6, 4);
   scene.add(fillLight);
@@ -183,7 +179,6 @@
   /* ---------------------------------------------------------
      MATERIALES
      --------------------------------------------------------- */
-  // Cuerpo del edificio: piedra oscura con tinte azul profundo
   const stoneMat = new THREE.MeshStandardMaterial({
     color: 0x1a1e2e,
     metalness: 0.25,
@@ -192,7 +187,6 @@
     emissiveIntensity: 0.25
   });
 
-  // Variante más clara (para la base, que recibe más luz)
   const stoneLightMat = new THREE.MeshStandardMaterial({
     color: 0x252a3d,
     metalness: 0.3,
@@ -201,7 +195,6 @@
     emissiveIntensity: 0.3
   });
 
-  // Detalles dorados (remates, cornisas)
   const goldMat = new THREE.MeshStandardMaterial({
     color: palette.gold.getHex(),
     metalness: 1,
@@ -210,19 +203,16 @@
     emissiveIntensity: 0.55
   });
 
-  // Puntas luminosas
   const glowMat = new THREE.MeshBasicMaterial({
     color: palette.goldBright.getHex(),
     toneMapped: false
   });
 
-  // Ventanas encendidas (doradas, emisivas)
   const windowLitMat = new THREE.MeshBasicMaterial({
     color: palette.goldBright.getHex(),
     toneMapped: false
   });
 
-  // Ventanas apagadas (oscuras)
   const windowDarkMat = new THREE.MeshStandardMaterial({
     color: 0x0a0d18,
     metalness: 0.5,
@@ -235,7 +225,6 @@
   const building = new THREE.Group();
   scene.add(building);
 
-  // Referencias para animar luces
   const litWindows = [];
 
   /* ---------------------------------------------------------
@@ -249,7 +238,6 @@
   ) => {
     const maxPerLevel = isSmallScreen ? 60 : 150;
 
-    // Geometrías compartidas (todas las ventanas iguales)
     const winW = width * 0.055;
     const winH = height / rows * 0.55;
     const winGeo = new THREE.PlaneGeometry(winW, winH);
@@ -266,7 +254,6 @@
         const x = ((c + 0.5) / cols - 0.5) * width * 0.88;
         const y = centerY + ((r + 0.5) / rows - 0.5) * height * 0.82;
 
-        // 4 caras
         const faces = [
           { px:  x,                pz:  depth / 2 + 0.005, ry: 0 },
           { px: -x,                pz: -depth / 2 - 0.005, ry: Math.PI },
@@ -293,8 +280,6 @@
   /* ---------------------------------------------------------
      CONSTRUCCIÓN DEL RASCACIELOS
      --------------------------------------------------------- */
-
-  // Dimensiones maestras
   const BASE_W = 1.6;
   const BASE_H = 0.8;
 
@@ -304,13 +289,11 @@
   podium.position.y = 0.175;
   building.add(podium);
 
-  // Cornisa dorada de la plataforma
   const podiumTrimGeo = new THREE.BoxGeometry(2.24, 0.04, 2.24);
   const podiumTrim = new THREE.Mesh(podiumTrimGeo, goldMat);
   podiumTrim.position.y = 0.35;
   building.add(podiumTrim);
 
-  // Ventanas del podio
   addWindowGrid(2.2, 0.3, 2.2, 0.175, 5, 1, building, 0.4);
 
   // ----- NIVEL 1: base principal -----
@@ -319,10 +302,8 @@
   base1.position.y = 0.35 + BASE_H / 2;
   building.add(base1);
 
-  // Ventanas de la base principal
   addWindowGrid(BASE_W, BASE_H, BASE_W, 0.35 + BASE_H / 2, 6, 5, building, 0.35);
 
-  // Cornisa superior de la base
   const base1TrimGeo = new THREE.BoxGeometry(BASE_W + 0.08, 0.06, BASE_W + 0.08);
   const base1Trim = new THREE.Mesh(base1TrimGeo, goldMat);
   base1Trim.position.y = 0.35 + BASE_H;
@@ -340,7 +321,6 @@
 
   addWindowGrid(L2_W, L2_H, L2_W, L2_Y0 + L2_H / 2, 5, 7, building, 0.3);
 
-  // Cornisa
   const l2TrimGeo = new THREE.BoxGeometry(L2_W + 0.06, 0.05, L2_W + 0.06);
   const l2Trim = new THREE.Mesh(l2TrimGeo, goldMat);
   l2Trim.position.y = L2_Y0 + L2_H;
@@ -380,10 +360,9 @@
   l4Trim.position.y = L4_Y0 + L4_H;
   building.add(l4Trim);
 
-  // ----- NIVEL 5: remate piramidal escalonado (tipo Chrysler) -----
+  // ----- NIVEL 5: remate piramidal escalonado -----
   const L5_Y0 = L4_Y0 + L4_H;
 
-  // Tres "arcos" o anillos escalonados en la parte superior
   const crownLayers = [
     { w: L4_W * 0.85, h: 0.22 },
     { w: L4_W * 0.65, h: 0.22 },
@@ -408,13 +387,11 @@
   spire.position.y = crownY + spireH / 2;
   building.add(spire);
 
-  // Punta luminosa
   const tipGeo = new THREE.SphereGeometry(0.05, 8, 8);
   const tip = new THREE.Mesh(tipGeo, glowMat);
   tip.position.y = crownY + spireH + 0.03;
   building.add(tip);
 
-  // Pequeña esfera luminosa en la base de la aguja
   const beaconGeo = new THREE.SphereGeometry(0.08, 12, 12);
   const beaconMat = new THREE.MeshBasicMaterial({
     color: palette.goldBright.getHex(),
@@ -440,14 +417,11 @@
   /* ---------------------------------------------------------
      CÁMARA Y POSICIÓN
      --------------------------------------------------------- */
-  // El edificio mide aproximadamente 6 unidades de alto.
-  // Centramos la cámara para que quepa entero.
   const buildingHeight = 0.35 + BASE_H + 1.4 + 1.1 + 0.8 + 0.66 + spireH;
 
   camera.position.set(0, buildingHeight * 0.45, 8);
   camera.lookAt(0, buildingHeight * 0.42, 0);
 
-  // Rotamos ligeramente el edificio para verlo de tres cuartos
   building.rotation.y = Math.PI / 6;
 
   /* ---------------------------------------------------------
@@ -472,7 +446,6 @@
     const h = Math.max(1, rect.height);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // Ajustamos la distancia de cámara según proporción
     const baseDistance = w < 520 ? 9.5 : 8;
     camera.position.z = baseDistance;
     camera.updateProjectionMatrix();
@@ -537,25 +510,19 @@
       pointer.x += (pointer.tx - pointer.x) * 0.05;
       pointer.y += (pointer.ty - pointer.y) * 0.05;
 
-      // Rotación lenta y continua del edificio
       building.rotation.y += dt * 0.12;
-
-      // Inclinación muy sutil siguiendo el ratón
       building.rotation.x = pointer.y * 0.03;
 
-      // La esfera luminosa de la aguja pulsa
       const pulse = 0.9 + Math.sin(t * 2.2) * 0.15;
       beacon.scale.setScalar(pulse);
       tip.scale.setScalar(0.9 + Math.sin(t * 2.2) * 0.2);
 
-      // Parpadeo aleatorio de ventanas encendidas
       litWindows.forEach((win) => {
         const phase = win.userData.flickerPhase || 0;
         const flicker = Math.sin(t * 1.5 + phase) > 0.85 ? 0.3 : 1;
         win.material = flicker > 0.5 ? windowLitMat : windowDarkMat;
       });
 
-      // Cámara con parallax muy suave
       camera.position.x = pointer.x * 0.8;
       camera.position.y = buildingHeight * 0.45 + pointer.y * 0.4;
       camera.lookAt(0, buildingHeight * 0.42 + pointer.y * 0.15, 0);
