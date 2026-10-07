@@ -139,8 +139,7 @@
       <a href="#contacto" data-matrix>Objetivo</a>
     </nav>
 
-        <div class="header-tools">
-
+    <div class="header-tools">
       <!-- Widget del tiempo (Open-Meteo) -->
       <div class="weather" id="weather" aria-live="polite" hidden>
         <span class="weather__icon" id="weather-icon" aria-hidden="true">☀</span>
@@ -279,7 +278,8 @@
         </div>
       </div>
     </section>
-        <!-- NASA APOD -->
+
+    <!-- NASA APOD -->
     <section class="apod section-shell" id="apod">
       <div class="section-heading section-heading--row reveal">
         <div>
@@ -291,14 +291,14 @@
 
       <div class="apod__stage reveal">
         <div class="apod__frame">
-          <div class="apod__loader" id="apod-loader">
-            <div class="apod__loader-dot"></div>
-            <div class="apod__loader-dot"></div>
-            <div class="apod__loader-dot"></div>
-            <span>Consultando al cosmos…</span>
+          <div class="apod__media" id="apod-media">
+            <div class="apod__loader" id="apod-loader">
+              <div class="apod__loader-dot"></div>
+              <div class="apod__loader-dot"></div>
+              <div class="apod__loader-dot"></div>
+              <span>Consultando al cosmos…</span>
+            </div>
           </div>
-
-          <div class="apod__media" id="apod-media"></div>
 
           <div class="apod__caption">
             <div class="apod__meta">
@@ -385,58 +385,54 @@
         </article>
 
         <article class="project-card reveal" data-tilt>
-          
-         <article class="project-card reveal" data-tilt>
-  <div class="project-visual project-visual--logic">
-    <div class="logic-orbit">
-      <span class="logic-node">01</span>
-      <span class="logic-node">02</span>
-      <span class="logic-node">03</span>
-      <i></i>
-    </div>
-    <span class="project-visual__label">02 — MIRAR MÁS ALLÁ</span>
-  </div>
-  <div class="project-info">
-    <div>
-      <p class="project-kicker">CINE</p>
-      <h3>Películas y buenas historias</h3>
-      <p>Me gusta disfrutar de películas y fijarme en los personajes, la ambientación y la forma en que se cuenta cada historia.</p>
-    </div>
-    <span class="project-number">02</span>
-  </div>
+          <div class="project-visual project-visual--logic">
+            <div class="logic-orbit">
+              <span class="logic-node">01</span>
+              <span class="logic-node">02</span>
+              <span class="logic-node">03</span>
+              <i></i>
+            </div>
+            <span class="project-visual__label">02 — MIRAR MÁS ALLÁ</span>
+          </div>
+          <div class="project-info">
+            <div>
+              <p class="project-kicker">CINE</p>
+              <h3>Películas y buenas historias</h3>
+              <p>Me gusta disfrutar de películas y fijarme en los personajes, la ambientación y la forma en que se cuenta cada historia.</p>
+            </div>
+            <span class="project-number">02</span>
+          </div>
 
-  <!-- 👇 NUEVO -->
-  <div class="movie-grid" id="movie-grid" aria-label="Mis películas favoritas">
-    <div class="movie movie--loading">
-      <div class="movie__poster-skeleton"></div>
-      <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-    </div>
-    <div class="movie movie--loading">
-      <div class="movie__poster-skeleton"></div>
-      <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-    </div>
-    <div class="movie movie--loading">
-      <div class="movie__poster-skeleton"></div>
-      <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-    </div>
-    <div class="movie movie--loading">
-      <div class="movie__poster-skeleton"></div>
-      <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-    </div>
-    <div class="movie movie--loading">
-      <div class="movie__poster-skeleton"></div>
-      <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-    </div>
-  </div>
+          <div class="movie-grid" id="movie-grid" aria-label="Mis películas favoritas">
+            <div class="movie movie--loading">
+              <div class="movie__poster-skeleton"></div>
+              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+            </div>
+            <div class="movie movie--loading">
+              <div class="movie__poster-skeleton"></div>
+              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+            </div>
+            <div class="movie movie--loading">
+              <div class="movie__poster-skeleton"></div>
+              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+            </div>
+            <div class="movie movie--loading">
+              <div class="movie__poster-skeleton"></div>
+              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+            </div>
+            <div class="movie movie--loading">
+              <div class="movie__poster-skeleton"></div>
+              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+            </div>
+          </div>
 
-  <div class="movie-tooltip" id="movie-tooltip" role="tooltip" aria-hidden="true">
-    <strong class="movie-tooltip__title"></strong>
-    <small class="movie-tooltip__desc"></small>
-  </div>
-  <!-- 👆 FIN NUEVO -->
+          <div class="movie-tooltip" id="movie-tooltip" role="tooltip" aria-hidden="true">
+            <strong class="movie-tooltip__title"></strong>
+            <small class="movie-tooltip__desc"></small>
+          </div>
 
-  <div class="tag-row"><span>Cine</span><span>Imaginación</span><span>Relatos</span></div>
-</article>
+          <div class="tag-row"><span>Cine</span><span>Imaginación</span><span>Relatos</span></div>
+        </article>
 
         <article class="project-card reveal" data-tilt>
           <div class="project-visual project-visual--future">
@@ -846,14 +842,13 @@
           </small>
         </div>
 
-          <!-- 👇 AÑADE ESTO -->
-     <div class="chat__lang" id="chat-lang" role="group" aria-label="Idioma del chat">
-    <button type="button" class="chat__lang-btn is-active" data-lang="es" aria-label="Español">ES</button>
-    <button type="button" class="chat__lang-btn" data-lang="va" aria-label="Valencià">VA</button>
-    <button type="button" class="chat__lang-btn" data-lang="en" aria-label="English">EN</button>
-    <button type="button" class="chat__lang-btn" data-lang="fr" aria-label="Français">FR</button>
-    </div>
-  
+        <div class="chat__lang" id="chat-lang" role="group" aria-label="Idioma del chat">
+          <button type="button" class="chat__lang-btn is-active" data-lang="es" aria-label="Español">ES</button>
+          <button type="button" class="chat__lang-btn" data-lang="va" aria-label="Valencià">VA</button>
+          <button type="button" class="chat__lang-btn" data-lang="en" aria-label="English">EN</button>
+          <button type="button" class="chat__lang-btn" data-lang="fr" aria-label="Français">FR</button>
+        </div>
+
         <button class="chat__close" id="chat-close" type="button" aria-label="Cerrar chat">✕</button>
       </header>
 
