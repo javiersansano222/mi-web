@@ -164,23 +164,59 @@
      ========================================================= */
   const year = $("#year");
   if (year) year.textContent = String(new Date().getFullYear());
-
   /* =========================================================
      3. ERAS
      ========================================================= */
-const eras = ["neon-nocturno", "matrix-verde", "blade-runner", "vaporwave", "sangre-neon", "ultravioleta"];
+  const eras = [
+    "neon-nocturno",
+    "matrix-verde",
+    "blade-runner",
+    "vaporwave",
+    "sangre-neon",
+    "ultravioleta"
+  ];
+
+  // Mapa de paletas → fuentes que necesitan
+  const ERA_FONTS = {
+    "neon-nocturno": [],
+    "matrix-verde": ["VT323", "IBM+Plex+Mono:wght@400;700"],
+    "blade-runner": ["Cormorant+Garamond:wght@500;700", "Inter:wght@400;500"],
+    "vaporwave":    ["Italiana", "Space+Grotesk:wght@400;500"],
+    "sangre-neon":  ["Bebas+Neue", "Space+Mono:wght@400;700"],
+    "ultravioleta": ["Cinzel:wght@400;500", "Lora:ital,wght@0,400;0,500;1,400"]
+  };
+
+  // Cargar la fuente de una paleta si no está ya cargada
+  const loadEraFonts = (era) => {
+    const fonts = ERA_FONTS[era];
+    if (!fonts || fonts.length === 0) return;
+    const id = "fonts-" + era;
+    if (document.getElementById(id)) return;
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=" + fonts.join("&family=") + "&display=swap";
+    document.head.appendChild(link);
+  };
+
   const eraSelect = $("#era-select");
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
   if (eraSelect) {
+    // Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
+    loadEraFonts(root.dataset.era || "neon-nocturno");
+
     eraSelect.value = eras.includes(root.dataset.era) ? root.dataset.era : "neon-nocturno";
     eraSelect.addEventListener("change", () => {
       if (!eras.includes(eraSelect.value)) return;
       root.dataset.era = eraSelect.value;
       safeSet("portfolio-era", eraSelect.value);
+      loadEraFonts(eraSelect.value);
     });
   }
+// Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
+loadEraFonts(root.dataset.era || "neon-nocturno");
 
   /* =========================================================
      4. TEMA

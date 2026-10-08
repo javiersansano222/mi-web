@@ -29,18 +29,18 @@
   --water: #1a1a3a;
 
   /* Tipografías */
-  --serif: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --sans: 'JetBrains Mono', 'Courier New', monospace;
-
+  --serif: var(--font-display, 'Bebas Neue', sans-serif);
+  --sans: var(--font-body, 'JetBrains Mono', monospace);
   --content: 1160px;
   --ease: cubic-bezier(.2, .75, .25, 1);
 }
 
 /* ---------------------------------------------------------
    Paletas cyberpunk (selector de "eras")
+   Cada paleta define: color, tipografía, formas y velocidad.
    --------------------------------------------------------- */
 
-/* 1. Neón Nocturno (por defecto) — cian + magenta + amarillo */
+/* 1. NEÓN NOCTURNO (por defecto) — Cyberpunk clásico */
 html[data-era="neon-nocturno"]{
   --gold: #00fff7;
   --gold-bright: #ff00e5;
@@ -48,9 +48,33 @@ html[data-era="neon-nocturno"]{
   --ember: #f5ff00;
   --line: rgba(0, 255, 247, .35);
   --line-soft: rgba(0, 255, 247, .12);
+
+  /* Tipografía */
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body: 'JetBrains Mono', 'Courier New', monospace;
+  --font-display-weight: 400;
+  --font-display-spacing: .02em;
+
+  /* Formas */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 0px;
+  --border-width: 1px;
+  --shadow-style: 0 8px 25px;
+  --glow-strength: 1;
+
+  /* Decoración */
+  --deco-city: block;
+  --deco-matrix: none;
+  --deco-rays: none;
+  --deco-rain: none;
+  --deco-sun: none;
+
+  /* Animaciones */
+  --anim-speed: 1;
 }
 
-/* 2. Matrix Verde — verde fósforo + blanco */
+/* 2. MATRIX VERDE — Terminal hacker */
 html[data-era="matrix-verde"]{
   --gold: #00ff41;
   --gold-bright: #b8ffbe;
@@ -58,9 +82,29 @@ html[data-era="matrix-verde"]{
   --ember: #e0ffe0;
   --line: rgba(0, 255, 65, .35);
   --line-soft: rgba(0, 255, 65, .12);
+
+  --font-display: 'VT323', 'Courier New', monospace;
+  --font-body: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-display-weight: 400;
+  --font-display-spacing: .05em;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --border-width: 1px;
+  --shadow-style: 0 4px 15px;
+  --glow-strength: .6;
+
+  --deco-city: none;
+  --deco-matrix: block;   /* Lluvia de código */
+  --deco-rays: none;
+  --deco-rain: none;
+  --deco-sun: none;
+
+  --anim-speed: 1.4;
 }
 
-/* 3. Blade Runner — naranja + rosa */
+/* 3. BLADE RUNNER — Noir futurista */
 html[data-era="blade-runner"]{
   --gold: #ff6b00;
   --gold-bright: #ff006e;
@@ -68,9 +112,29 @@ html[data-era="blade-runner"]{
   --ember: #ffd166;
   --line: rgba(255, 107, 0, .35);
   --line-soft: rgba(255, 107, 0, .12);
+
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display-weight: 500;
+  --font-display-spacing: .04em;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --border-width: 1px;
+  --shadow-style: 0 12px 40px;
+  --glow-strength: .8;
+
+  --deco-city: block;
+  --deco-matrix: none;
+  --deco-rays: none;
+  --deco-rain: block;   /* Lluvia diagonal */
+  --deco-sun: none;
+
+  --anim-speed: .8;
 }
 
-/* 4. Vaporwave — rosa + cian pastel */
+/* 4. VAPORWAVE — Y2K chill */
 html[data-era="vaporwave"]{
   --gold: #ff71ce;
   --gold-bright: #01cdfe;
@@ -78,9 +142,29 @@ html[data-era="vaporwave"]{
   --ember: #05ffa1;
   --line: rgba(255, 113, 206, .35);
   --line-soft: rgba(255, 113, 206, .12);
+
+  --font-display: 'Italiana', 'Times New Roman', serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-display-weight: 400;
+  --font-display-spacing: .06em;
+
+  --radius-sm: 10px;
+  --radius-md: 20px;
+  --radius-lg: 999px;
+  --border-width: 1px;
+  --shadow-style: 0 10px 30px;
+  --glow-strength: .9;
+
+  --deco-city: block;
+  --deco-matrix: none;
+  --deco-rays: none;
+  --deco-rain: none;
+  --deco-sun: block;   /* Sol gigante al fondo */
+
+  --anim-speed: 1.2;
 }
 
-/* 5. Sangre Neón — rojo + amarillo */
+/* 5. SANGRE NEÓN — Doom agresivo */
 html[data-era="sangre-neon"]{
   --gold: #ff003c;
   --gold-bright: #f5ff00;
@@ -88,9 +172,29 @@ html[data-era="sangre-neon"]{
   --ember: #ff8b00;
   --line: rgba(255, 0, 60, .35);
   --line-soft: rgba(255, 0, 60, .12);
+
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body: 'Space Mono', 'Courier New', monospace;
+  --font-display-weight: 400;
+  --font-display-spacing: .02em;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --border-width: 2px;
+  --shadow-style: 0 10px 35px;
+  --glow-strength: 1.4;
+
+  --deco-city: none;
+  --deco-matrix: none;
+  --deco-rays: block;  /* Rayos diagonales */
+  --deco-rain: none;
+  --deco-sun: none;
+
+  --anim-speed: .7;
 }
 
-/* 6. Ultravioleta — violeta + cian */
+/* 6. ULTRAVIOLETA — Art Déco revival místico */
 html[data-era="ultravioleta"]{
   --gold: #8a2be2;
   --gold-bright: #00fff7;
@@ -98,18 +202,26 @@ html[data-era="ultravioleta"]{
   --ember: #ff00e5;
   --line: rgba(138, 43, 226, .35);
   --line-soft: rgba(138, 43, 226, .12);
-}
 
-/* Tema forzado a oscuro (no hay light en cyberpunk) */
-html[data-theme="light"]{
-  color-scheme: dark;
-}
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-body: 'Lora', Georgia, serif;
+  --font-display-weight: 400;
+  --font-display-spacing: .04em;
 
-/* Las "eras" ya no existen: solo hay una paleta cyberpunk */
-html[data-era]{
-  --gold: #00fff7;
-  --gold-bright: #ff00e5;
-  --ember: #f5ff00;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 0px;
+  --border-width: 1px;
+  --shadow-style: 0 15px 40px;
+  --glow-strength: .9;
+
+  --deco-city: block;
+  --deco-matrix: none;
+  --deco-rays: none;
+  --deco-rain: none;
+  --deco-sun: none;
+
+  --anim-speed: 1.1;
 }
 
 /* ---------------------------------------------------------
@@ -4346,4 +4458,141 @@ html, body,
     color .6s var(--ease),
     border-color .6s var(--ease),
     box-shadow .6s var(--ease);
+}
+
+/* =========================================================
+   38. DECORACIONES POR PALETA
+   ========================================================= */
+
+/* Control de visibilidad por paleta */
+.cyber-city{ display: var(--deco-city, block) }
+.deco-matrix{ display: var(--deco-matrix, none) }
+.deco-rays{ display: var(--deco-rays, none) }
+.deco-rain{ display: var(--deco-rain, none) }
+.deco-sun{ display: var(--deco-sun, none) }
+
+/* --- Matrix: lluvia de código --- */
+.deco-matrix{
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: .35;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 20px,
+      color-mix(in srgb, var(--gold) 15%, transparent) 20px,
+      color-mix(in srgb, var(--gold) 15%, transparent) 21px
+    );
+  mix-blend-mode: screen;
+}
+.deco-matrix::before{
+  content: "01 01 10 11 01 00 11 10 01 00 11 01 10 00 01 11 10 01 00 11 01 10 00 01 11 10 01 00 11 01 10 00 01 11 10 01 00 11";
+  position: absolute;
+  inset: -20% 0 -20% 0;
+  font: 500 14px/1.1 var(--font-body, monospace);
+  color: var(--gold);
+  letter-spacing: .4em;
+  white-space: pre-wrap;
+  word-break: break-all;
+  text-shadow: 0 0 6px var(--gold);
+  animation: matrix-fall 8s linear infinite;
+}
+@keyframes matrix-fall{
+  from { transform: translateY(-10%) }
+  to   { transform: translateY(10%) }
+}
+
+/* --- Rayos diagonales (Sangre Neón) --- */
+.deco-rays{
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      35deg,
+      transparent 0,
+      transparent 60px,
+      color-mix(in srgb, var(--gold) 18%, transparent) 60px,
+      color-mix(in srgb, var(--gold) 18%, transparent) 62px
+    ),
+    repeating-linear-gradient(
+      -35deg,
+      transparent 0,
+      transparent 90px,
+      color-mix(in srgb, var(--gold-bright) 12%, transparent) 90px,
+      color-mix(in srgb, var(--gold-bright) 12%, transparent) 91px
+    );
+  opacity: .5;
+  animation: rays-shift 12s linear infinite;
+}
+@keyframes rays-shift{
+  from { background-position: 0 0, 0 0 }
+  to   { background-position: 200px 0, -200px 0 }
+}
+
+/* --- Lluvia diagonal (Blade Runner) --- */
+.deco-rain{
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      100deg,
+      transparent 0,
+      transparent 60px,
+      color-mix(in srgb, var(--gold) 25%, transparent) 60px,
+      color-mix(in srgb, var(--gold) 25%, transparent) 60.5px,
+      transparent 60.5px,
+      transparent 120px
+    );
+  opacity: .35;
+  animation: rain-fall .8s linear infinite;
+}
+@keyframes rain-fall{
+  from { background-position: 0 0 }
+  to   { background-position: -80px 400px }
+}
+
+/* --- Sol gigante (Vaporwave) --- */
+.deco-sun{
+  position: fixed;
+  left: 50%;
+  bottom: 30%;
+  transform: translateX(-50%);
+  width: min(60vw, 600px);
+  height: min(60vw, 600px);
+  border-radius: 50%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%,
+      color-mix(in srgb, var(--gold-bright) 90%, transparent) 0%,
+      color-mix(in srgb, var(--gold) 70%, transparent) 40%,
+      color-mix(in srgb, var(--ember) 40%, transparent) 70%,
+      transparent 100%);
+  filter: blur(2px);
+  opacity: .55;
+  box-shadow:
+    0 0 120px 40px color-mix(in srgb, var(--gold-bright) 40%, transparent);
+}
+.deco-sun::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 30px,
+      color-mix(in srgb, #050510 70%, transparent) 30px,
+      color-mix(in srgb, #050510 70%, transparent) 34px
+    );
+  mask-image: linear-gradient(180deg, transparent 40%, black 60%);
 }
