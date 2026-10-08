@@ -1693,5 +1693,187 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   // Lanzarlo cuando el DOM esté listo (script.js va con defer)
   initGeoWelcome();
 
+  const GAMES_DATA = {
+  fallout: {
+    title: "Fallout: New Vegas",
+    year: 2010,
+    genre: "RPG post-apocalíptico",
+    studio: "Obsidian Entertainment",
+    synopsis: "Eres un mensajero al que dan por muerto en el Mojave. Entre facciones, casinos y un yermo radioactivo, decides quién controlará Nueva Vegas. El RPG con más libertad de decisiones jamás hecho.",
+    note: "10/10",
+    why: "Ningún juego me ha dado tanta libertad para decidir quién soy y a quién traiciono."
+  },
+  doom: {
+    title: "DOOM",
+    year: 2016,
+    genre: "FPS frenético",
+    studio: "id Software",
+    synopsis: "Despiertas en una base de Marte invadida por demonios y solo tienes una misión: matarlos a todos. Sin cubrirse, sin recargar, sin piedad. El FPS más puro de la década.",
+    note: "10/10",
+    why: "La mejor jugabilidad de un shooter en años. Cada segundo es adrenalina pura."
+  },
+  skyrim: {
+    title: "The Elder Scrolls V: Skyrim",
+    year: 2011,
+    genre: "RPG de mundo abierto",
+    studio: "Bethesda",
+    synopsis: "Eres el Sangre de Dragón, el único capaz de detener el regreso de Alduin. Explora un mundo helado lleno de mitos, facciones y decisiones.",
+    note: "10/10",
+    why: "Cada partida es distinta. Es un mundo que no se acaba nunca."
+  },
+  bioshock: {
+    title: "BioShock",
+    year: 2007,
+    genre: "FPS narrativo",
+    studio: "Irrational Games",
+    synopsis: "Tras un accidente aéreo, llegas a Rapture, una ciudad submarina en ruinas. Un comentario brutal sobre el libre albedrío y la utopía fallida.",
+    note: "10/10",
+    why: "'Would you kindly' es la frase que cambió para siempre mi forma de ver los videojuegos."
+  },
+  cyberpunk: {
+    title: "Cyberpunk 2077",
+    year: 2020,
+    genre: "RPG de acción",
+    studio: "CD Projekt Red",
+    synopsis: "Eres V, un mercenario en Night City que busca la inmortalidad. Un mundo abierto futurista lleno de implantes, corporaciones y decisiones imposibles.",
+    note: "9/10",
+    why: "Night City es el personaje principal. Cada esquina cuenta una historia."
+  }
+
+};
+    /* =========================================================
+     ABANICO 3D DE VIDEOJUEGOS — Interacción
+     ========================================================= */
+  const gamesDeck = document.querySelector(".games-deck");
+  const gameCards = $$(".game-card", gamesDeck || document);
+  const gamesPanel = $("#games-panel");
+  const gamesOverlay = $("#games-overlay");
+  const gamesPanelClose = $("#games-panel-close");
+
+  // Referencias del panel
+  const gpPoster = $("#gp-poster");
+  const gpNum = $("#gp-num");
+  const gpGenre = $("#gp-genre");
+  const gpTitle = $("#gp-title");
+  const gpYear = $("#gp-year");
+  const gpStudio = $("#gp-studio");
+  const gpSynopsis = $("#gp-synopsis");
+  const gpNote = $("#gp-note");
+  const gpWhy = $("#gp-why");
+
+  if (gamesDeck && gameCards.length > 0) {
+
+    // Estado del abanico: array de keys en orden (index 0 = frente)
+    let currentOrder = gameCards.map((c) => c.dataset.game);
+
+    // Aplica las posiciones según el orden actual
+    const applyOrder = () => {
+      currentOrder.forEach((key, pos) => {
+        const card = gameCards.find((c) => c.dataset.game === key);
+        if (card) {
+          card.setAttribute("data-pos", String(pos));
+          card.setAttribute("aria-selected", pos === 0 ? "true" : "false");
+        }
+      });
+    };
+
+    // Rota el abanico para poner la carta `key` al frente
+    const bringToFront = (key) => {
+      if (currentOrder[0] === key) return;
+      const idx = currentOrder.indexOf(key);
+      if (idx === -1) return;
+      // Mueve esa carta al inicio, manteniendo el resto en orden
+      currentOrder = [key, ...currentOrder.slice(0, idx), ...currentOrder.slice(idx + 1)];
+      applyOrder();
+    };
+
+    // Abre el panel con los datos de un juego
+    const openPanel = (key) => {
+  const data = GAMES_DATA[key];
+  if (!data || !gamesPanel) return;
+
+  const card = gameCards.find((c) => c.dataset.game === key);
+  const coverImg = card?.querySelector(".game-card__cover");
+  const coverSrc = coverImg?.src || "";
+
+  if (gpPoster) {
+    gpPoster.src = coverSrc;
+    gpPoster.alt = data.title;
+  }
+  if (gpNum) gpNum.textContent = String(currentOrder.indexOf(key) + 1).padStart(2, "0");
+  if (gpGenre) gpGenre.textContent = data.genre;
+  if (gpTitle) gpTitle.textContent = data.title;
+  if (gpYear) gpYear.textContent = data.year;
+  if (gpStudio) gpStudio.textContent = data.studio;
+  if (gpSynopsis) gpSynopsis.textContent = data.synopsis;
+  if (gpNote) gpNote.textContent = data.note;
+  if (gpWhy) gpWhy.textContent = data.why;
+
+  gamesPanel.setAttribute("aria-hidden", "false");
+  // El overlay solo se muestra en móvil (en desktop no lo necesitamos porque el panel está dentro)
+  if (window.matchMedia("(max-width: 640px)").matches && gamesOverlay) {
+    gamesOverlay.classList.add("is-visible");
+    gamesOverlay.setAttribute("aria-hidden", "false");
+  }
+};
+
+    const closePanel = () => {
+      if (!gamesPanel) return;
+      gamesPanel.setAttribute("aria-hidden", "true");
+      if (gamesOverlay) {
+        gamesOverlay.classList.remove("is-visible");
+        gamesOverlay.setAttribute("aria-hidden", "true");
+      }
+    };
+
+    // Click en una carta
+    gameCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const key = card.dataset.game;
+        if (currentOrder[0] === key) {
+          // Ya está al frente → abre el panel
+          openPanel(key);
+        } else {
+          // No está al frente → la trae al frente
+          bringToFront(key);
+        }
+      });
+
+      // Teclado: Enter / Space activan, ← → navegan
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          card.click();
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          const nextKey = currentOrder[currentOrder.length - 1];
+          bringToFront(nextKey);
+          const nextCard = gameCards.find((c) => c.dataset.game === nextKey);
+          nextCard?.focus();
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          const nextKey = currentOrder[1];
+          bringToFront(nextKey);
+          const nextCard = gameCards.find((c) => c.dataset.game === nextKey);
+          nextCard?.focus();
+        }
+      });
+    });
+
+    // Cerrar panel
+    gamesPanelClose?.addEventListener("click", closePanel);
+    gamesOverlay?.addEventListener("click", closePanel);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && gamesPanel?.getAttribute("aria-hidden") === "false") {
+        closePanel();
+      }
+    });
+
+    // Aplicar orden inicial (el primero del HTML al frente)
+    applyOrder();
+
+    console.info("[games] Abanico 3D cargado con", gameCards.length, "cartas.");
+  }
+
   console.info("[script] Todo listo.");
 })();
