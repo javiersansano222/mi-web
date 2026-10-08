@@ -498,7 +498,7 @@
           if (dx * dx + dy * dy < 90 * 90) a = 0.78;
         }
         ctx.beginPath();
-        ctx.fillStyle = `rgba(230, 204, 139, ${a})`;
+        ctx.fillStyle = `rgba(0, 255, 247, ${a})`;
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
       });
