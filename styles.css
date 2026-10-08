@@ -3923,3 +3923,153 @@ html{
     text-shadow: none !important;
   }
 }
+
+/* =========================================================
+   36. POP-UP DE BIENVENIDA GEO-IP
+   ========================================================= */
+.geo-welcome{
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 200;
+  max-width: 340px;
+  padding: 18px 44px 18px 20px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gold) 14%, var(--bg-deep)) 0%,
+    color-mix(in srgb, var(--bg-deep) 96%, transparent) 100%);
+  border: 1px solid var(--gold);
+  outline: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
+  outline-offset: 4px;
+  color: #ffffff;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, .65),
+    0 0 40px color-mix(in srgb, var(--gold) 20%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(30px);
+  transition:
+    opacity .5s var(--ease),
+    transform .5s var(--ease),
+    visibility .5s;
+  pointer-events: auto;
+}
+
+.geo-welcome.is-visible{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Adorno dorado en la esquina */
+.geo-welcome::before{
+  content: "";
+  position: absolute;
+  top: 6px; left: 6px;
+  width: 14px; height: 14px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  pointer-events: none;
+}
+.geo-welcome::after{
+  content: "";
+  position: absolute;
+  bottom: 6px; right: 6px;
+  width: 14px; height: 14px;
+  border-bottom: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+  pointer-events: none;
+}
+
+.geo-welcome__eyebrow{
+  display: block;
+  font: 500 9px var(--serif);
+  letter-spacing: .35em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin: 0 0 6px;
+  opacity: .85;
+}
+
+.geo-welcome__title{
+  display: block;
+  font: 500 18px/1.2 var(--serif);
+  color: #ffffff;
+  letter-spacing: .02em;
+  margin: 0 0 4px;
+}
+
+.geo-welcome__title em{
+  font-style: normal;
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+
+.geo-welcome__sub{
+  display: block;
+  font: italic 12px/1.4 var(--serif);
+  color: #e0e6ee;
+  margin: 0;
+}
+
+.geo-welcome__close{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+  color: var(--gold-bright);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s, color .2s, transform .2s;
+}
+.geo-welcome__close:hover{
+  background: color-mix(in srgb, var(--gold) 25%, transparent);
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* Barra de progreso sutil abajo */
+.geo-welcome__bar{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--gold) 20%, transparent);
+  overflow: hidden;
+}
+.geo-welcome__bar i{
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--gold-bright), var(--gold));
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: geo-welcome-bar 7s linear forwards;
+}
+
+@keyframes geo-welcome-bar{
+  to { transform: scaleX(1); }
+}
+
+/* Móvil: pop-up ocupa ancho cómodo abajo */
+@media (max-width: 700px){
+  .geo-welcome{
+    left: 16px;
+    right: 16px;
+    bottom: 90px; /* por encima del botón del chat */
+    max-width: none;
+    padding: 16px 40px 16px 16px;
+  }
+  .geo-welcome__title{ font-size: 16px }
+  .geo-welcome__sub{ font-size: 11px }
+}
+
+/* Accesibilidad: sin animaciones si el usuario las rechaza */
+@media (prefers-reduced-motion: reduce){
+  .geo-welcome,
+  .geo-welcome__bar i{ transition: none; animation: none }
+}
