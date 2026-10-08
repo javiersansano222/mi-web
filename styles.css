@@ -4160,17 +4160,24 @@ html[data-theme="light"] .city-bg{
   padding: 30px 26px 30px;
   overflow-y: auto;
   transform: translateX(105%);
-  transition: transform .55s cubic-bezier(.2, .75, .25, 1);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform .55s cubic-bezier(.2, .75, .25, 1),
+    visibility .55s,
+    opacity .35s;
   scrollbar-width: thin;
   scrollbar-color: var(--gold) transparent;
 }
-html[data-theme="light"] .games-panel{
-  background: linear-gradient(180deg, #ffffff 0%, #f0f3f6 100%);
-  color: #0a0a19;
-}
+
 .games-panel[aria-hidden="false"]{
   transform: translateX(0);
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
+
 .games-panel__close{
   position: absolute;
   top: 14px;
