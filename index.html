@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" data-era="oro-noche" data-theme="dark">
+<html lang="es" data-era="neon-nocturno" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,59 +44,50 @@
        aria-valuemax="100"
        aria-valuenow="0"></div>
 
-  <!-- FONDO ART DÉCO -->
-  <div class="ocean" aria-hidden="true">
-    <div class="city-bg" aria-hidden="true">
-      <div class="city-layer city-layer--far">
-        <div class="city-layer__inner">
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--sm"></span>
-        </div>
-        <div class="city-layer__inner" aria-hidden="true">
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--sm"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--sm"></span>
-        </div>
+    <!-- CIUDAD CYBERPUNK -->
+    <div class="cyber-city" aria-hidden="true">
+      <!-- Rascacielos del horizonte -->
+      <div class="cyber-city__skyline">
+        <span class="cyber-bld cyber-bld--far"></span>
+        <span class="cyber-bld cyber-bld--far cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--far"></span>
+        <span class="cyber-bld cyber-bld--far cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--far"></span>
+        <span class="cyber-bld cyber-bld--far"></span>
+        <span class="cyber-bld cyber-bld--far cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--far"></span>
       </div>
-      <div class="city-layer city-layer--mid">
-        <div class="city-layer__inner">
-          <span class="bld bld--md"></span>
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--lg"></span>
-        </div>
-        <div class="city-layer__inner" aria-hidden="true">
-          <span class="bld bld--md"></span>
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--md"></span>
-          <span class="bld bld--lg"></span>
-        </div>
-      </div>
-      <div class="city-layer city-layer--near">
-        <div class="city-layer__inner">
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--xl"></span>
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--xl"></span>
-        </div>
-        <div class="city-layer__inner" aria-hidden="true">
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--xl"></span>
-          <span class="bld bld--lg"></span>
-          <span class="bld bld--xl"></span>
-        </div>
-      </div>
-    </div>
 
+      <div class="cyber-city__skyline cyber-city__skyline--mid">
+        <span class="cyber-bld cyber-bld--mid"></span>
+        <span class="cyber-bld cyber-bld--mid cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--mid"></span>
+        <span class="cyber-bld cyber-bld--mid cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--mid"></span>
+        <span class="cyber-bld cyber-bld--mid cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--mid"></span>
+      </div>
+
+      <div class="cyber-city__skyline cyber-city__skyline--near">
+        <span class="cyber-bld cyber-bld--near"></span>
+        <span class="cyber-bld cyber-bld--near cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--near"></span>
+        <span class="cyber-bld cyber-bld--near cyber-bld--tall"></span>
+        <span class="cyber-bld cyber-bld--near"></span>
+      </div>
+
+      <!-- Línea de horizonte -->
+      <div class="cyber-city__horizon"></div>
+
+      <!-- Coches voladores -->
+      <div class="cyber-car cyber-car--1"></div>
+      <div class="cyber-car cyber-car--2"></div>
+      <div class="cyber-car cyber-car--3"></div>
+      <div class="cyber-car cyber-car--4"></div>
+      <div class="cyber-car cyber-car--5"></div>
+      <div class="cyber-car cyber-car--6"></div>
+    </div>
+   <div> 
     <div class="ocean__glow"></div>
     <div class="ocean__grain"></div>
     <div class="bubble bubble--one"></div>
@@ -147,12 +138,14 @@
       </div>
 
       <label class="sr-only" for="era-select">Paleta visual</label>
-      <select id="era-select" class="era-select" aria-label="Elegir paleta">
-        <option value="oro-noche">Oro &amp; Noche</option>
-        <option value="cobre-esmeralda">Cobre &amp; Esmeralda</option>
-        <option value="plata-carbon">Plata &amp; Carbón</option>
-        <option value="coral-abismo">Coral &amp; Abismo</option>
-      </select>
+          <select id="era-select" class="era-select" aria-label="Elegir paleta">
+        <option value="neon-nocturno">Neón Nocturno</option>
+        <option value="matrix-verde">Matrix Verde</option>
+        <option value="blade-runner">Blade Runner</option>
+        <option value="vaporwave">Vaporwave</option>
+        <option value="sangre-neon">Sangre Neón</option>
+        <option value="ultravioleta">Ultravioleta</option>
+    </select>
       <button class="theme-toggle"
               id="theme-toggle"
               type="button"

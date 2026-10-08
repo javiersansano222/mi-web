@@ -168,13 +168,13 @@
   /* =========================================================
      3. ERAS
      ========================================================= */
-  const eras = ["oro-noche", "cobre-esmeralda", "plata-carbon", "coral-abismo"];
+const eras = ["neon-nocturno", "matrix-verde", "blade-runner", "vaporwave", "sangre-neon", "ultravioleta"];
   const eraSelect = $("#era-select");
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
   if (eraSelect) {
-    eraSelect.value = eras.includes(root.dataset.era) ? root.dataset.era : "oro-noche";
+    eraSelect.value = eras.includes(root.dataset.era) ? root.dataset.era : "neon-nocturno";
     eraSelect.addEventListener("change", () => {
       if (!eras.includes(eraSelect.value)) return;
       root.dataset.era = eraSelect.value;

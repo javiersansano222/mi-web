@@ -36,6 +36,70 @@
   --ease: cubic-bezier(.2, .75, .25, 1);
 }
 
+/* ---------------------------------------------------------
+   Paletas cyberpunk (selector de "eras")
+   --------------------------------------------------------- */
+
+/* 1. Neón Nocturno (por defecto) — cian + magenta + amarillo */
+html[data-era="neon-nocturno"]{
+  --gold: #00fff7;
+  --gold-bright: #ff00e5;
+  --gold-deep: #0099cc;
+  --ember: #f5ff00;
+  --line: rgba(0, 255, 247, .35);
+  --line-soft: rgba(0, 255, 247, .12);
+}
+
+/* 2. Matrix Verde — verde fósforo + blanco */
+html[data-era="matrix-verde"]{
+  --gold: #00ff41;
+  --gold-bright: #b8ffbe;
+  --gold-deep: #008a23;
+  --ember: #e0ffe0;
+  --line: rgba(0, 255, 65, .35);
+  --line-soft: rgba(0, 255, 65, .12);
+}
+
+/* 3. Blade Runner — naranja + rosa */
+html[data-era="blade-runner"]{
+  --gold: #ff6b00;
+  --gold-bright: #ff006e;
+  --gold-deep: #b34b00;
+  --ember: #ffd166;
+  --line: rgba(255, 107, 0, .35);
+  --line-soft: rgba(255, 107, 0, .12);
+}
+
+/* 4. Vaporwave — rosa + cian pastel */
+html[data-era="vaporwave"]{
+  --gold: #ff71ce;
+  --gold-bright: #01cdfe;
+  --gold-deep: #b34d8e;
+  --ember: #05ffa1;
+  --line: rgba(255, 113, 206, .35);
+  --line-soft: rgba(255, 113, 206, .12);
+}
+
+/* 5. Sangre Neón — rojo + amarillo */
+html[data-era="sangre-neon"]{
+  --gold: #ff003c;
+  --gold-bright: #f5ff00;
+  --gold-deep: #a8002a;
+  --ember: #ff8b00;
+  --line: rgba(255, 0, 60, .35);
+  --line-soft: rgba(255, 0, 60, .12);
+}
+
+/* 6. Ultravioleta — violeta + cian */
+html[data-era="ultravioleta"]{
+  --gold: #8a2be2;
+  --gold-bright: #00fff7;
+  --gold-deep: #5a1c96;
+  --ember: #ff00e5;
+  --line: rgba(138, 43, 226, .35);
+  --line-soft: rgba(138, 43, 226, .12);
+}
+
 /* Tema forzado a oscuro (no hay light en cyberpunk) */
 html[data-theme="light"]{
   color-scheme: dark;
@@ -4063,4 +4127,223 @@ html{
 @media (prefers-reduced-motion: reduce){
   .geo-welcome,
   .geo-welcome__bar i{ transition: none; animation: none }
+}
+/* =========================================================
+   37. CIUDAD CYBERPUNK DE FONDO
+   ========================================================= */
+.cyber-city{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 60vh;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  mask-image: linear-gradient(to top,
+    black 0%,
+    black 60%,
+    transparent 100%);
+}
+
+/* --- Skyline: tres capas de rascacielos con parallax de color --- */
+.cyber-city__skyline{
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 6px;
+  padding: 0 4vw;
+  height: 70%;
+}
+.cyber-city__skyline--mid{
+  height: 55%;
+  opacity: .8;
+}
+.cyber-city__skyline--near{
+  height: 42%;
+  opacity: 1;
+}
+
+/* --- Silueta de cada rascacielos --- */
+.cyber-bld{
+  display: block;
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 20px;
+  max-width: 90px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--gold) 12%, #000) 0%,
+    #000000 60%,
+    #000000 100%);
+  border-top: 1px solid color-mix(in srgb, var(--gold) 70%, transparent);
+  box-shadow:
+    inset 0 0 20px color-mix(in srgb, var(--gold) 20%, transparent),
+    0 0 25px color-mix(in srgb, var(--gold) 15%, transparent);
+}
+.cyber-bld--far{
+  height: 40%;
+  opacity: .55;
+  filter: blur(.5px);
+}
+.cyber-bld--mid{
+  height: 60%;
+  opacity: .8;
+}
+.cyber-bld--near{
+  height: 85%;
+}
+.cyber-bld--tall{
+  height: 100%;
+}
+
+/* Ventanas neón en cada rascacielos */
+.cyber-bld::before{
+  content: "";
+  position: absolute;
+  inset: 6% 12% 8% 12%;
+  background-image:
+    radial-gradient(circle, var(--gold) 1px, transparent 1.5px),
+    radial-gradient(circle, var(--gold-bright) 1px, transparent 1.5px),
+    radial-gradient(circle, var(--gold) 1px, transparent 1.5px);
+  background-size: 10px 14px, 18px 20px, 26px 24px;
+  background-position: 0 0, 4px 6px, 8px 3px;
+  opacity: .5;
+  mix-blend-mode: screen;
+  animation: cyber-windows 6s ease-in-out infinite alternate;
+  mask-image: repeating-linear-gradient(
+    0deg,
+    black 0,
+    black 6px,
+    transparent 6px,
+    transparent 10px
+  );
+}
+@keyframes cyber-windows{
+  0%   { opacity: .35 }
+  100% { opacity: .8 }
+}
+
+/* --- Línea de horizonte con glow --- */
+.cyber-city__horizon{
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 30%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold) 20%,
+    var(--gold-bright) 50%,
+    var(--gold) 80%,
+    transparent 100%);
+  box-shadow:
+    0 0 12px var(--gold),
+    0 0 30px var(--gold-bright);
+  opacity: .8;
+}
+
+/* --- Coches voladores --- */
+.cyber-car{
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold) 60%,
+    #ffffff 100%);
+  box-shadow:
+    0 0 8px var(--gold),
+    0 0 20px var(--gold-bright),
+    0 0 40px var(--gold);
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(-100px, 0, 0);
+}
+.cyber-car::after{
+  /* Estela luminosa */
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--gold) 40%, transparent));
+}
+
+/* 6 coches con trayectorias y tiempos distintos */
+.cyber-car--1{
+  top: 62%;
+  animation: cyber-fly-right 9s linear infinite;
+  animation-delay: 0s;
+}
+.cyber-car--2{
+  top: 55%;
+  animation: cyber-fly-left 12s linear infinite;
+  animation-delay: -3s;
+}
+.cyber-car--3{
+  top: 68%;
+  animation: cyber-fly-right 14s linear infinite;
+  animation-delay: -6s;
+  transform: scale(.7);
+}
+.cyber-car--4{
+  top: 48%;
+  animation: cyber-fly-left 10s linear infinite;
+  animation-delay: -2s;
+  transform: scale(.6);
+}
+.cyber-car--5{
+  top: 72%;
+  animation: cyber-fly-right 16s linear infinite;
+  animation-delay: -9s;
+  transform: scale(.55);
+}
+.cyber-car--6{
+  top: 40%;
+  animation: cyber-fly-left 18s linear infinite;
+  animation-delay: -4s;
+  transform: scale(.5);
+  opacity: .7;
+}
+
+@keyframes cyber-fly-right{
+  from { transform: translate3d(-100px, 0, 0) }
+  to   { transform: translate3d(calc(100vw + 100px), 0, 0) }
+}
+@keyframes cyber-fly-left{
+  from { transform: translate3d(calc(100vw + 100px), 0, 0) }
+  to   { transform: translate3d(-100px, 0, 0) }
+}
+
+/* En móvil, menos coches y ciudad más baja */
+@media (max-width: 700px){
+  .cyber-city{ height: 45vh }
+  .cyber-city__horizon{ bottom: 34% }
+  .cyber-car--4,
+  .cyber-car--5,
+  .cyber-car--6{ display: none }
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce){
+  .cyber-bld::before{ animation: none }
+  .cyber-car{ animation: none !important }
+  .cyber-car{ display: none }
+}
+
+/* Transición suave al cambiar de paleta */
+html, body,
+.site-header, .ocean, .cyber-city,
+.cyber-bld, .cyber-city__horizon, .cyber-car,
+.project-card, .counter, .chat__panel, .apod__stage{
+  transition:
+    background-color .6s var(--ease),
+    color .6s var(--ease),
+    border-color .6s var(--ease),
+    box-shadow .6s var(--ease);
 }
