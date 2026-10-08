@@ -1862,6 +1862,148 @@
 
     console.info("[games] Abanico 3D cargado con", allGameCards.length, "cartas.");
   }
+    /* =========================================================
+     22. LLUVIA DE CÓDIGO MATRIX (canvas)
+     Solo se ejecuta cuando la paleta activa es "matrix-verde"
+     ========================================================= */
+  const matrixCanvas = $("#matrix-canvas");
+  const matrixCtx = matrixCanvas?.getContext("2d");
+
+  if (matrixCanvas && matrixCtx && !prefersReducedMotion()) {
+    let matrixActive = false;
+    let matrixFrame = null;
+    let matrixCols = 0;
+    let matrixDrops = [];
+    let matrixFontSize = 16;
+    let matrixLastTime = 0;
+    const MATRIX_FPS = 20; // fps del efecto (20 es suficiente y ahorra CPU)
+    const MATRIX_INTERVAL = 1000 / MATRIX_FPS;
+
+    const MATRIX_CHARS =
+      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン" +
+      "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const matrixResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+
+      matrixCanvas.width = Math.floor(w * ratio);
+      matrixCanvas.height = Math.floor(h * ratio);
+      matrixCanvas.style.width = w + "px";
+      matrixCanvas.style.height = h + "px";
+      matrixCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      matrixFontSize = w < 700 ? 14 : 16;
+      matrixCols = Math.ceil(w / matrixFontSize);
+      matrixDrops = Array.from({ length: matrixCols }, () =>
+        Math.floor((Math.random() * h) / matrixFontSize)
+      );
+      matrixCtx.font = `${matrixFontSize}px "JetBrains Mono", "Courier New", monospace`;
+    };
+
+    const matrixRandomChar = () =>
+      MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+
+    const matrixStep = (timestamp) => {
+      if (!matrixActive) return;
+      matrixFrame = requestAnimationFrame(matrixStep);
+
+      // Limitar a MATRIX_FPS para no consumir CPU innecesariamente
+      if (timestamp - matrixLastTime < MATRIX_INTERVAL) return;
+      matrixLastTime = timestamp;
+
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Estela: cada frame pintamos un velo negro semitransparente
+      matrixCtx.fillStyle = "rgba(0, 0, 0, 0.08)";
+      matrixCtx.fillRect(0, 0, w, h);
+
+      // Color de los caracteres (verde Matrix)
+      const green = "#00ff41";
+
+      matrixCtx.font = `${matrixFontSize}px "JetBrains Mono", "Courier New", monospace`;
+
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const x = i * matrixFontSize;
+        const y = matrixDrops[i] * matrixFontSize;
+
+        // Carácter cabeza (más brillante)
+        matrixCtx.fillStyle = "#b8ffbe";
+        matrixCtx.shadowColor = green;
+        matrixCtx.shadowBlur = 8;
+        matrixCtx.fillText(matrixRandomChar(), x, y);
+
+        // Caracteres estela (verde normal)
+        matrixCtx.shadowBlur = 0;
+        matrixCtx.fillStyle = green;
+        matrixCtx.fillText(matrixRandomChar(), x, y - matrixFontSize);
+        matrixCtx.fillText(matrixRandomChar(), x, y - matrixFontSize * 2);
+
+        // Reset al fondo cuando llega abajo
+        if (y > h && Math.random() > 0.975) {
+          matrixDrops[i] = 0;
+        } else {
+          matrixDrops[i]++;
+        }
+      }
+    };
+
+    const matrixStart = () => {
+      if (matrixActive) return;
+      matrixActive = true;
+      matrixResize();
+      matrixLastTime = 0;
+      matrixFrame = requestAnimationFrame(matrixStep);
+      console.info("[matrix] Lluvia de código activada.");
+    };
+
+    const matrixStop = () => {
+      if (!matrixActive) return;
+      matrixActive = false;
+      if (matrixFrame) cancelAnimationFrame(matrixFrame);
+      matrixCtx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      console.info("[matrix] Lluvia de código detenida.");
+    };
+
+    // Activar/desactivar según la paleta activa
+    const matrixCheckEra = () => {
+      const era = root.dataset.era || "neon-nocturno";
+      if (era === "matrix-verde") {
+        matrixStart();
+      } else {
+        matrixStop();
+      }
+    };
+
+    // Comprobar al arrancar
+    matrixCheckEra();
+
+    // Comprobar cuando cambia la paleta
+    if (eraSelect) {
+      eraSelect.addEventListener("change", matrixCheckEra);
+    }
+
+    // También si la paleta se aplica por código desde otro sitio
+    const eraObserver = new MutationObserver(matrixCheckEra);
+    eraObserver.observe(root, { attributes: true, attributeFilter: ["data-era"] });
+
+    // Resize
+    window.addEventListener("resize", () => {
+      if (matrixActive) matrixResize();
+    }, { passive: true });
+
+    // Pausa cuando la pestaña no se ve
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (matrixFrame) cancelAnimationFrame(matrixFrame);
+      } else if (matrixActive) {
+        matrixLastTime = 0;
+        matrixFrame = requestAnimationFrame(matrixStep);
+      }
+    });
+  }
 
   console.info("[script] Todo listo.");
 })();
