@@ -4470,42 +4470,18 @@ html, body,
 .deco-rays{ display: var(--deco-rays, none) }
 .deco-rain{ display: var(--deco-rain, none) }
 .deco-sun{ display: var(--deco-sun, none) }
-
-/* --- Matrix: lluvia de código --- */
+/* --- Matrix: lluvia de código (canvas) --- */
 .deco-matrix{
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  overflow: hidden;
-  opacity: .35;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0,
-      transparent 20px,
-      color-mix(in srgb, var(--gold) 15%, transparent) 20px,
-      color-mix(in srgb, var(--gold) 15%, transparent) 21px
-    );
-  mix-blend-mode: screen;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.9;
+  background: #000;
 }
-.deco-matrix::before{
-  content: "01 01 10 11 01 00 11 10 01 00 11 01 10 00 01 11 10 01 00 11 01 10 00 01 11 10 01 00 11 01 10 00 01 11 10 01 00 11";
-  position: absolute;
-  inset: -20% 0 -20% 0;
-  font: 500 14px/1.1 var(--font-body, monospace);
-  color: var(--gold);
-  letter-spacing: .4em;
-  white-space: pre-wrap;
-  word-break: break-all;
-  text-shadow: 0 0 6px var(--gold);
-  animation: matrix-fall 8s linear infinite;
-}
-@keyframes matrix-fall{
-  from { transform: translateY(-10%) }
-  to   { transform: translateY(10%) }
-}
-
 /* --- Rayos diagonales (Sangre Neón) --- */
 .deco-rays{
   position: fixed;
