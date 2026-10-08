@@ -552,4 +552,82 @@
   window.addEventListener("beforeunload", () => {
     renderer.dispose();
   });
+
+  /* =========================================================
+   SCENE.JS — Rascacielos Art Déco (carga diferida de Three.js)
+   ========================================================= */
+
+(() => {
+  "use strict";
+
+  const canvas = document.getElementById("scene-3d");
+  const container = document.getElementById("hero-scene");
+  const fallback = document.getElementById("hero-art-fallback");
+
+  if (!canvas || !container) return;
+
+  // ⬇️ No cargamos Three.js hasta que el hero sea visible
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const isSmallScreen = window.matchMedia("(max-width: 700px)").matches;
+
+  // Si es móvil o el usuario pide menos movimiento, ni lo intentamos
+  if (isSmallScreen || prefersReducedMotion) {
+    container.style.display = "none";
+    if (fallback) fallback.style.display = "block";
+    return;
+  }
+
+  const hasWebGL = (() => {
+    try {
+      const c = document.createElement("canvas");
+      return !!(window.WebGLRenderingContext &&
+        (c.getContext("webgl2") || c.getContext("webgl")));
+    } catch { return false; }
+  })();
+
+  if (!hasWebGL) {
+    container.style.display = "none";
+    if (fallback) fallback.style.display = "block";
+    return;
+  }
+
+  // Cargar Three.js dinámicamente
+  const loadThree = () => new Promise((resolve, reject) => {
+    if (window.THREE) return resolve(window.THREE);
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js";
+    s.onload = () => resolve(window.THREE);
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  // Esperar a que el hero sea visible
+  const initScene = async () => {
+    try {
+      const THREE = await loadThree();
+      if (!THREE) throw new Error("Three no cargó");
+      // ... aquí todo tu código original de scene.js usando THREE
+      // (pega aquí el resto de tu scene.js tal cual estaba,
+      //  desde "console.info('[scene] Iniciando...')" en adelante)
+    } catch (err) {
+      console.warn("[scene] No se pudo cargar Three.js:", err);
+      container.style.display = "none";
+      if (fallback) fallback.style.display = "block";
+    }
+  };
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          initScene();
+          io.disconnect();
+        }
+      });
+    }, { rootMargin: "200px" }); // empieza a cargar un poco antes de que se vea
+    io.observe(container);
+  } else {
+    initScene();
+  }
+})();
 })();
