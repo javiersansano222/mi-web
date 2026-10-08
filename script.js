@@ -164,6 +164,7 @@
      ========================================================= */
   const year = $("#year");
   if (year) year.textContent = String(new Date().getFullYear());
+
   /* =========================================================
      3. ERAS
      ========================================================= */
@@ -203,10 +204,10 @@
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
-  if (eraSelect) {
-    // Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
-    loadEraFonts(root.dataset.era || "neon-nocturno");
+  // Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
+  loadEraFonts(root.dataset.era || "neon-nocturno");
 
+  if (eraSelect) {
     eraSelect.value = eras.includes(root.dataset.era) ? root.dataset.era : "neon-nocturno";
     eraSelect.addEventListener("change", () => {
       if (!eras.includes(eraSelect.value)) return;
@@ -215,8 +216,6 @@
       loadEraFonts(eraSelect.value);
     });
   }
-// Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
-loadEraFonts(root.dataset.era || "neon-nocturno");
 
   /* =========================================================
      4. TEMA
@@ -267,9 +266,7 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   });
 
   /* =========================================================
-     5.5. EFECTO MATRIX (codificado → descodificar al hover)
-     Solo se activa en dispositivos con ratón (hover: hover) y
-     puntero fino. En móvil/táctil se deja el texto tal cual.
+     5.5. EFECTO MATRIX
      ========================================================= */
   const matrixChars = "#@$%!*&?¿¡+=";
   const finePointerForMatrix = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -283,18 +280,15 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   };
 
   const initMatrixElement = (el) => {
-    // Guardamos el texto original
     if (!el.dataset.matrixOriginal) {
       el.dataset.matrixOriginal = el.textContent.trim();
     }
     const original = el.dataset.matrixOriginal;
     const len = original.length;
 
-    // Estado inicial: codificado, QUIETO (no cambia solo)
     el.textContent = generateRandomCode(len);
     el.classList.add("is-coded");
 
-    // Función para descodificar letra a letra
     const decode = () => {
       if (el.dataset.matrixRunning === "true") return;
       if (el.classList.contains("is-decoded")) return;
@@ -332,13 +326,9 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
     el.addEventListener("focus", decode);
   };
 
-  // ⚠️ Solo aplicar efecto Matrix en dispositivos con ratón.
-  // En móvil/táctil, dejamos el texto normal legible.
   if (finePointerForMatrix.matches && !prefersReducedMotion()) {
     $$("[data-matrix]").forEach((el) => initMatrixElement(el));
   } else {
-    // En táctil: nos aseguramos de que el texto original está tal cual,
-    // y guardamos el original en dataset por si acaso.
     $$("[data-matrix]").forEach((el) => {
       if (!el.dataset.matrixOriginal) {
         el.dataset.matrixOriginal = el.textContent.trim();
@@ -953,7 +943,6 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
     const addMessage = (text, type = "bot") => {
       const msg = document.createElement("div");
       msg.className = `chat__msg chat__msg--${type}`;
-      // Sanitizamos el HTML permitido (strong, em, br)
       const allowed = text
         .replace(/<(?!\/?(strong|em|br)\b)[^>]*>/gi, '')
         .replace(/&(?!(amp|lt|gt|quot|#039);)/g, '&amp;');
@@ -1050,158 +1039,6 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
       setTimeout(openChat, 800);
     }
   }
-
-  /* =========================================================
-     12.4. TMDB — Cartelera personal de películas favoritas
-     ========================================================= */
-  // 🔑 PON AQUÍ TU API KEY DE TMDB
-  const TMDB_API_KEY = "eb84a38debac4f94c4f640978ca7a112";
-
-  const movieGrid = $("#movie-grid");
-  const movieTooltip = $("#movie-tooltip");
-  const movieTooltipTitle = movieTooltip?.querySelector(".movie-tooltip__title");
-  const movieTooltipDesc = movieTooltip?.querySelector(".movie-tooltip__desc");
-
-  const FAVORITE_MOVIES = [
-    { title: "Gladiator", year: 2000 },
-    { title: "Star Wars: Episode VI - Return of the Jedi", year: 1983 },
-    { title: "The Silence of the Lambs", year: 1991 },
-    { title: "Se7en", year: 1995 },
-    { title: "Spider-Man", year: 2002 }
-  ];
-
-  const showMovieTooltip = (movie, targetEl) => {
-    if (!movieTooltip || !movie) return;
-    movieTooltipTitle.textContent = `${movie.title} (${movie.year})`;
-    movieTooltipDesc.textContent = movie.overview || "Sin sinopsis disponible.";
-
-    const cardRect = movieGrid.getBoundingClientRect();
-    const targetRect = targetEl.getBoundingClientRect();
-    const x = targetRect.left + targetRect.width / 2 - cardRect.left;
-    const y = targetRect.top - cardRect.top;
-
-    movieTooltip.style.left = x + "px";
-    movieTooltip.style.top = (y - 10) + "px";
-    movieTooltip.style.transform = "translate(-50%, -100%)";
-    movieTooltip.classList.add("is-visible");
-    movieTooltip.setAttribute("aria-hidden", "false");
-  };
-
-  const hideMovieTooltip = () => {
-    if (!movieTooltip) return;
-    movieTooltip.classList.remove("is-visible");
-    movieTooltip.setAttribute("aria-hidden", "true");
-  };
-
-  const loadMovies = async () => {
-    if (!movieGrid) return;
-
-    if (!TMDB_API_KEY || TMDB_API_KEY === "TU_API_KEY_DE_TMDB_AQUI") {
-      console.warn("[tmdb] Falta la API key de TMDB");
-      movieGrid.innerHTML = `
-        <div class="movie" style="grid-column: 1 / -1; aspect-ratio: auto; padding: 20px; text-align: center; border-color: var(--line-soft);">
-          <div class="movie__meta" style="position: static; background: none;">
-            <strong>Añade tu API key de TMDB</strong>
-            <small>Regístrate gratis en themoviedb.org</small>
-          </div>
-        </div>
-      `;
-      return;
-    }
-
-    movieGrid.innerHTML = "";
-
-    try {
-      const promises = FAVORITE_MOVIES.map(async (fav) => {
-        let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=es-ES&query=${encodeURIComponent(fav.title)}`;
-        if (fav.year) url += `&year=${fav.year}`;
-
-        const res = await fetch(url);
-        const data = await res.json();
-        const movie = data.results?.[0] || null;
-
-        if (!movie) return null;
-
-        return {
-          title: movie.title,
-          year: movie.release_date ? movie.release_date.split("-")[0] : "—",
-          rating: movie.vote_average ? movie.vote_average.toFixed(1) : "—",
-          poster: movie.poster_path
-            ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-            : "",
-          overview: movie.overview || "Sin sinopsis disponible."
-        };
-      });
-
-      const movies = await Promise.all(promises);
-
-      movies.forEach((movie) => {
-        const div = document.createElement("div");
-        div.className = "movie";
-
-        if (!movie) {
-          div.innerHTML = `
-            <div class="movie__poster-skeleton"></div>
-            <div class="movie__meta">
-              <strong>No encontrada</strong>
-              <small>—</small>
-            </div>
-          `;
-          movieGrid.appendChild(div);
-          return;
-        }
-
-        div.innerHTML = `
-          ${movie.poster
-            ? `<img class="movie__poster" src="${escapeHTML(movie.poster)}" alt="${escapeHTML(movie.title)}" loading="lazy">`
-            : `<div class="movie__poster-skeleton"></div>`}
-          <div class="movie__meta">
-            <strong>${escapeHTML(movie.title)}</strong>
-            <small>${escapeHTML(movie.year)} · ⭐ ${escapeHTML(movie.rating)}</small>
-          </div>
-        `;
-
-        const img = div.querySelector("img.movie__poster");
-        if (img) {
-          img.onload = () => div.classList.add("is-loaded");
-          img.onerror = () => div.classList.add("is-loaded");
-        } else {
-          div.classList.add("is-loaded");
-        }
-
-        div.addEventListener("mouseenter", () => {
-          div.classList.add("is-hovering");
-          showMovieTooltip(movie, div);
-        });
-        div.addEventListener("mouseleave", () => {
-          div.classList.remove("is-hovering");
-          hideMovieTooltip();
-        });
-
-        div.addEventListener("touchstart", () => {
-          showMovieTooltip(movie, div);
-          setTimeout(hideMovieTooltip, 2500);
-        }, { passive: true });
-
-        movieGrid.appendChild(div);
-      });
-
-      console.info("[tmdb] Cartelera cargada ✅");
-
-    } catch (err) {
-      console.warn("[tmdb] Error:", err);
-      movieGrid.innerHTML = `
-        <div class="movie" style="grid-column: 1 / -1; aspect-ratio: auto; padding: 20px; text-align: center; border-color: var(--line-soft);">
-          <div class="movie__meta" style="position: static; background: none;">
-            <strong>No se pudieron cargar las películas</strong>
-            <small>Inténtalo más tarde</small>
-          </div>
-        </div>
-      `;
-    }
-  };
-
-  if (movieGrid) loadMovies();
 
   /* =========================================================
      12.5. NASA APOD
@@ -1560,12 +1397,11 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   const contactForm = document.querySelector('.contact-form');
   if (contactForm) {
     const submitBtn = contactForm.querySelector('.contact-form__submit');
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', () => {
       if (submitBtn) {
         submitBtn.disabled = true;
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = 'Enviando... <span aria-hidden="true">⏳</span>';
-        // Re-habilitar tras 5 segundos por si falla la red
         setTimeout(() => {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalText;
@@ -1575,16 +1411,13 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   }
 
   /* =========================================================
-     17. GEO-IP — Pop-up de bienvenida según la ubicación
-     API gratuita: https://ipwho.is/ (sin key, 1.000 req/día)
-     Se muestra una vez por sesión (sessionStorage).
+     17. GEO-IP — Pop-up de bienvenida
      ========================================================= */
   const GEO_SESSION_KEY = "portfolio-geo-welcomed";
-  const GEO_TIMEOUT_MS   = 5000;   // 5 s para responder
-  const GEO_DELAY_MS     = 1500;   // 1,5 s antes de mostrar el pop-up
-  const GEO_AUTOCLOSE_MS = 7000;   // 7 s visible antes de cerrarse solo
+  const GEO_TIMEOUT_MS   = 5000;
+  const GEO_DELAY_MS     = 1500;
+  const GEO_AUTOCLOSE_MS = 7000;
 
-  // Mensajes por país (código ISO de 2 letras → mensaje)
   const GEO_MESSAGES = {
     ES: (c) => ({ title: `¡Hola desde <em>${c || "España"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇪🇸" }),
     MX: (c) => ({ title: `¡Qué onda desde <em>${c || "México"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇲🇽" }),
@@ -1645,12 +1478,10 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
   };
 
   const initGeoWelcome = async () => {
-    // Solo una vez por sesión
     try {
       if (sessionStorage.getItem(GEO_SESSION_KEY)) return;
-    } catch { /* Safari privado: seguimos igual */ }
+    } catch {}
 
-    // Construir opciones del fetch con timeout si el navegador lo soporta
     const fetchOptions = {};
     if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
       fetchOptions.signal = AbortSignal.timeout(GEO_TIMEOUT_MS);
@@ -1661,15 +1492,12 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
       if (!res.ok) throw new Error("Geo API " + res.status);
       const geo = await res.json();
 
-      // Si la API devuelve success:false, abortamos
       if (geo.success === false) throw new Error("Geo API: " + (geo.message || "sin datos"));
 
-      // Marcamos la sesión como "ya saludada"
       try { sessionStorage.setItem(GEO_SESSION_KEY, "1"); } catch {}
 
       console.info("[geo] Visitante de:", geo.city, "·", geo.country || geo.country_code);
 
-      // Esperamos GEO_DELAY_MS antes de mostrar el pop-up
       setTimeout(() => {
         const card = buildGeoCard(geo);
         document.body.appendChild(card);
@@ -1690,156 +1518,315 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
     }
   };
 
-  // Lanzarlo cuando el DOM esté listo (script.js va con defer)
   initGeoWelcome();
 
+  /* =========================================================
+     18. DATOS DE JUEGOS
+     ========================================================= */
   const GAMES_DATA = {
-  fallout: {
-    title: "Fallout: New Vegas",
-    year: 2010,
-    genre: "RPG post-apocalíptico",
-    studio: "Obsidian Entertainment",
-    synopsis: "Eres un mensajero al que dan por muerto en el Mojave. Entre facciones, casinos y un yermo radioactivo, decides quién controlará Nueva Vegas. El RPG con más libertad de decisiones jamás hecho.",
-    note: "10/10",
-    why: "Ningún juego me ha dado tanta libertad para decidir quién soy y a quién traiciono."
-  },
-  doom: {
-    title: "DOOM",
-    year: 2016,
-    genre: "FPS frenético",
-    studio: "id Software",
-    synopsis: "Despiertas en una base de Marte invadida por demonios y solo tienes una misión: matarlos a todos. Sin cubrirse, sin recargar, sin piedad. El FPS más puro de la década.",
-    note: "10/10",
-    why: "La mejor jugabilidad de un shooter en años. Cada segundo es adrenalina pura."
-  },
-  skyrim: {
-    title: "The Elder Scrolls V: Skyrim",
-    year: 2011,
-    genre: "RPG de mundo abierto",
-    studio: "Bethesda",
-    synopsis: "Eres el Sangre de Dragón, el único capaz de detener el regreso de Alduin. Explora un mundo helado lleno de mitos, facciones y decisiones.",
-    note: "10/10",
-    why: "Cada partida es distinta. Es un mundo que no se acaba nunca."
-  },
-  bioshock: {
-    title: "BioShock",
-    year: 2007,
-    genre: "FPS narrativo",
-    studio: "Irrational Games",
-    synopsis: "Tras un accidente aéreo, llegas a Rapture, una ciudad submarina en ruinas. Un comentario brutal sobre el libre albedrío y la utopía fallida.",
-    note: "10/10",
-    why: "'Would you kindly' es la frase que cambió para siempre mi forma de ver los videojuegos."
-  },
-  cyberpunk: {
-    title: "Cyberpunk 2077",
-    year: 2020,
-    genre: "RPG de acción",
-    studio: "CD Projekt Red",
-    synopsis: "Eres V, un mercenario en Night City que busca la inmortalidad. Un mundo abierto futurista lleno de implantes, corporaciones y decisiones imposibles.",
-    note: "9/10",
-    why: "Night City es el personaje principal. Cada esquina cuenta una historia."
-  }
+    fallout: {
+      title: "Fallout: New Vegas",
+      year: 2010,
+      genre: "RPG post-apocalíptico",
+      studio: "Obsidian Entertainment",
+      synopsis: "Eres un mensajero al que dan por muerto en el Mojave. Entre facciones, casinos y un yermo radioactivo, decides quién controlará Nueva Vegas. El RPG con más libertad de decisiones jamás hecho.",
+      note: "10/10",
+      why: "Ningún juego me ha dado tanta libertad para decidir quién soy y a quién traiciono."
+    },
+    doom: {
+      title: "DOOM",
+      year: 2016,
+      genre: "FPS frenético",
+      studio: "id Software",
+      synopsis: "Despiertas en una base de Marte invadida por demonios y solo tienes una misión: matarlos a todos. Sin cubrirse, sin recargar, sin piedad. El FPS más puro de la década.",
+      note: "10/10",
+      why: "La mejor jugabilidad de un shooter en años. Cada segundo es adrenalina pura."
+    },
+    skyrim: {
+      title: "The Elder Scrolls V: Skyrim",
+      year: 2011,
+      genre: "RPG de mundo abierto",
+      studio: "Bethesda",
+      synopsis: "Eres el Sangre de Dragón, el único capaz de detener el regreso de Alduin. Explora un mundo helado lleno de mitos, facciones y decisiones.",
+      note: "10/10",
+      why: "Cada partida es distinta. Es un mundo que no se acaba nunca."
+    },
+    bioshock: {
+      title: "BioShock",
+      year: 2007,
+      genre: "FPS narrativo",
+      studio: "Irrational Games",
+      synopsis: "Tras un accidente aéreo, llegas a Rapture, una ciudad submarina en ruinas. Un comentario brutal sobre el libre albedrío y la utopía fallida.",
+      note: "10/10",
+      why: "'Would you kindly' es la frase que cambió para siempre mi forma de ver los videojuegos."
+    },
+    cyberpunk: {
+      title: "Cyberpunk 2077",
+      year: 2020,
+      genre: "RPG de acción",
+      studio: "CD Projekt Red",
+      synopsis: "Eres V, un mercenario en Night City que busca la inmortalidad. Un mundo abierto futurista lleno de implantes, corporaciones y decisiones imposibles.",
+      note: "9/10",
+      why: "Night City es el personaje principal. Cada esquina cuenta una historia."
+    }
+  };
 
-};
-    /* =========================================================
-     ABANICO 3D DE VIDEOJUEGOS — Interacción
+  /* =========================================================
+     19. DATOS DE PELÍCULAS
+     ========================================================= */
+  const MOVIES_DATA = {
+    gladiator: {
+      title: "Gladiator",
+      year: 2000,
+      genre: "Drama histórico",
+      studio: "Ridley Scott",
+      synopsis: "Un general romano traicionado por el emperador busca venganza en la arena del Coliseo. Un épico sobre el honor, la familia y la justicia.",
+      note: "9/10",
+      why: "La primera película que me hizo entender lo que era un relato épico de verdad."
+    },
+    "star-wars-6": {
+      title: "Star Wars: Episode VI - Return of the Jedi",
+      year: 1983,
+      genre: "Space opera",
+      studio: "Richard Marquand",
+      synopsis: "El cierre de la trilogía original. Luke se enfrenta a Vader y al Emperador mientras la Rebelión lanza su ataque final contra la Estrella de la Muerte.",
+      note: "10/10",
+      why: "El final de la trilogía que me hizo amar la ciencia ficción para siempre."
+    },
+    "silence-lambs": {
+      title: "The Silence of the Lambs",
+      year: 1991,
+      genre: "Thriller psicológico",
+      studio: "Jonathan Demme",
+      synopsis: "Una agente del FBI en formación necesita la ayuda de un asesino caníbal para atrapar a otro. Una clase magistral de tensión y personajes.",
+      note: "10/10",
+      why: "Hannibal Lecter es el mejor personaje escrito en la historia del cine de suspense."
+    },
+    se7en: {
+      title: "Se7en",
+      year: 1995,
+      genre: "Thriller criminal",
+      studio: "David Fincher",
+      synopsis: "Dos detectives siguen el rastro de un asesino que mata siguiendo los siete pecados capitales. Oscura, perturbadora y con un final inolvidable.",
+      note: "10/10",
+      why: "El final me dejó sentado en el sofá durante diez minutos sin poder moverme."
+    },
+    spiderman: {
+      title: "Spider-Man",
+      year: 2002,
+      genre: "Superhéroes",
+      studio: "Sam Raimi",
+      synopsis: "Peter Parker es mordido por una araña radioactiva y descubre que 'un gran poder conlleva una gran responsabilidad'. El clásico que definió el cine de superhéroes moderno.",
+      note: "9/10",
+      why: "La primera película que me hizo creer que los superhéroes podían ser cine de verdad."
+    }
+  };
+
+  /* =========================================================
+     20. TMDB — Carga de pósters de películas
+     ========================================================= */
+  const TMDB_API_KEY = "eb84a38debac4f94c4f640978ca7a112";
+  const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/w500";
+
+  const fetchTMDBPoster = async (title, year) => {
+    if (!TMDB_API_KEY) return null;
+    try {
+      let url = `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&language=es-ES&query=${encodeURIComponent(title)}`;
+      if (year) url += `&year=${year}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const movie = data.results?.[0];
+      return movie?.poster_path ? TMDB_IMG_BASE + movie.poster_path : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const loadAllMoviePosters = async () => {
+    const movieCards = $$('.game-card[data-type="movie"]');
+    if (movieCards.length === 0) return;
+
+    console.info("[movies] Cargando", movieCards.length, "pósters desde TMDB…");
+
+    await Promise.all(movieCards.map(async (card) => {
+      const movieKey = card.dataset.movie;
+      const data = MOVIES_DATA[movieKey];
+      if (!data) return;
+
+      const img = card.querySelector(".game-card__cover");
+      if (!img) return;
+
+      const poster = await fetchTMDBPoster(data.title, data.year);
+      if (poster) {
+        img.src = poster;
+        console.info("[movies] Póster cargado:", data.title);
+      } else {
+        console.warn("[movies] No se encontró póster para:", data.title);
+      }
+    }));
+  };
+
+  /* =========================================================
+     21. ABANICO 3D UNIFICADO — Juegos + Pelis + Hardware
      ========================================================= */
   const gamesDeck = document.querySelector(".games-deck");
-  const gameCards = $$(".game-card", gamesDeck || document);
+  const allGameCards = $$(".game-card");
   const gamesPanel = $("#games-panel");
   const gamesOverlay = $("#games-overlay");
   const gamesPanelClose = $("#games-panel-close");
 
-  // Referencias del panel
-  const gpPoster = $("#gp-poster");
-  const gpNum = $("#gp-num");
-  const gpGenre = $("#gp-genre");
-  const gpTitle = $("#gp-title");
-  const gpYear = $("#gp-year");
-  const gpStudio = $("#gp-studio");
-  const gpSynopsis = $("#gp-synopsis");
-  const gpNote = $("#gp-note");
-  const gpWhy = $("#gp-why");
+  const gpPoster    = $("#gp-poster");
+  const gpNum       = $("#gp-num");
+  const gpGenre     = $("#gp-genre");
+  const gpTitle     = $("#gp-title");
+  const gpYear      = $("#gp-year");
+  const gpStudio    = $("#gp-studio");
+  const gpSynopsis  = $("#gp-synopsis");
+  const gpNote      = $("#gp-note");
+  const gpWhy       = $("#gp-why");
 
-  if (gamesDeck && gameCards.length > 0) {
+  let currentOrder = [];
 
-    // Estado del abanico: array de keys en orden (index 0 = frente)
-    let currentOrder = gameCards.map((c) => c.dataset.game);
+  const getCardKey = (card) =>
+    card.dataset.game || card.dataset.movie || card.dataset.hardware;
 
-    // Aplica las posiciones según el orden actual
-    const applyOrder = () => {
-      currentOrder.forEach((key, pos) => {
-        const card = gameCards.find((c) => c.dataset.game === key);
-        if (card) {
-          card.setAttribute("data-pos", String(pos));
-          card.setAttribute("aria-selected", pos === 0 ? "true" : "false");
-        }
-      });
-    };
+  const getCardType = (card) => card.dataset.type || "game";
 
-    // Rota el abanico para poner la carta `key` al frente
-    const bringToFront = (key) => {
-      if (currentOrder[0] === key) return;
-      const idx = currentOrder.indexOf(key);
-      if (idx === -1) return;
-      // Mueve esa carta al inicio, manteniendo el resto en orden
-      currentOrder = [key, ...currentOrder.slice(0, idx), ...currentOrder.slice(idx + 1)];
-      applyOrder();
-    };
+  const getCardData = (card) => {
+    const type = getCardType(card);
+    const key = getCardKey(card);
+    if (type === "game") return GAMES_DATA[key];
+    if (type === "movie") return MOVIES_DATA[key];
+    if (type === "hardware") {
+      return {
+        title: "Mi PC Gaming",
+        year: 2023,
+        genre: "Hardware",
+        studio: "Montaje propio",
+        synopsis: "Torre Lian Li con refrigeración líquida, iluminación RGB personalizada y cableado gestionado a mano. Mi primer montaje desde cero.",
+        note: "10/10",
+        why: "Montarlo me enseñó más sobre hardware que cualquier libro."
+      };
+    }
+    return null;
+  };
 
-    // Abre el panel con los datos de un juego
-    const openPanel = (key) => {
-  const data = GAMES_DATA[key];
-  if (!data || !gamesPanel) return;
-
-  const card = gameCards.find((c) => c.dataset.game === key);
-  const coverImg = card?.querySelector(".game-card__cover");
-  const coverSrc = coverImg?.src || "";
-
-  if (gpPoster) {
-    gpPoster.src = coverSrc;
-    gpPoster.alt = data.title;
-  }
-  if (gpNum) gpNum.textContent = String(currentOrder.indexOf(key) + 1).padStart(2, "0");
-  if (gpGenre) gpGenre.textContent = data.genre;
-  if (gpTitle) gpTitle.textContent = data.title;
-  if (gpYear) gpYear.textContent = data.year;
-  if (gpStudio) gpStudio.textContent = data.studio;
-  if (gpSynopsis) gpSynopsis.textContent = data.synopsis;
-  if (gpNote) gpNote.textContent = data.note;
-  if (gpWhy) gpWhy.textContent = data.why;
-
-  gamesPanel.setAttribute("aria-hidden", "false");
-  // El overlay solo se muestra en móvil (en desktop no lo necesitamos porque el panel está dentro)
-  if (window.matchMedia("(max-width: 640px)").matches && gamesOverlay) {
-    gamesOverlay.classList.add("is-visible");
-    gamesOverlay.setAttribute("aria-hidden", "false");
-  }
-};
-
-    const closePanel = () => {
-      if (!gamesPanel) return;
-      gamesPanel.setAttribute("aria-hidden", "true");
-      if (gamesOverlay) {
-        gamesOverlay.classList.remove("is-visible");
-        gamesOverlay.setAttribute("aria-hidden", "true");
+  const applyOrder = () => {
+    currentOrder.forEach((key, pos) => {
+      const card = allGameCards.find((c) => getCardKey(c) === key);
+      if (card) {
+        card.setAttribute("data-pos", String(pos));
+        card.setAttribute("aria-selected", pos === 0 ? "true" : "false");
       }
-    };
+    });
+  };
 
-    // Click en una carta
-    gameCards.forEach((card) => {
+  const rebuildCurrentOrder = () => {
+    const visibleCards = allGameCards.filter((c) => !c.hasAttribute("hidden"));
+    const prevVisible = currentOrder.filter((k) =>
+      visibleCards.some((c) => getCardKey(c) === k)
+    );
+    const newKeys = visibleCards
+      .map((c) => getCardKey(c))
+      .filter((k) => !prevVisible.includes(k));
+    currentOrder = [...prevVisible, ...newKeys];
+
+    allGameCards.forEach((card) => {
+      if (card.hasAttribute("hidden")) {
+        card.removeAttribute("data-pos");
+        card.setAttribute("aria-selected", "false");
+      }
+    });
+
+    applyOrder();
+  };
+
+  const bringToFront = (key) => {
+    if (currentOrder[0] === key) return;
+    const idx = currentOrder.indexOf(key);
+    if (idx === -1) return;
+    currentOrder = [key, ...currentOrder.slice(0, idx), ...currentOrder.slice(idx + 1)];
+    applyOrder();
+  };
+
+  const openPanel = (card) => {
+    const data = getCardData(card);
+    if (!data || !gamesPanel) return;
+
+    const coverImg = card.querySelector(".game-card__cover");
+    const coverSrc = coverImg?.src || "";
+
+    if (gpPoster) { gpPoster.src = coverSrc; gpPoster.alt = data.title; }
+    if (gpNum)    gpNum.textContent = (card.querySelector(".game-card__num")?.textContent || "").trim();
+    if (gpGenre)  gpGenre.textContent = data.genre;
+    if (gpTitle)  gpTitle.textContent = data.title;
+    if (gpYear)   gpYear.textContent = data.year;
+    if (gpStudio) gpStudio.textContent = data.studio;
+    if (gpSynopsis) gpSynopsis.textContent = data.synopsis;
+    if (gpNote)   gpNote.textContent = data.note;
+    if (gpWhy)    gpWhy.textContent = data.why;
+
+    gamesPanel.setAttribute("aria-hidden", "false");
+    if (window.matchMedia("(max-width: 640px)").matches && gamesOverlay) {
+      gamesOverlay.classList.add("is-visible");
+      gamesOverlay.setAttribute("aria-hidden", "false");
+    }
+  };
+
+  const closePanel = () => {
+    if (!gamesPanel) return;
+    gamesPanel.setAttribute("aria-hidden", "true");
+    if (gamesOverlay) {
+      gamesOverlay.classList.remove("is-visible");
+      gamesOverlay.setAttribute("aria-hidden", "true");
+    }
+  };
+
+  const initGamesFilter = () => {
+    const filterBtns = $$(".games-filter__btn");
+    const allCards = $$(".game-card");
+    if (filterBtns.length === 0 || allCards.length === 0) return;
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
+
+        filterBtns.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle("is-active", active);
+          b.setAttribute("aria-selected", String(active));
+        });
+
+        allCards.forEach((card) => {
+          const type = card.dataset.type;
+          const show = filter === "all" || type === filter;
+          if (show) {
+            card.removeAttribute("hidden");
+          } else {
+            card.setAttribute("hidden", "");
+          }
+        });
+
+        rebuildCurrentOrder();
+
+        console.info("[games] Filtro aplicado:", filter);
+      });
+    });
+  };
+
+  if (gamesDeck && allGameCards.length > 0) {
+    rebuildCurrentOrder();
+
+    allGameCards.forEach((card) => {
       card.addEventListener("click", () => {
-        const key = card.dataset.game;
+        const key = getCardKey(card);
         if (currentOrder[0] === key) {
-          // Ya está al frente → abre el panel
-          openPanel(key);
+          openPanel(card);
         } else {
-          // No está al frente → la trae al frente
           bringToFront(key);
         }
       });
 
-      // Teclado: Enter / Space activan, ← → navegan
       card.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -1847,20 +1834,21 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
         } else if (e.key === "ArrowRight") {
           e.preventDefault();
           const nextKey = currentOrder[currentOrder.length - 1];
-          bringToFront(nextKey);
-          const nextCard = gameCards.find((c) => c.dataset.game === nextKey);
-          nextCard?.focus();
+          if (nextKey) {
+            bringToFront(nextKey);
+            allGameCards.find((c) => getCardKey(c) === nextKey)?.focus();
+          }
         } else if (e.key === "ArrowLeft") {
           e.preventDefault();
           const nextKey = currentOrder[1];
-          bringToFront(nextKey);
-          const nextCard = gameCards.find((c) => c.dataset.game === nextKey);
-          nextCard?.focus();
+          if (nextKey) {
+            bringToFront(nextKey);
+            allGameCards.find((c) => getCardKey(c) === nextKey)?.focus();
+          }
         }
       });
     });
 
-    // Cerrar panel
     gamesPanelClose?.addEventListener("click", closePanel);
     gamesOverlay?.addEventListener("click", closePanel);
     document.addEventListener("keydown", (e) => {
@@ -1869,10 +1857,10 @@ loadEraFonts(root.dataset.era || "neon-nocturno");
       }
     });
 
-    // Aplicar orden inicial (el primero del HTML al frente)
-    applyOrder();
+    initGamesFilter();
+    loadAllMoviePosters();
 
-    console.info("[games] Abanico 3D cargado con", gameCards.length, "cartas.");
+    console.info("[games] Abanico 3D cargado con", allGameCards.length, "cartas.");
   }
 
   console.info("[script] Todo listo.");
