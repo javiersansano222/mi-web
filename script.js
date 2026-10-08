@@ -177,7 +177,6 @@
     "ultravioleta"
   ];
 
-  // Mapa de paletas → fuentes que necesitan
   const ERA_FONTS = {
     "neon-nocturno": [],
     "matrix-verde": ["VT323", "IBM+Plex+Mono:wght@400;700"],
@@ -187,7 +186,6 @@
     "ultravioleta": ["Cinzel:wght@400;500", "Lora:ital,wght@0,400;0,500;1,400"]
   };
 
-  // Cargar la fuente de una paleta si no está ya cargada
   const loadEraFonts = (era) => {
     const fonts = ERA_FONTS[era];
     if (!fonts || fonts.length === 0) return;
@@ -204,7 +202,6 @@
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
-  // Cargar la fuente inicial (por si el usuario entra con una paleta ya guardada)
   loadEraFonts(root.dataset.era || "neon-nocturno");
 
   if (eraSelect) {
@@ -338,7 +335,7 @@
   }
 
   /* =========================================================
-     16. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
+     6. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
      ========================================================= */
   const navLinks = $$("a", mainNav || document).filter((a) => {
     const href = a.getAttribute("href") || "";
@@ -402,7 +399,7 @@
   }
 
   /* =========================================================
-     6. BARRA DE PROGRESO SCROLL
+     7. BARRA DE PROGRESO SCROLL
      ========================================================= */
   const progress = $("#scroll-progress");
   let scrollQueued = false;
@@ -424,7 +421,7 @@
   updateProgress();
 
   /* =========================================================
-     7. REVEAL
+     8. REVEAL
      ========================================================= */
   const revealItems = $$(".reveal");
   if ("IntersectionObserver" in window) {
@@ -442,7 +439,7 @@
   }
 
   /* =========================================================
-     8. TYPEWRITER
+     9. TYPEWRITER
      ========================================================= */
   const typewriter = $("#typewriter");
   const phrases = ["ser programador", "crear proyectos diferentes", "no rendirme ante un reto"];
@@ -468,7 +465,7 @@
   }
 
   /* =========================================================
-     9. TILT
+     10. TILT
      ========================================================= */
   const cards = $$("[data-tilt]");
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -486,7 +483,7 @@
   }
 
   /* =========================================================
-     10. PARTÍCULAS FONDO
+     11. PARTÍCULAS FONDO
      ========================================================= */
   const canvas = $("#particles");
   const ctx = canvas?.getContext("2d", { alpha: true });
@@ -544,7 +541,7 @@
   }
 
   /* =========================================================
-     11. CONTADORES COLAPSABLES
+     12. CONTADORES COLAPSABLES
      ========================================================= */
   const counter = $("#counter");
   const counterHead = counter ? $(".counter__head", counter) : null;
@@ -571,7 +568,7 @@
   });
 
   /* =========================================================
-     12. CHATBOT MULTILINGÜE (ES · VA · EN · FR)
+     13. CHATBOT MULTILINGÜE
      ========================================================= */
   const chat = $("#chat");
   const chatToggle = $("#chat-toggle");
@@ -1041,7 +1038,7 @@
   }
 
   /* =========================================================
-     12.5. NASA APOD
+     14. NASA APOD
      ========================================================= */
   const NASA_API_KEY = "STsrnenqw6mMNKQdq19HYWDUdkDKVD7QqNl11Wp3";
 
@@ -1190,7 +1187,7 @@
   }
 
   /* =========================================================
-     13. REPOS DE GITHUB
+     15. REPOS DE GITHUB
      ========================================================= */
   const reposList = $("#repos-list");
   const reposCount = $("#repos-count");
@@ -1301,7 +1298,7 @@
   loadRepos();
 
   /* =========================================================
-     14. SCENE READY
+     16. SCENE READY
      ========================================================= */
   document.addEventListener("scene:ready", () => {
     document.body.classList.add("scene-ready");
@@ -1309,7 +1306,7 @@
   });
 
   /* =========================================================
-     15. DIAGRAMA INTERACTIVO DEL PC
+     17. DIAGRAMA INTERACTIVO DEL PC
      ========================================================= */
   const pcDiagram = document.querySelector(".pc-diagram");
   if (pcDiagram) {
@@ -1392,7 +1389,7 @@
   }
 
   /* =========================================================
-     16. FORMULARIO DE CONTACTO
+     18. FORMULARIO DE CONTACTO
      ========================================================= */
   const contactForm = document.querySelector('.contact-form');
   if (contactForm) {
@@ -1411,7 +1408,7 @@
   }
 
   /* =========================================================
-     17. GEO-IP — Pop-up de bienvenida
+     19. GEO-IP — Pop-up de bienvenida
      ========================================================= */
   const GEO_SESSION_KEY = "portfolio-geo-welcomed";
   const GEO_TIMEOUT_MS   = 5000;
@@ -1521,7 +1518,7 @@
   initGeoWelcome();
 
   /* =========================================================
-     18. DATOS DE JUEGOS
+     20. DATOS DE JUEGOS
      ========================================================= */
   const GAMES_DATA = {
     fallout: {
@@ -1572,7 +1569,7 @@
   };
 
   /* =========================================================
-     19. DATOS DE PELÍCULAS
+     21. DATOS DE PELÍCULAS
      ========================================================= */
   const MOVIES_DATA = {
     gladiator: {
@@ -1623,7 +1620,7 @@
   };
 
   /* =========================================================
-     20. TMDB — Carga de pósters de películas
+     22. TMDB — Carga de pósters de películas
      ========================================================= */
   const TMDB_API_KEY = "eb84a38debac4f94c4f640978ca7a112";
   const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/w500";
@@ -1667,7 +1664,7 @@
   };
 
   /* =========================================================
-     21. ABANICO 3D UNIFICADO — Juegos + Pelis + Hardware
+     23. ABANICO 3D UNIFICADO — Juegos + Pelis + Hardware
      ========================================================= */
   const gamesDeck = document.querySelector(".games-deck");
   const allGameCards = $$(".game-card");
@@ -1815,6 +1812,15 @@
   };
 
   if (gamesDeck && allGameCards.length > 0) {
+    // Asegurar que el panel arranca cerrado
+    if (gamesPanel) {
+      gamesPanel.setAttribute("aria-hidden", "true");
+    }
+    if (gamesOverlay) {
+      gamesOverlay.classList.remove("is-visible");
+      gamesOverlay.setAttribute("aria-hidden", "true");
+    }
+
     rebuildCurrentOrder();
 
     allGameCards.forEach((card) => {
@@ -1862,9 +1868,9 @@
 
     console.info("[games] Abanico 3D cargado con", allGameCards.length, "cartas.");
   }
-    /* =========================================================
-     22. LLUVIA DE CÓDIGO MATRIX (canvas)
-     Solo se ejecuta cuando la paleta activa es "matrix-verde"
+
+  /* =========================================================
+     24. LLUVIA DE CÓDIGO MATRIX (canvas)
      ========================================================= */
   const matrixCanvas = $("#matrix-canvas");
   const matrixCtx = matrixCanvas?.getContext("2d");
@@ -1876,7 +1882,7 @@
     let matrixDrops = [];
     let matrixFontSize = 16;
     let matrixLastTime = 0;
-    const MATRIX_FPS = 20; // fps del efecto (20 es suficiente y ahorra CPU)
+    const MATRIX_FPS = 20;
     const MATRIX_INTERVAL = 1000 / MATRIX_FPS;
 
     const MATRIX_CHARS =
@@ -1909,18 +1915,15 @@
       if (!matrixActive) return;
       matrixFrame = requestAnimationFrame(matrixStep);
 
-      // Limitar a MATRIX_FPS para no consumir CPU innecesariamente
       if (timestamp - matrixLastTime < MATRIX_INTERVAL) return;
       matrixLastTime = timestamp;
 
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      // Estela: cada frame pintamos un velo negro semitransparente
       matrixCtx.fillStyle = "rgba(0, 0, 0, 0.08)";
       matrixCtx.fillRect(0, 0, w, h);
 
-      // Color de los caracteres (verde Matrix)
       const green = "#00ff41";
 
       matrixCtx.font = `${matrixFontSize}px "JetBrains Mono", "Courier New", monospace`;
@@ -1929,19 +1932,16 @@
         const x = i * matrixFontSize;
         const y = matrixDrops[i] * matrixFontSize;
 
-        // Carácter cabeza (más brillante)
         matrixCtx.fillStyle = "#b8ffbe";
         matrixCtx.shadowColor = green;
         matrixCtx.shadowBlur = 8;
         matrixCtx.fillText(matrixRandomChar(), x, y);
 
-        // Caracteres estela (verde normal)
         matrixCtx.shadowBlur = 0;
         matrixCtx.fillStyle = green;
         matrixCtx.fillText(matrixRandomChar(), x, y - matrixFontSize);
         matrixCtx.fillText(matrixRandomChar(), x, y - matrixFontSize * 2);
 
-        // Reset al fondo cuando llega abajo
         if (y > h && Math.random() > 0.975) {
           matrixDrops[i] = 0;
         } else {
@@ -1967,7 +1967,6 @@
       console.info("[matrix] Lluvia de código detenida.");
     };
 
-    // Activar/desactivar según la paleta activa
     const matrixCheckEra = () => {
       const era = root.dataset.era || "neon-nocturno";
       if (era === "matrix-verde") {
@@ -1977,24 +1976,19 @@
       }
     };
 
-    // Comprobar al arrancar
     matrixCheckEra();
 
-    // Comprobar cuando cambia la paleta
     if (eraSelect) {
       eraSelect.addEventListener("change", matrixCheckEra);
     }
 
-    // También si la paleta se aplica por código desde otro sitio
     const eraObserver = new MutationObserver(matrixCheckEra);
     eraObserver.observe(root, { attributes: true, attributeFilter: ["data-era"] });
 
-    // Resize
     window.addEventListener("resize", () => {
       if (matrixActive) matrixResize();
     }, { passive: true });
 
-    // Pausa cuando la pestaña no se ve
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         if (matrixFrame) cancelAnimationFrame(matrixFrame);
