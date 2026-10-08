@@ -231,85 +231,86 @@
   });
 
   /* =========================================================
-   5.5. EFECTO MATRIX (codificado → descodificar al hover)
-   Solo se activa en dispositivos con ratón (hover: hover) y
-   puntero fino. En móvil/táctil se deja el texto tal cual.
-   ========================================================= */
-const matrixChars = "#@$%!*&?¿¡+=";
-const finePointerForMatrix = window.matchMedia("(hover: hover) and (pointer: fine)");
+     5.5. EFECTO MATRIX (codificado → descodificar al hover)
+     Solo se activa en dispositivos con ratón (hover: hover) y
+     puntero fino. En móvil/táctil se deja el texto tal cual.
+     ========================================================= */
+  const matrixChars = "#@$%!*&?¿¡+=";
+  const finePointerForMatrix = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-const generateRandomCode = (length) => {
-  let out = "";
-  for (let i = 0; i < length; i++) {
-    out += matrixChars[Math.floor(Math.random() * matrixChars.length)];
-  }
-  return out;
-};
-
-const initMatrixElement = (el) => {
-  // Guardamos el texto original
-  if (!el.dataset.matrixOriginal) {
-    el.dataset.matrixOriginal = el.textContent.trim();
-  }
-  const original = el.dataset.matrixOriginal;
-  const len = original.length;
-
-  // Estado inicial: codificado, QUIETO (no cambia solo)
-  el.textContent = generateRandomCode(len);
-  el.classList.add("is-coded");
-
-  // Función para descodificar letra a letra
-  const decode = () => {
-    if (el.dataset.matrixRunning === "true") return;
-    if (el.classList.contains("is-decoded")) return;
-
-    el.dataset.matrixRunning = "true";
-    el.classList.remove("is-coded");
-    el.classList.add("is-decoding");
-
-    const chars = original.split("");
-    const totalSteps = 12;
-    let step = 0;
-
-    const interval = setInterval(() => {
-      el.textContent = chars.map((ch, i) => {
-        if (ch === " ") return " ";
-        const threshold = (i / chars.length) * totalSteps;
-        if (step >= totalSteps - threshold) return ch;
-        return matrixChars[Math.floor(Math.random() * matrixChars.length)];
-      }).join("");
-
-      step++;
-
-      if (step > totalSteps) {
-        clearInterval(interval);
-        el.textContent = original;
-        el.classList.remove("is-decoding");
-        el.classList.add("is-decoded");
-        el.dataset.matrixRunning = "false";
-      }
-    }, 50);
+  const generateRandomCode = (length) => {
+    let out = "";
+    for (let i = 0; i < length; i++) {
+      out += matrixChars[Math.floor(Math.random() * matrixChars.length)];
+    }
+    return out;
   };
 
-  el.addEventListener("mouseenter", decode);
-  el.addEventListener("touchstart", decode, { passive: true });
-  el.addEventListener("focus", decode);
-};
-
-// ⚠️ Solo aplicar efecto Matrix en dispositivos con ratón.
-// En móvil/táctil, dejamos el texto normal legible.
-if (finePointerForMatrix.matches && !prefersReducedMotion()) {
-  $$("[data-matrix]").forEach((el) => initMatrixElement(el));
-} else {
-  // En táctil: nos aseguramos de que el texto original está tal cual,
-  // y guardamos el original en dataset por si acaso.
-  $$("[data-matrix]").forEach((el) => {
+  const initMatrixElement = (el) => {
+    // Guardamos el texto original
     if (!el.dataset.matrixOriginal) {
       el.dataset.matrixOriginal = el.textContent.trim();
     }
-    el.textContent = el.dataset.matrixOriginal;
-  });
-}
+    const original = el.dataset.matrixOriginal;
+    const len = original.length;
+
+    // Estado inicial: codificado, QUIETO (no cambia solo)
+    el.textContent = generateRandomCode(len);
+    el.classList.add("is-coded");
+
+    // Función para descodificar letra a letra
+    const decode = () => {
+      if (el.dataset.matrixRunning === "true") return;
+      if (el.classList.contains("is-decoded")) return;
+
+      el.dataset.matrixRunning = "true";
+      el.classList.remove("is-coded");
+      el.classList.add("is-decoding");
+
+      const chars = original.split("");
+      const totalSteps = 12;
+      let step = 0;
+
+      const interval = setInterval(() => {
+        el.textContent = chars.map((ch, i) => {
+          if (ch === " ") return " ";
+          const threshold = (i / chars.length) * totalSteps;
+          if (step >= totalSteps - threshold) return ch;
+          return matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        }).join("");
+
+        step++;
+
+        if (step > totalSteps) {
+          clearInterval(interval);
+          el.textContent = original;
+          el.classList.remove("is-decoding");
+          el.classList.add("is-decoded");
+          el.dataset.matrixRunning = "false";
+        }
+      }, 50);
+    };
+
+    el.addEventListener("mouseenter", decode);
+    el.addEventListener("touchstart", decode, { passive: true });
+    el.addEventListener("focus", decode);
+  };
+
+  // ⚠️ Solo aplicar efecto Matrix en dispositivos con ratón.
+  // En móvil/táctil, dejamos el texto normal legible.
+  if (finePointerForMatrix.matches && !prefersReducedMotion()) {
+    $$("[data-matrix]").forEach((el) => initMatrixElement(el));
+  } else {
+    // En táctil: nos aseguramos de que el texto original está tal cual,
+    // y guardamos el original en dataset por si acaso.
+    $$("[data-matrix]").forEach((el) => {
+      if (!el.dataset.matrixOriginal) {
+        el.dataset.matrixOriginal = el.textContent.trim();
+      }
+      el.textContent = el.dataset.matrixOriginal;
+    });
+  }
+
   /* =========================================================
      16. INDICADOR DE SECCIÓN ACTIVA EN EL MENÚ
      ========================================================= */
@@ -1538,193 +1539,123 @@ if (finePointerForMatrix.matches && !prefersReducedMotion()) {
   }
 
   /* =========================================================
-   GEO-IP — Mensaje de bienvenida según la ubicación del visitante
-   API gratuita: https://geo.kamero.ai/api/geo (sin key, sin límites)
-   ========================================================= */
-const initGeoWelcome = async () => {
-  const welcomeText = document.querySelector(".welcome-bar__text");
-  if (!welcomeText) return;
+     17. GEO-IP — Pop-up de bienvenida según la ubicación
+     API gratuita: https://ipwho.is/ (sin key, 1.000 req/día)
+     Se muestra una vez por sesión (sessionStorage).
+     ========================================================= */
+  const GEO_SESSION_KEY = "portfolio-geo-welcomed";
+  const GEO_TIMEOUT_MS   = 5000;   // 5 s para responder
+  const GEO_DELAY_MS     = 1500;   // 1,5 s antes de mostrar el pop-up
+  const GEO_AUTOCLOSE_MS = 7000;   // 7 s visible antes de cerrarse solo
 
-  // Mensaje original por si algo falla
-  const mensajeOriginal = welcomeText.innerHTML;
+  // Mensajes por país (código ISO de 2 letras → mensaje)
+  const GEO_MESSAGES = {
+    ES: (c) => ({ title: `¡Hola desde <em>${c || "España"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇪🇸" }),
+    MX: (c) => ({ title: `¡Qué onda desde <em>${c || "México"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇲🇽" }),
+    AR: (c) => ({ title: `¡Che, saludos desde <em>${c || "Argentina"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇦🇷" }),
+    CO: (c) => ({ title: `¡Hola desde <em>${c || "Colombia"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇴" }),
+    CL: (c) => ({ title: `¡Hola desde <em>${c || "Chile"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇱" }),
+    PE: (c) => ({ title: `¡Hola desde <em>${c || "Perú"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇵🇪" }),
+    VE: (c) => ({ title: `¡Hola desde <em>${c || "Venezuela"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇻🇪" }),
+    UY: (c) => ({ title: `¡Hola desde <em>${c || "Uruguay"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇺🇾" }),
+    EC: (c) => ({ title: `¡Hola desde <em>${c || "Ecuador"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇪🇨" }),
+    BO: (c) => ({ title: `¡Hola desde <em>${c || "Bolivia"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇧🇴" }),
+    PY: (c) => ({ title: `¡Hola desde <em>${c || "Paraguay"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇵🇾" }),
+    CR: (c) => ({ title: `¡Hola desde <em>${c || "Costa Rica"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇷" }),
+    CU: (c) => ({ title: `¡Hola desde <em>${c || "Cuba"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇺" }),
+    DO: (c) => ({ title: `¡Hola desde <em>${c || "Rep. Dominicana"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇩🇴" }),
+    GT: (c) => ({ title: `¡Hola desde <em>${c || "Guatemala"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇬🇹" }),
+    US: (c) => ({ title: `Hello from <em>${c || "the US"}</em>!`, sub: "Welcome to my portfolio.", flag: "🇺🇸" }),
+    GB: (c) => ({ title: `Hello from <em>${c || "the UK"}</em>!`, sub: "Welcome to my portfolio.", flag: "🇬🇧" }),
+    FR: (c) => ({ title: `Salut depuis <em>${c || "la France"}</em> !`, sub: "Bienvenue sur mon portfolio.", flag: "🇫🇷" }),
+    DE: (c) => ({ title: `Hallo aus <em>${c || "Deutschland"}</em>!`, sub: "Willkommen in meinem Portfolio.", flag: "🇩🇪" }),
+    IT: (c) => ({ title: `Ciao da <em>${c || "Italia"}</em>!`, sub: "Benvenuto nel mio portfolio.", flag: "🇮🇹" }),
+    PT: (c) => ({ title: `Olá de <em>${c || "Portugal"}</em>!`, sub: "Bem-vindo ao meu portfólio.", flag: "🇵🇹" }),
+    BR: (c) => ({ title: `Olá do <em>${c || "Brasil"}</em>!`, sub: "Bem-vindo ao meu portfólio.", flag: "🇧🇷" }),
+    JP: (c) => ({ title: `こんにちは <em>${c || "Japan"}</em> より`, sub: "私のポートフォリオへようこそ。", flag: "🇯🇵" }),
+    CN: (c) => ({ title: `你好来自 <em>${c || "中国"}</em>`, sub: "欢迎来到我的作品集。", flag: "🇨🇳" }),
+    MA: (c) => ({ title: `Salam alekoum depuis <em>${c || "le Maroc"}</em>`, sub: "Bienvenue dans mon portfolio.", flag: "🇲🇦" }),
+    DZ: (c) => ({ title: `Salam alekoum depuis <em>${c || "l'Algérie"}</em>`, sub: "Bienvenue dans mon portfolio.", flag: "🇩🇿" })
+  };
 
-  try {
-    const res = await fetch("https://geo.kamero.ai/api/geo", {
-      signal: AbortSignal.timeout(5000)
-    });
-    if (!res.ok) throw new Error("Geo API " + res.status);
-    const geo = await res.json();
+  const escapeGeoText = (str) =>
+    (str == null ? "" : String(str)).replace(/[&<>"']/g, (ch) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    }[ch]));
 
-    // Diccionario de países → mensaje personalizado
-    // Añade los que quieras siguiendo el mismo patrón
-    const mensajes = {
-      ES: (ciudad) => `SALUDOS DESDE ${(ciudad || "ESPAÑA").toUpperCase()} 🇪🇸`,
-      MX: (ciudad) => `QUÉ ONDA DESDE ${(ciudad || "MÉXICO").toUpperCase()} 🇲🇽`,
-      AR: (ciudad) => `CHE, SALUDOS DESDE ${(ciudad || "ARGENTINA").toUpperCase()} 🇦🇷`,
-      CO: (ciudad) => `SALUDOS DESDE ${(ciudad || "COLOMBIA").toUpperCase()} 🇨🇴`,
-      CL: (ciudad) => `SALUDOS DESDE ${(ciudad || "CHILE").toUpperCase()} 🇨🇱`,
-      PE: (ciudad) => `SALUDOS DESDE ${(ciudad || "PERÚ").toUpperCase()} 🇵🇪`,
-      VE: (ciudad) => `SALUDOS DESDE ${(ciudad || "VENEZUELA").toUpperCase()} 🇻🇪`,
-      UY: (ciudad) => `SALUDOS DESDE ${(ciudad || "URUGUAY").toUpperCase()} 🇺🇾`,
-      EC: (ciudad) => `SALUDOS DESDE ${(ciudad || "ECUADOR").toUpperCase()} 🇪🇨`,
-      BO: (ciudad) => `SALUDOS DESDE ${(ciudad || "BOLIVIA").toUpperCase()} 🇧🇴`,
-      PY: (ciudad) => `SALUDOS DESDE ${(ciudad || "PARAGUAY").toUpperCase()} 🇵🇾`,
-      CR: (ciudad) => `SALUDOS DESDE ${(ciudad || "COSTA RICA").toUpperCase()} 🇨🇷`,
-      CU: (ciudad) => `SALUDOS DESDE ${(ciudad || "CUBA").toUpperCase()} 🇨🇺`,
-      DO: (ciudad) => `SALUDOS DESDE ${(ciudad || "REP. DOMINICANA").toUpperCase()} 🇩🇴`,
-      GT: (ciudad) => `SALUDOS DESDE ${(ciudad || "GUATEMALA").toUpperCase()} 🇬🇹`,
-      US: (ciudad) => `HELLO FROM ${(ciudad || "THE US").toUpperCase()} 🇺🇸`,
-      GB: (ciudad) => `HELLO FROM ${(ciudad || "THE UK").toUpperCase()} 🇬🇧`,
-      FR: (ciudad) => `SALUT DEPUIS ${(ciudad || "FRANCE").toUpperCase()} 🇫🇷`,
-      DE: (ciudad) => `HALLO AUS ${(ciudad || "DEUTSCHLAND").toUpperCase()} 🇩🇪`,
-      IT: (ciudad) => `CIAO DA ${(ciudad || "ITALIA").toUpperCase()} 🇮🇹`,
-      PT: (ciudad) => `OLÁ DE ${(ciudad || "PORTUGAL").toUpperCase()} 🇵🇹`,
-      BR: (ciudad) => `OLÁ DO ${(ciudad || "BRASIL").toUpperCase()} 🇧🇷`,
-      JP: (ciudad) => `こんにちは ${(ciudad || "JAPAN").toUpperCase()} より 🇯🇵`,
-      CN: (ciudad) => `你好来自 ${(ciudad || "中国").toUpperCase()} 🇨🇳`,
-      MA: (ciudad) => `SALAM ALEKOUM DEPUIS ${(ciudad || "MAROC").toUpperCase()} 🇲🇦`,
-      DZ: (ciudad) => `SALAM ALEKOUM DEPUIS ${(ciudad || "ALGÉRIE").toUpperCase()} 🇩🇿`
-    };
-
-    // Buscar mensaje por país; si no existe, uno genérico
-    const generador = mensajes[geo.country];
+  const buildGeoCard = (geo) => {
+    const code = geo.country_code || geo.country;
+    const generador = GEO_MESSAGES[code];
     const mensaje = generador
-      ? generador(geo.city)
-      : `SALUDOS DESDE ${(geo.city || geo.country || "EL MUNDO").toUpperCase()} 🌍`;
+      ? generador(escapeGeoText(geo.city))
+      : {
+          title: `¡Hola desde <em>${escapeGeoText(geo.city || geo.country || "el mundo")}</em>!`,
+          sub: "Bienvenido a mi portafolio.",
+          flag: "🌍"
+        };
 
-    // Reemplazar el contenido de la barra de bienvenida
-    welcomeText.innerHTML = `
-      <span class="welcome-bar__star" aria-hidden="true">✦</span>
-      ${mensaje}
-      <span class="welcome-bar__star" aria-hidden="true">✦</span>
+    const card = document.createElement("div");
+    card.className = "geo-welcome";
+    card.setAttribute("role", "status");
+    card.setAttribute("aria-live", "polite");
+    card.innerHTML = `
+      <button class="geo-welcome__close" type="button" aria-label="Cerrar mensaje">✕</button>
+      <span class="geo-welcome__eyebrow">BIENVENIDO ${mensaje.flag}</span>
+      <span class="geo-welcome__title">${mensaje.title}</span>
+      <span class="geo-welcome__sub">${mensaje.sub}</span>
+      <span class="geo-welcome__bar" aria-hidden="true"><i></i></span>
     `;
+    return card;
+  };
 
-    console.info("[geo] Visitante de:", geo.city, "·", geo.country);
+  const initGeoWelcome = async () => {
+    // Solo una vez por sesión
+    try {
+      if (sessionStorage.getItem(GEO_SESSION_KEY)) return;
+    } catch { /* Safari privado: seguimos igual */ }
 
-  } catch (err) {
-    // Si falla (sin internet, API caída, timeout), dejamos el original
-    console.warn("[geo] No se pudo detectar la ubicación:", err);
-    welcomeText.innerHTML = mensajeOriginal;
-  }
-};
+    // Construir opciones del fetch con timeout si el navegador lo soporta
+    const fetchOptions = {};
+    if (typeof AbortSignal !== "undefined" && typeof AbortSignal.timeout === "function") {
+      fetchOptions.signal = AbortSignal.timeout(GEO_TIMEOUT_MS);
+    }
 
-// Lanzarlo cuando el DOM esté listo (ya lo está porque script.js va con defer)
-initGeoWelcome();
+    try {
+      const res = await fetch("https://ipwho.is/", fetchOptions);
+      if (!res.ok) throw new Error("Geo API " + res.status);
+      const geo = await res.json();
+
+      // Si la API devuelve success:false, abortamos
+      if (geo.success === false) throw new Error("Geo API: " + (geo.message || "sin datos"));
+
+      // Marcamos la sesión como "ya saludada"
+      try { sessionStorage.setItem(GEO_SESSION_KEY, "1"); } catch {}
+
+      console.info("[geo] Visitante de:", geo.city, "·", geo.country || geo.country_code);
+
+      // Esperamos GEO_DELAY_MS antes de mostrar el pop-up
+      setTimeout(() => {
+        const card = buildGeoCard(geo);
+        document.body.appendChild(card);
+
+        requestAnimationFrame(() => card.classList.add("is-visible"));
+
+        const closeBtn = card.querySelector(".geo-welcome__close");
+        const cerrar = () => {
+          card.classList.remove("is-visible");
+          setTimeout(() => card.remove(), 500);
+        };
+        closeBtn.addEventListener("click", cerrar);
+        setTimeout(cerrar, GEO_AUTOCLOSE_MS);
+      }, GEO_DELAY_MS);
+
+    } catch (err) {
+      console.warn("[geo] No se pudo detectar la ubicación:", err);
+    }
+  };
+
+  // Lanzarlo cuando el DOM esté listo (script.js va con defer)
+  initGeoWelcome();
 
   console.info("[script] Todo listo.");
 })();
-
-/* =========================================================
-   GEO-IP — Pop-up de bienvenida según la ubicación del visitante
-   API gratuita: https://geo.kamero.ai/api/geo (sin key, sin límites)
-   Se muestra una vez por sesión (sessionStorage).
-   ========================================================= */
-const GEO_SESSION_KEY = "portfolio-geo-welcomed";
-const GEO_TIMEOUT_MS = 5000;      // 5 s para responder
-const GEO_DELAY_MS = 1500;        // 1,5 s tras cargar para que no ataque nada más entrar
-const GEO_AUTOCLOSE_MS = 7000;    // 7 s visible antes de cerrarse solo
-
-// Mensajes por país (edita/añade los que quieras)
-const GEO_MESSAGES = {
-  ES: (c) => ({ title: `¡Hola desde <em>${c || "España"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇪🇸" }),
-  MX: (c) => ({ title: `¡Qué onda desde <em>${c || "México"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇲🇽" }),
-  AR: (c) => ({ title: `¡Che, saludos desde <em>${c || "Argentina"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇦🇷" }),
-  CO: (c) => ({ title: `¡Hola desde <em>${c || "Colombia"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇴" }),
-  CL: (c) => ({ title: `¡Hola desde <em>${c || "Chile"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇱" }),
-  PE: (c) => ({ title: `¡Hola desde <em>${c || "Perú"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇵🇪" }),
-  VE: (c) => ({ title: `¡Hola desde <em>${c || "Venezuela"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇻🇪" }),
-  UY: (c) => ({ title: `¡Hola desde <em>${c || "Uruguay"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇺🇾" }),
-  EC: (c) => ({ title: `¡Hola desde <em>${c || "Ecuador"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇪🇨" }),
-  BO: (c) => ({ title: `¡Hola desde <em>${c || "Bolivia"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇧🇴" }),
-  PY: (c) => ({ title: `¡Hola desde <em>${c || "Paraguay"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇵🇾" }),
-  CR: (c) => ({ title: `¡Hola desde <em>${c || "Costa Rica"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇷" }),
-  CU: (c) => ({ title: `¡Hola desde <em>${c || "Cuba"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇨🇺" }),
-  DO: (c) => ({ title: `¡Hola desde <em>${c || "Rep. Dominicana"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇩🇴" }),
-  GT: (c) => ({ title: `¡Hola desde <em>${c || "Guatemala"}</em>!`, sub: "Bienvenido a mi portafolio.", flag: "🇬🇹" }),
-  US: (c) => ({ title: `Hello from <em>${c || "the US"}</em>!`, sub: "Welcome to my portfolio.", flag: "🇺🇸" }),
-  GB: (c) => ({ title: `Hello from <em>${c || "the UK"}</em>!`, sub: "Welcome to my portfolio.", flag: "🇬🇧" }),
-  FR: (c) => ({ title: `Salut depuis <em>${c || "la France"}</em> !`, sub: "Bienvenue sur mon portfolio.", flag: "🇫🇷" }),
-  DE: (c) => ({ title: `Hallo aus <em>${c || "Deutschland"}</em>!`, sub: "Willkommen in meinem Portfolio.", flag: "🇩🇪" }),
-  IT: (c) => ({ title: `Ciao da <em>${c || "Italia"}</em>!`, sub: "Benvenuto nel mio portfolio.", flag: "🇮🇹" }),
-  PT: (c) => ({ title: `Olá de <em>${c || "Portugal"}</em>!`, sub: "Bem-vindo ao meu portfólio.", flag: "🇵🇹" }),
-  BR: (c) => ({ title: `Olá do <em>${c || "Brasil"}</em>!`, sub: "Bem-vindo ao meu portfólio.", flag: "🇧🇷" }),
-  JP: (c) => ({ title: `こんにちは <em>${c || "Japan"}</em> より`, sub: "私のポートフォリオへようこそ。", flag: "🇯🇵" }),
-  CN: (c) => ({ title: `你好来自 <em>${c || "中国"}</em>`, sub: "欢迎来到我的作品集。", flag: "🇨🇳" }),
-  MA: (c) => ({ title: `Salam alekoum depuis <em>${c || "le Maroc"}</em>`, sub: "Bienvenue dans mon portfolio.", flag: "🇲🇦" }),
-  DZ: (c) => ({ title: `Salam alekoum depuis <em>${c || "l'Algérie"}</em>`, sub: "Bienvenue dans mon portfolio.", flag: "🇩🇿" })
-};
-
-const escapeGeoText = (str) =>
-  String(str || "").replace(/[&<>"']/g, (ch) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
-  }[ch]));
-
-const buildGeoCard = (geo) => {
-  const generador = GEO_MESSAGES[geo.country];
-  const mensaje = generador
-    ? generador(escapeGeoText(geo.city))
-    : {
-        title: `¡Hola desde <em>${escapeGeoText(geo.city || geo.country || "el mundo")}</em>!`,
-        sub: "Bienvenido a mi portafolio.",
-        flag: "🌍"
-      };
-
-  const card = document.createElement("div");
-  card.className = "geo-welcome";
-  card.setAttribute("role", "status");
-  card.setAttribute("aria-live", "polite");
-  card.innerHTML = `
-    <button class="geo-welcome__close" type="button" aria-label="Cerrar mensaje">✕</button>
-    <span class="geo-welcome__eyebrow">BIENVENIDO ${mensaje.flag}</span>
-    <span class="geo-welcome__title">${mensaje.title}</span>
-    <span class="geo-welcome__sub">${mensaje.sub}</span>
-    <span class="geo-welcome__bar" aria-hidden="true"><i></i></span>
-  `;
-  return card;
-};
-
-const initGeoWelcome = async () => {
-  // Solo una vez por sesión
-  if (sessionStorage.getItem(GEO_SESSION_KEY)) return;
-
-  // Si el navegador es muy antiguo y no soporta AbortSignal.timeout, no lo usamos
-  const supportsTimeout = typeof AbortSignal !== "undefined" && "timeout" in AbortSignal;
-
-  try {
-    const fetchOptions = supportsTimeout ? { signal: AbortSignal.timeout(GEO_TIMEOUT_MS) } : {};
-    const res = await fetch("https://geo.kamero.ai/api/geo", fetchOptions);
-    if (!res.ok) throw new Error("Geo API " + res.status);
-    const geo = await res.json();
-
-    // Marcamos la sesión como "ya saludada" incluso si el usuario cierra el pop-up
-    sessionStorage.setItem(GEO_SESSION_KEY, "1");
-
-    console.info("[geo] Visitante de:", geo.city, "·", geo.country);
-
-    // Esperamos GEO_DELAY_MS antes de mostrar el pop-up
-    setTimeout(() => {
-      const card = buildGeoCard(geo);
-      document.body.appendChild(card);
-
-      // Forzamos un frame para que la transición se dispare
-      requestAnimationFrame(() => card.classList.add("is-visible"));
-
-      // Cierre por botón ✕
-      const closeBtn = card.querySelector(".geo-welcome__close");
-      const cerrar = () => {
-        card.classList.remove("is-visible");
-        setTimeout(() => card.remove(), 500);
-      };
-      closeBtn.addEventListener("click", cerrar);
-
-      // Cierre automático
-      setTimeout(cerrar, GEO_AUTOCLOSE_MS);
-    }, GEO_DELAY_MS);
-
-  } catch (err) {
-    console.warn("[geo] No se pudo detectar la ubicación:", err);
-  }
-};
-
-// Lanzarlo cuando el DOM esté listo (script.js va con defer)
-initGeoWelcome();
