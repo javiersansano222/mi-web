@@ -350,32 +350,97 @@
             <span class="project-number">01</span>
           </div>
 
-          <div class="game-grid" aria-label="Algunos de mis videojuegos favoritos">
-            <article class="game" data-game="fallout">
-              <img class="game__cover" src="img/fallout new vegas.jpg" alt="Carátula de Fallout" loading="lazy">
-              <span class="game__num">01</span>
-              <div class="game__meta"><strong>Fallout</strong><small>1997 — Post-apocalipsis</small></div>
-            </article>
-            <article class="game" data-game="doom">
-              <img class="game__cover" src="img/doom.webp" alt="Carátula de Doom" loading="lazy">
-              <span class="game__num">02</span>
-              <div class="game__meta"><strong>Doom</strong><small>1993 — Acción</small></div>
-            </article>
-            <article class="game" data-game="skyrim">
-              <img class="game__cover" src="img/skyrim-tag-page-cover-art.avif" alt="Carátula de Skyrim" loading="lazy">
-              <span class="game__num">03</span>
-              <div class="game__meta"><strong>Skyrim</strong><small>2011 — Fantasía</small></div>
-            </article>
-            <article class="game" data-game="bioshock">
-              <img class="game__cover" src="img/bioshock.png" alt="Carátula de Bioshock" loading="lazy">
-              <span class="game__num">04</span>
-              <div class="game__meta"><strong>Bioshock</strong><small>2007 — Distopía</small></div>
-            </article>
-            <article class="game" data-game="cyberpunk">
-              <img class="game__cover" src="img/cyberpunk.avif" alt="Carátula de Cyberpunk 2077" loading="lazy">
-              <span class="game__num">05</span>
-              <div class="game__meta"><strong>Cyberpunk 2077</strong><small>2020 — Futuro</small></div>
-            </article>
+                 <!-- ABANICO 3D DE VIDEOJUEGOS -->
+          <div class="games-stage">
+            <ul class="games-deck" role="listbox" aria-label="Mis videojuegos favoritos">
+              <li class="game-card" data-game="fallout" role="option" tabindex="0" aria-selected="false">
+                <div class="game-card__inner">
+                  <img class="game-card__cover" src="img/fallout new vegas.jpg" alt="Carátula de Fallout: New Vegas" loading="lazy">
+                  <span class="game-card__num">01</span>
+                  <div class="game-card__meta">
+                    <strong>Fallout: New Vegas</strong>
+                    <small>2010 · RPG</small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="game-card" data-game="doom" role="option" tabindex="0" aria-selected="false">
+                <div class="game-card__inner">
+                  <img class="game-card__cover" src="img/doom.webp" alt="Carátula de DOOM" loading="lazy">
+                  <span class="game-card__num">02</span>
+                  <div class="game-card__meta">
+                    <strong>DOOM</strong>
+                    <small>2016 · FPS</small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="game-card" data-game="skyrim" role="option" tabindex="0" aria-selected="false">
+                <div class="game-card__inner">
+                  <img class="game-card__cover" src="img/skyrim-tag-page-cover-art.avif" alt="Carátula de Skyrim" loading="lazy">
+                  <span class="game-card__num">03</span>
+                  <div class="game-card__meta">
+                    <strong>Skyrim</strong>
+                    <small>2011 · RPG</small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="game-card" data-game="bioshock" role="option" tabindex="0" aria-selected="false">
+                <div class="game-card__inner">
+                  <img class="game-card__cover" src="img/bioshock.png" alt="Carátula de BioShock" loading="lazy">
+                  <span class="game-card__num">04</span>
+                  <div class="game-card__meta">
+                    <strong>BioShock</strong>
+                    <small>2007 · FPS narrativo</small>
+                  </div>
+                </div>
+              </li>
+
+              <li class="game-card" data-game="cyberpunk" role="option" tabindex="0" aria-selected="false">
+                <div class="game-card__inner">
+                  <img class="game-card__cover" src="img/cyberpunk.avif" alt="Carátula de Cyberpunk 2077" loading="lazy">
+                  <span class="game-card__num">05</span>
+                  <div class="game-card__meta">
+                    <strong>Cyberpunk 2077</strong>
+                    <small>2020 · RPG acción</small>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <!-- Panel lateral con sinopsis -->
+            <aside class="games-panel" id="games-panel" aria-hidden="true" aria-label="Detalles del videojuego">
+              <button class="games-panel__close" id="games-panel-close" type="button" aria-label="Cerrar panel">✕</button>
+
+              <div class="games-panel__content">
+                <div class="games-panel__poster-wrap">
+                  <img class="games-panel__poster" id="gp-poster" src="" alt="">
+                </div>
+
+                <div class="games-panel__meta">
+                  <span class="games-panel__num" id="gp-num">01</span>
+                  <span class="games-panel__genre" id="gp-genre">RPG</span>
+                </div>
+
+                <h3 class="games-panel__title" id="gp-title">—</h3>
+                <p class="games-panel__year" id="gp-year">—</p>
+                <p class="games-panel__studio" id="gp-studio">—</p>
+
+                <p class="games-panel__synopsis" id="gp-synopsis">—</p>
+
+                <div class="games-panel__rating">
+                  <span class="games-panel__rating-label">Mi nota</span>
+                  <span class="games-panel__rating-value" id="gp-note">—</span>
+                </div>
+
+                <blockquote class="games-panel__why" id="gp-why">—</blockquote>
+              </div>
+            </aside>
+
+            <!-- Overlay para móvil -->
+            <div class="games-overlay" id="games-overlay" aria-hidden="true"></div>
+          </div>
           </div>
 
           <div class="tag-row"><span>Historias</span><span>Retos</span><span>Creatividad</span></div>
