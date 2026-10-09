@@ -2941,6 +2941,13 @@ html[data-theme="light"] .chat__send{
   background-size: 40px 40px;
   mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
+.pc-part{
+  transition: filter .3s, opacity .3s;
+  cursor: pointer;
+}
+.pc-part:hover{
+  filter: drop-shadow(0 0 10px currentColor) brightness(1.15);
+}
 .pc-svg{
   display: block;
   width: 100%;
@@ -4557,4 +4564,37 @@ html, body,
   .geo-welcome,
   .geo-welcome__bar i{ transition: none; animation: none }
   .app__loader-dot, .apod__loader-dot{ animation: none }
+}
+
+/* ============ Hover y tooltip del diagrama del PC ============ */
+
+.pc-diagram .pc-part{
+  transition: filter .3s, opacity .3s;
+}
+
+.pc-diagram.is-hovering .pc-part{
+  opacity: 0.35;
+  filter: grayscale(.7);
+}
+
+.pc-diagram.is-hovering .pc-part.is-active{
+  opacity: 1;
+  filter: grayscale(0) drop-shadow(0 0 14px currentColor);
+}
+
+/* Colores específicos al activar cada componente */
+.pc-part--cpu.is-active     { color: #ffd166 }
+.pc-part--ram.is-active     { color: #ff6b8a }
+.pc-part--gpu.is-active     { color: #7fd8c8 }
+.pc-part--storage.is-active { color: #c9a0ff }
+.pc-part--cooling.is-active { color: #a0c4ff }
+.pc-part--psu.is-active     { color: #f4d98a }
+.pc-part--mobo.is-active    { color: #00fff7 }
+
+/* El SVG interactivo responde a pointer-events en cada g */
+.pc-svg .pc-part{
+  pointer-events: auto;
+}
+.pc-svg .pc-part *{
+  pointer-events: inherit;
 }

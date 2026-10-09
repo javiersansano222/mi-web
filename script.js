@@ -1812,7 +1812,6 @@
   };
 
   if (gamesDeck && allGameCards.length > 0) {
-    // Asegurar que el panel arranca cerrado
     if (gamesPanel) {
       gamesPanel.setAttribute("aria-hidden", "true");
     }
