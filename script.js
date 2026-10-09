@@ -1784,6 +1784,17 @@
     const allCards = $$(".game-card");
     if (filterBtns.length === 0 || allCards.length === 0) return;
 
+    const markLastVisible = () => {
+      allCards.forEach((card) => card.classList.remove("is-last-visible"));
+
+      const visibleCards = allCards.filter((card) => !card.hasAttribute("hidden"));
+
+      if (visibleCards.length % 2 !== 0) {
+        const last = visibleCards[visibleCards.length - 1];
+        if (last) last.classList.add("is-last-visible");
+      }
+    };
+
     filterBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const filter = btn.dataset.filter;
@@ -1805,10 +1816,13 @@
         });
 
         rebuildCurrentOrder();
+        markLastVisible();
 
         console.info("[games] Filtro aplicado:", filter);
       });
     });
+
+    markLastVisible();
   };
 
   if (gamesDeck && allGameCards.length > 0) {

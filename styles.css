@@ -4503,10 +4503,12 @@ html, body,
   .geo-welcome__title{ font-size: 16px }
   .geo-welcome__sub{ font-size: 11px }
 }
+@media (max-width: 640px) {
+  .games-stage {
+    padding: 20px 12px;
+  }
 
-@media (max-width: 640px){
-  .games-stage{ padding: 20px 12px }
-  .games-deck{
+  .games-deck {
     position: static;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -4515,7 +4517,8 @@ html, body,
     max-width: 100%;
     perspective: none;
   }
-  .game-card{
+
+  .game-card {
     position: static;
     width: 100%;
     height: auto;
@@ -4524,21 +4527,34 @@ html, body,
     transform: none !important;
     filter: none !important;
   }
-  .game-card__meta strong{ font-size: 11px }
-  .game-card__meta small{ font-size: 9px }
-  .games-panel{
+
+  .game-card__meta strong {
+    font-size: 11px;
+  }
+
+  .game-card__meta small {
+    font-size: 9px;
+  }
+
+  .game-card.is-last-visible {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    margin-inline: auto;
+  }
+
+  .games-panel {
     position: fixed;
-    top: 0; right: 0; bottom: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     padding: 30px 20px;
     z-index: 400;
   }
-  .game-card:last-child:nth-child(odd){
-  grid-column: 1 / -1;
-  max-width: 50%;
-  margin-inline: auto;
-}
-  .games-panel__poster-wrap{ max-width: 160px }
+
+  .games-panel__poster-wrap {
+    max-width: 160px;
+  }
 }
 
 @media (max-width: 600px){
