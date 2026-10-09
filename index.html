@@ -88,11 +88,7 @@
     </div>
 
     <!-- Decoraciones por paleta -->
-     HEAD
     <canvas class="deco-matrix" id="matrix-canvas" aria-hidden="true"></canvas>
-
-   <canvas class="deco-matrix" id="matrix-canvas" aria-hidden="true"></canvas>
- 5e2a3218598c69421caec84835585c1e211ce396
     <div class="deco-rays" aria-hidden="true"></div>
     <div class="deco-rain" aria-hidden="true"></div>
     <div class="deco-sun" aria-hidden="true"></div>
@@ -516,8 +512,8 @@
 
     <!-- DENTRO DEL ORDENADOR -->
     <section class="inside section-shell" id="dentro">
-           <div class="pc-diagram">
-        <svg class="pc-svg" viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc
+      <div class="pc-diagram">
+        <svg class="pc-svg" viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc">
   <defs>
     <!-- Chasis -->
     <linearGradient id="caseFrame" x1="0" y1="0" x2="1" y2="1">
@@ -1153,40 +1149,36 @@
     <text x="400" y="700" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a90b0" letter-spacing="4" text-anchor="middle" opacity="0.6">SPEC: MODEL 01 · BUILT BY JAVIER</text>
   </g>
 </svg>
-          <div class="pc-tooltip" id="pc-tooltip" role="tooltip" aria-hidden="true">
-            <strong class="pc-tooltip__title"></strong>
-            <small class="pc-tooltip__desc"></small>
-          </div>
-
-          <ul class="pc-legend" aria-label="Lista de componentes">
-            <li><button type="button" class="pc-legend__btn" data-part="cpu"><span class="pc-legend__dot" style="--c:#ffd166"></span>CPU</button></li>
-            <li><button type="button" class="pc-legend__btn" data-part="ram"><span class="pc-legend__dot" style="--c:#ff6b8a"></span>RAM</button></li>
-            <li><button type="button" class="pc-legend__btn" data-part="gpu"><span class="pc-legend__dot" style="--c:#7fd8c8"></span>GPU</button></li>
-            <li><button type="button" class="pc-legend__btn" data-part="storage"><span class="pc-legend__dot" style="--c:#c9a0ff"></span>SSD</button></li>
-            <li><button type="button" class="pc-legend__btn" data-part="cooling"><span class="pc-legend__dot" style="--c:#a0c4ff"></span>Refrigeración</button></li>
-            <li><button type="button" class="pc-legend__btn" data-part="psu"><span class="pc-legend__dot" style="--c:#f4d98a"></span>Fuente</button></li>
-          </ul>
+        <div class="pc-tooltip" id="pc-tooltip" role="tooltip" aria-hidden="true">
+          <strong class="pc-tooltip__title"></strong>
+          <small class="pc-tooltip__desc"></small>
         </div>
-                  
 
-          <ul class="pc-legend" aria-label="Lista de componentes">
+        <ul class="pc-legend" aria-label="Lista de componentes">
+          <li><button type="button" class="pc-legend__btn" data-part="cpu"><span class="pc-legend__dot" style="--c:#ffd166"></span>CPU</button></li>
+          <li><button type="button" class="pc-legend__btn" data-part="ram"><span class="pc-legend__dot" style="--c:#ff6b8a"></span>RAM</button></li>
+          <li><button type="button" class="pc-legend__btn" data-part="gpu"><span class="pc-legend__dot" style="--c:#7fd8c8"></span>GPU</button></li>
+          <li><button type="button" class="pc-legend__btn" data-part="storage"><span class="pc-legend__dot" style="--c:#c9a0ff"></span>SSD</button></li>
+          <li><button type="button" class="pc-legend__btn" data-part="cooling"><span class="pc-legend__dot" style="--c:#a0c4ff"></span>Refrigeración</button></li>
+          <li><button type="button" class="pc-legend__btn" data-part="psu"><span class="pc-legend__dot" style="--c:#f4d98a"></span>Fuente</button></li>
+        </ul>
+      </div>
 
-        <div class="pc__caption">
-          <p class="pc__caption-line">Entender la máquina es el primer paso para programarla.</p>
-          <p class="pc__caption-body">
-            Desde la <strong>arquitectura de Von Neumann</strong> (1945) hasta los procesadores
-            actuales con miles de millones de transistores, la historia de la informática es la historia
-            de una idea: <strong>separar memoria y cálculo</strong> para poder automatizar tareas.
-            Montar un PC me enseñó que detrás de cada componente hay una decisión de ingeniería:
-            por qué la <strong>CPU</strong> va junto a la <strong>RAM</strong> para reducir latencia,
-            por qué la <strong>GPU</strong> tiene su propia memoria,
-            por qué el <strong>almacenamiento</strong> ahora es SSD y no disco mecánico,
-            o por qué la <strong>refrigeración</strong> importa tanto cuando subes de gama.
-            Entender esa arquitectura es lo que me motiva a estudiar
-            <strong>Desarrollo de Aplicaciones Multiplataforma</strong>: el software y el hardware
-            son dos caras de la misma moneda.
-          </p>
-        </div>
+      <div class="pc__caption">
+        <p class="pc__caption-line">Entender la máquina es el primer paso para programarla.</p>
+        <p class="pc__caption-body">
+          Desde la <strong>arquitectura de Von Neumann</strong> (1945) hasta los procesadores
+          actuales con miles de millones de transistores, la historia de la informática es la historia
+          de una idea: <strong>separar memoria y cálculo</strong> para poder automatizar tareas.
+          Montar un PC me enseñó que detrás de cada componente hay una decisión de ingeniería:
+          por qué la <strong>CPU</strong> va junto a la <strong>RAM</strong> para reducir latencia,
+          por qué la <strong>GPU</strong> tiene su propia memoria,
+          por qué el <strong>almacenamiento</strong> ahora es SSD y no disco mecánico,
+          o por qué la <strong>refrigeración</strong> importa tanto cuando subes de gama.
+          Entender esa arquitectura es lo que me motiva a estudiar
+          <strong>Desarrollo de Aplicaciones Multiplataforma</strong>: el software y el hardware
+          son dos caras de la misma moneda.
+        </p>
       </div>
     </section>
 
