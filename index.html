@@ -6,16 +6,16 @@
   <meta name="description" content="Portafolio de Javier Sansano Martínez, estudiante de Desarrollo de Aplicaciones Multiplataforma.">
   <meta name="theme-color" content="#0a1220">
   <title>Javier Sansano Martínez — Portafolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <script src="script.js" defer></script>
   <script src="scene.js" defer></script>
-
 </head>
 
 <body class="is-loading">
@@ -44,9 +44,10 @@
        aria-valuemax="100"
        aria-valuenow="0"></div>
 
-    <!-- CIUDAD CYBERPUNK -->
+  <!-- FONDO CYBERPUNK -->
+  <div class="ocean" aria-hidden="true">
+    <!-- Ciudad con coches voladores -->
     <div class="cyber-city" aria-hidden="true">
-      <!-- Rascacielos del horizonte -->
       <div class="cyber-city__skyline">
         <span class="cyber-bld cyber-bld--far"></span>
         <span class="cyber-bld cyber-bld--far cyber-bld--tall"></span>
@@ -57,11 +58,6 @@
         <span class="cyber-bld cyber-bld--far cyber-bld--tall"></span>
         <span class="cyber-bld cyber-bld--far"></span>
       </div>
-          <!-- DECORACIONES POR PALETA -->
-    <div class="deco-matrix" aria-hidden="true"></div>
-    <div class="deco-rays" aria-hidden="true"></div>
-    <div class="deco-rain" aria-hidden="true"></div>
-    <div class="deco-sun" aria-hidden="true"></div>
 
       <div class="cyber-city__skyline cyber-city__skyline--mid">
         <span class="cyber-bld cyber-bld--mid"></span>
@@ -81,10 +77,8 @@
         <span class="cyber-bld cyber-bld--near"></span>
       </div>
 
-      <!-- Línea de horizonte -->
       <div class="cyber-city__horizon"></div>
 
-      <!-- Coches voladores -->
       <div class="cyber-car cyber-car--1"></div>
       <div class="cyber-car cyber-car--2"></div>
       <div class="cyber-car cyber-car--3"></div>
@@ -92,7 +86,13 @@
       <div class="cyber-car cyber-car--5"></div>
       <div class="cyber-car cyber-car--6"></div>
     </div>
-   <div> 
+
+    <!-- Decoraciones por paleta -->
+    <canvas class="deco-matrix" id="matrix-canvas" aria-hidden="true"></canvas>
+    <div class="deco-rays" aria-hidden="true"></div>
+    <div class="deco-rain" aria-hidden="true"></div>
+    <div class="deco-sun" aria-hidden="true"></div>
+
     <div class="ocean__glow"></div>
     <div class="ocean__grain"></div>
     <div class="bubble bubble--one"></div>
@@ -135,7 +135,6 @@
     </nav>
 
     <div class="header-tools">
-      <!-- Widget del tiempo (Open-Meteo) -->
       <div class="weather" id="weather" aria-live="polite" hidden>
         <span class="weather__icon" id="weather-icon" aria-hidden="true">☀</span>
         <span class="weather__temp" id="weather-temp">--°C</span>
@@ -143,14 +142,15 @@
       </div>
 
       <label class="sr-only" for="era-select">Paleta visual</label>
-          <select id="era-select" class="era-select" aria-label="Elegir paleta">
+      <select id="era-select" class="era-select" aria-label="Elegir paleta">
         <option value="neon-nocturno">Neón Nocturno</option>
         <option value="matrix-verde">Matrix Verde</option>
         <option value="blade-runner">Blade Runner</option>
         <option value="vaporwave">Vaporwave</option>
         <option value="sangre-neon">Sangre Neón</option>
         <option value="ultravioleta">Ultravioleta</option>
-    </select>
+      </select>
+
       <button class="theme-toggle"
               id="theme-toggle"
               type="button"
@@ -191,7 +191,7 @@
         </div>
       </div>
 
-      <div class="hero-art reveal" id="hero-art-fallback" aria-label="Ilustración decorativa de una ciudad Art Déco">
+      <div class="hero-art reveal" id="hero-art-fallback" aria-label="Ilustración decorativa cyberpunk">
         <div class="hero-art__orbit hero-art__orbit--outer"></div>
         <div class="hero-art__orbit hero-art__orbit--inner"></div>
         <div class="hero-art__waterline"></div>
@@ -229,9 +229,7 @@
         </div>
 
         <div class="counter counter--tree reveal" id="counter-repos">
-          <button class="counter__head" type="button"
-                  aria-expanded="false"
-                  aria-controls="repos-tree">
+          <button class="counter__head" type="button" aria-expanded="false" aria-controls="repos-tree">
             <span class="counter__num" id="repos-count" data-target="0">00</span>
             <span class="counter__title">repositorios en GitHub</span>
             <span class="counter__chevron" aria-hidden="true">▾</span>
@@ -255,9 +253,7 @@
         </div>
 
         <div class="counter reveal" id="counter">
-          <button class="counter__head" type="button"
-                  aria-expanded="false"
-                  aria-controls="counter-list">
+          <button class="counter__head" type="button" aria-expanded="false" aria-controls="counter-list">
             <span class="counter__num" data-target="6">06</span>
             <span class="counter__title">cosas que he hecho</span>
             <span class="counter__chevron" aria-hidden="true">▾</span>
@@ -318,7 +314,7 @@
       </div>
     </section>
 
-    <!-- PROYECTOS -->
+    <!-- PROYECTOS / INTERESES -->
     <section class="projects section-shell" id="proyectos">
       <div class="section-heading section-heading--row reveal">
         <div>
@@ -328,129 +324,187 @@
         <span class="section-index">INTERESES · 01—03</span>
       </div>
 
-      <div class="project-grid">
-        <article class="project-card project-card--featured reveal" data-tilt>
-          <div class="project-visual project-visual--portfolio">
-            <div class="browser-bar"><b></b><b></b><b></b><span>mi-universo.dev</span></div>
-            <div class="mini-layout">
-              <div class="mini-layout__sun"></div>
-              <div class="mini-layout__title">Historias<br>que me inspiran<span>.</span></div>
-              <div class="mini-layout__line"></div>
-              <div class="mini-layout__blocks"><i></i><i></i><i></i></div>
-            </div>
-            <span class="project-visual__label">01 — IMAGINACIÓN</span>
-          </div>
+      <!-- FILTRO POR CATEGORÍA -->
+      <div class="games-filter reveal" role="tablist" aria-label="Filtrar por categoría">
+        <button class="games-filter__btn is-active" data-filter="all" role="tab" aria-selected="true">
+          Todos <span class="games-filter__count">(11)</span>
+        </button>
+        <button class="games-filter__btn" data-filter="game" role="tab" aria-selected="false">
+          🎮 Juegos <span class="games-filter__count">(5)</span>
+        </button>
+        <button class="games-filter__btn" data-filter="movie" role="tab" aria-selected="false">
+          🎬 Pelis <span class="games-filter__count">(5)</span>
+        </button>
+        <button class="games-filter__btn" data-filter="hardware" role="tab" aria-selected="false">
+          💻 Hardware <span class="games-filter__count">(1)</span>
+        </button>
+      </div>
 
-          <div class="project-info">
-            <div>
-              <p class="project-kicker">VIDEOJUEGOS</p>
-              <h3>Explorar otros mundos</h3>
-              <p>Me gustan los videojuegos por sus historias, sus desafíos y los mundos que construyen. Disfruto descubriendo cómo combinan creatividad y tecnología.</p>
-            </div>
-            <span class="project-number">01</span>
-          </div>
+      <!-- ABANICO ÚNICO -->
+      <div class="games-stage">
+        <ul class="games-deck" id="all-deck" role="listbox" aria-label="Mi colección">
 
-          <div class="game-grid" aria-label="Algunos de mis videojuegos favoritos">
-            <article class="game" data-game="fallout">
-              <img class="game__cover" src="img/fallout new vegas.jpg" alt="Carátula de Fallout" loading="lazy">
-              <span class="game__num">01</span>
-              <div class="game__meta"><strong>Fallout</strong><small>1997 — Post-apocalipsis</small></div>
-            </article>
-            <article class="game" data-game="doom">
-              <img class="game__cover" src="img/doom.webp" alt="Carátula de Doom" loading="lazy">
-              <span class="game__num">02</span>
-              <div class="game__meta"><strong>Doom</strong><small>1993 — Acción</small></div>
-            </article>
-            <article class="game" data-game="skyrim">
-              <img class="game__cover" src="img/skyrim-tag-page-cover-art.avif" alt="Carátula de Skyrim" loading="lazy">
-              <span class="game__num">03</span>
-              <div class="game__meta"><strong>Skyrim</strong><small>2011 — Fantasía</small></div>
-            </article>
-            <article class="game" data-game="bioshock">
-              <img class="game__cover" src="img/bioshock.png" alt="Carátula de Bioshock" loading="lazy">
-              <span class="game__num">04</span>
-              <div class="game__meta"><strong>Bioshock</strong><small>2007 — Distopía</small></div>
-            </article>
-            <article class="game" data-game="cyberpunk">
-              <img class="game__cover" src="img/cyberpunk.avif" alt="Carátula de Cyberpunk 2077" loading="lazy">
-              <span class="game__num">05</span>
-              <div class="game__meta"><strong>Cyberpunk 2077</strong><small>2020 — Futuro</small></div>
-            </article>
-          </div>
+          <!-- ============ JUEGOS ============ -->
+          <li class="game-card" data-game="fallout" data-type="game" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/fallout new vegas.jpg" alt="Fallout: New Vegas" loading="lazy">
+              <span class="game-card__num">01</span>
+              <span class="game-card__badge game-card__badge--game">🎮</span>
+              <div class="game-card__meta">
+                <strong>Fallout: New Vegas</strong>
+                <small>2010 · RPG</small>
+              </div>
+            </div>
+          </li>
 
-          <div class="tag-row"><span>Historias</span><span>Retos</span><span>Creatividad</span></div>
-        </article>
+          <li class="game-card" data-game="doom" data-type="game" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/doom.webp" alt="DOOM" loading="lazy">
+              <span class="game-card__num">02</span>
+              <span class="game-card__badge game-card__badge--game">🎮</span>
+              <div class="game-card__meta">
+                <strong>DOOM</strong>
+                <small>2016 · FPS</small>
+              </div>
+            </div>
+          </li>
 
-        <article class="project-card reveal" data-tilt>
-          <div class="project-visual project-visual--logic">
-            <div class="logic-orbit">
-              <span class="logic-node">01</span>
-              <span class="logic-node">02</span>
-              <span class="logic-node">03</span>
-              <i></i>
+          <li class="game-card" data-game="skyrim" data-type="game" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/skyrim-tag-page-cover-art.avif" alt="Skyrim" loading="lazy">
+              <span class="game-card__num">03</span>
+              <span class="game-card__badge game-card__badge--game">🎮</span>
+              <div class="game-card__meta">
+                <strong>Skyrim</strong>
+                <small>2011 · RPG</small>
+              </div>
             </div>
-            <span class="project-visual__label">02 — MIRAR MÁS ALLÁ</span>
-          </div>
-          <div class="project-info">
-            <div>
-              <p class="project-kicker">CINE</p>
-              <h3>Películas y buenas historias</h3>
-              <p>Me gusta disfrutar de películas y fijarme en los personajes, la ambientación y la forma en que se cuenta cada historia.</p>
-            </div>
-            <span class="project-number">02</span>
-          </div>
+          </li>
 
-          <div class="movie-grid" id="movie-grid" aria-label="Mis películas favoritas">
-            <div class="movie movie--loading">
-              <div class="movie__poster-skeleton"></div>
-              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
+          <li class="game-card" data-game="bioshock" data-type="game" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/bioshock.png" alt="BioShock" loading="lazy">
+              <span class="game-card__num">04</span>
+              <span class="game-card__badge game-card__badge--game">🎮</span>
+              <div class="game-card__meta">
+                <strong>BioShock</strong>
+                <small>2007 · FPS narrativo</small>
+              </div>
             </div>
-            <div class="movie movie--loading">
-              <div class="movie__poster-skeleton"></div>
-              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-            </div>
-            <div class="movie movie--loading">
-              <div class="movie__poster-skeleton"></div>
-              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-            </div>
-            <div class="movie movie--loading">
-              <div class="movie__poster-skeleton"></div>
-              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-            </div>
-            <div class="movie movie--loading">
-              <div class="movie__poster-skeleton"></div>
-              <div class="movie__meta"><strong>Cargando…</strong><small>—</small></div>
-            </div>
-          </div>
+          </li>
 
-          <div class="movie-tooltip" id="movie-tooltip" role="tooltip" aria-hidden="true">
-            <strong class="movie-tooltip__title"></strong>
-            <small class="movie-tooltip__desc"></small>
-          </div>
-
-          <div class="tag-row"><span>Cine</span><span>Imaginación</span><span>Relatos</span></div>
-        </article>
-
-        <article class="project-card reveal" data-tilt>
-          <div class="project-visual project-visual--future">
-            <div class="future-window">
-              <span>CURIOSIDAD / 003</span>
-              <div class="future-window__symbol">✳</div>
-              <strong>Dentro del ordenador</strong>
-              <small>Entender para crear.</small>
+          <li class="game-card" data-game="cyberpunk" data-type="game" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/cyberpunk.avif" alt="Cyberpunk 2077" loading="lazy">
+              <span class="game-card__num">05</span>
+              <span class="game-card__badge game-card__badge--game">🎮</span>
+              <div class="game-card__meta">
+                <strong>Cyberpunk 2077</strong>
+                <small>2020 · RPG acción</small>
+              </div>
             </div>
-            <span class="project-visual__label">03 — TECNOLOGÍA</span>
-          </div>
-          <div class="project-info">
-            <div>
-              <p class="project-kicker">ORDENADORES</p>
-              <h3>Cómo funciona la tecnología</h3>
-              <p>Me interesa conocer los componentes de un ordenador, cómo se montan y cómo trabajan juntos para que todo funcione.</p>
+          </li>
+
+          <!-- ============ PELÍCULAS ============ -->
+          <li class="game-card game-card--movie" data-movie="gladiator" data-type="movie" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" data-tmdb="gladiator" alt="Gladiator" loading="lazy">
+              <span class="game-card__num">06</span>
+              <span class="game-card__badge game-card__badge--movie">🎬</span>
+              <div class="game-card__meta">
+                <strong>Gladiator</strong>
+                <small>2000 · Drama</small>
+              </div>
             </div>
-            <span class="project-number">03</span>
+          </li>
+
+          <li class="game-card game-card--movie" data-movie="star-wars-6" data-type="movie" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" data-tmdb="star-wars-6" alt="Return of the Jedi" loading="lazy">
+              <span class="game-card__num">07</span>
+              <span class="game-card__badge game-card__badge--movie">🎬</span>
+              <div class="game-card__meta">
+                <strong>Return of the Jedi</strong>
+                <small>1983 · Sci-Fi</small>
+              </div>
+            </div>
+          </li>
+
+          <li class="game-card game-card--movie" data-movie="silence-lambs" data-type="movie" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" data-tmdb="silence-lambs" alt="The Silence of the Lambs" loading="lazy">
+              <span class="game-card__num">08</span>
+              <span class="game-card__badge game-card__badge--movie">🎬</span>
+              <div class="game-card__meta">
+                <strong>The Silence of the Lambs</strong>
+                <small>1991 · Thriller</small>
+              </div>
+            </div>
+          </li>
+
+          <li class="game-card game-card--movie" data-movie="se7en" data-type="movie" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" data-tmdb="se7en" alt="Se7en" loading="lazy">
+              <span class="game-card__num">09</span>
+              <span class="game-card__badge game-card__badge--movie">🎬</span>
+              <div class="game-card__meta">
+                <strong>Se7en</strong>
+                <small>1995 · Thriller</small>
+              </div>
+            </div>
+          </li>
+
+          <li class="game-card game-card--movie" data-movie="spiderman" data-type="movie" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" data-tmdb="spiderman" alt="Spider-Man" loading="lazy">
+              <span class="game-card__num">10</span>
+              <span class="game-card__badge game-card__badge--movie">🎬</span>
+              <div class="game-card__meta">
+                <strong>Spider-Man</strong>
+                <small>2002 · Superhéroes</small>
+              </div>
+            </div>
+          </li>
+
+          <!-- ============ HARDWARE ============ -->
+          <li class="game-card game-card--hardware" data-hardware="pc" data-type="hardware" role="option" tabindex="0" aria-selected="false">
+            <div class="game-card__inner">
+              <img class="game-card__cover" src="img/pc-gaming.jpg" alt="Mi PC gaming" loading="lazy">
+              <span class="game-card__num">11</span>
+              <span class="game-card__badge game-card__badge--hardware">💻</span>
+              <div class="game-card__meta">
+                <strong>Mi PC Gaming</strong>
+                <small>Montaje propio · 2023</small>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+
+        <!-- Panel lateral -->
+        <aside class="games-panel" id="games-panel" aria-hidden="true" aria-label="Detalles">
+          <button class="games-panel__close" id="games-panel-close" type="button" aria-label="Cerrar panel">✕</button>
+          <div class="games-panel__content">
+            <div class="games-panel__poster-wrap">
+              <img class="games-panel__poster" id="gp-poster" src="" alt="">
+            </div>
+            <div class="games-panel__meta">
+              <span class="games-panel__num" id="gp-num">01</span>
+              <span class="games-panel__genre" id="gp-genre">—</span>
+            </div>
+            <h3 class="games-panel__title" id="gp-title">—</h3>
+            <p class="games-panel__year" id="gp-year">—</p>
+            <p class="games-panel__studio" id="gp-studio">—</p>
+            <p class="games-panel__synopsis" id="gp-synopsis">—</p>
+            <div class="games-panel__rating">
+              <span class="games-panel__rating-label">Mi nota</span>
+              <span class="games-panel__rating-value" id="gp-note">—</span>
+            </div>
+            <blockquote class="games-panel__why" id="gp-why">—</blockquote>
           </div>
-          <div class="tag-row"><span>Hardware</span><span>Montaje</span><span>Aprendizaje</span></div>
-        </article>
+        </aside>
+
+        <div class="games-overlay" id="games-overlay" aria-hidden="true"></div>
       </div>
 
       <p class="projects-note reveal"><span>✳</span> Los proyectos irán creciendo conmigo. Vuelve pronto para ver las novedades.</p>
@@ -864,7 +918,7 @@
         <input type="text" id="chat-input" class="chat__input"
                placeholder="Escribe tu pregunta..." maxlength="200" required>
         <button type="submit" class="chat__send" aria-label="Enviar mensaje">
-          <span aria-hidden="true"></span>
+          <span aria-hidden="true">→</span>
         </button>
       </form>
     </div>
