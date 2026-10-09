@@ -3099,6 +3099,42 @@ html[data-theme="light"] .chat__send{
   flex-shrink: 0;
 }
 
+/* Animaciones específicas del PC isométrico */
+.pc-svg .pc-fan__blades{
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pc-fan-spin 3s linear infinite;
+}
+
+/* Los ventiladores de la GPU giran más rápido */
+.pc-part--gpu .pc-fan__blades{
+  animation-duration: 2.2s;
+}
+
+/* Los del radiador giran más lento */
+.pc-part--cooling .pc-fan__blades{
+  animation-duration: 4s;
+}
+
+/* El de la PSU gira medio */
+.pc-part--psu .pc-fan__blades{
+  animation-duration: 3.5s;
+}
+
+/* Aseguramos que las animaciones de brillo se vean */
+.pc-svg animate{
+  /* SVG nativo, no necesita CSS */
+}
+
+/* Hover sobre la caja: resaltar todo el chasis */
+.pc-diagram .pc-part--case.is-active{
+  filter: drop-shadow(0 0 15px rgba(0, 255, 247, 0.6));
+}
+
+/* Cuando el diagrama está en hover, atenuar los que no están activos */
+.pc-diagram.is-hovering .pc-part{
+  transition: opacity .3s, filter .3s;
+}
 /* =========================================================
    28. WIDGET DEL TIEMPO (Open-Meteo)
    ========================================================= */
