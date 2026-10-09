@@ -516,71 +516,64 @@
 
     <!-- DENTRO DEL ORDENADOR -->
     <section class="inside section-shell" id="dentro">
-      <div class="section-heading reveal">
-        <p class="eyebrow">03 / DENTRO DEL ORDENADOR</p>
-        <h2>Cada pieza,<br><em>una función.</em></h2>
-      </div>
-
-      <div class="inside__stage reveal">
-        <div class="pc-diagram" aria-label="Diagrama interactivo de un ordenador gaming con sus componentes">
-
-      <svg class="pc-svg" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc">
+      <svg class="pc-svg" viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pc-title pc-desc">
   <title id="pc-title">Componentes de un ordenador gaming</title>
-  <desc id="pc-desc">Vista isométrica de una torre gaming con placa base, CPU con disipador, RAM, GPU, SSD NVMe, refrigeración líquida y fuente de alimentación. Pasa el ratón por cada componente para ver su función.</desc>
+  <desc id="pc-desc">Vista frontal de una torre gaming con cristal templado. Se ven la placa base, CPU con disipador, RAM, GPU, SSD, refrigeración líquida y fuente de alimentación. Pasa el ratón por cada componente para ver su función.</desc>
 
   <defs>
-    <!-- Gradientes del chasis -->
-    <linearGradient id="caseTop" x1="0" y1="0" x2="1" y2="1">
+    <!-- Chasis -->
+    <linearGradient id="caseFrame" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#1a1a2e"/>
-      <stop offset="100%" stop-color="#0a0a19"/>
-    </linearGradient>
-    <linearGradient id="caseLeft" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0f0f1c"/>
+      <stop offset="50%" stop-color="#0f0f1c"/>
       <stop offset="100%" stop-color="#050510"/>
     </linearGradient>
-    <linearGradient id="caseRight" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#131322"/>
-      <stop offset="100%" stop-color="#08080f"/>
+    <linearGradient id="caseInner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#08080f"/>
+      <stop offset="100%" stop-color="#050510"/>
     </linearGradient>
 
-    <!-- Cristal templado -->
-    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#00fff7" stop-opacity="0.08"/>
-      <stop offset="50%" stop-color="#ff00e5" stop-opacity="0.04"/>
-      <stop offset="100%" stop-color="#00fff7" stop-opacity="0.08"/>
+    <!-- Cristal templado frontal (transparente) -->
+    <linearGradient id="glassFront" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00fff7" stop-opacity="0.06"/>
+      <stop offset="50%" stop-color="#ff00e5" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#00fff7" stop-opacity="0.06"/>
     </linearGradient>
-
-    <!-- Reflejo del cristal -->
-    <linearGradient id="glassReflect" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
-      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.02"/>
+    <linearGradient id="glassReflect" x1="0" y1="0" x2="0.7" y2="0.7">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0.02"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
 
-    <!-- Placa base (PCB) -->
-    <linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1">
+    <!-- PCB verde (placa base) -->
+    <linearGradient id="pcbGreen" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0a2419"/>
       <stop offset="100%" stop-color="#041208"/>
     </linearGradient>
 
-    <!-- CPU (IHS dorado) -->
-    <linearGradient id="cpuIHS" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f4d98a"/>
-      <stop offset="50%" stop-color="#d4a84b"/>
-      <stop offset="100%" stop-color="#8c6a25"/>
-    </linearGradient>
-
     <!-- Metal del disipador -->
-    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="metalHeat" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#e0e0e8"/>
-      <stop offset="50%" stop-color="#a0a0b0"/>
-      <stop offset="100%" stop-color="#606070"/>
+      <stop offset="45%" stop-color="#a8a8b8"/>
+      <stop offset="100%" stop-color="#505060"/>
     </linearGradient>
 
-    <!-- PCB de la GPU (verde oscuro) -->
-    <linearGradient id="gpuPcb" x1="0" y1="0" x2="0" y2="1">
+    <!-- PCB GPU (verde oscuro) -->
+    <linearGradient id="gpuBoard" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#0a1a10"/>
       <stop offset="100%" stop-color="#051008"/>
+    </linearGradient>
+
+    <!-- Backplate GPU (metal cepillado) -->
+    <linearGradient id="gpuPlate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a2a3a"/>
+      <stop offset="50%" stop-color="#1a1a2a"/>
+      <stop offset="100%" stop-color="#0a0a19"/>
+    </linearGradient>
+
+    <!-- RAM (disipador rosa/magenta) -->
+    <linearGradient id="ramHeat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff6b8a"/>
+      <stop offset="100%" stop-color="#b34d5e"/>
     </linearGradient>
 
     <!-- Fuente de alimentación -->
@@ -589,37 +582,46 @@
       <stop offset="100%" stop-color="#0a0804"/>
     </linearGradient>
 
-    <!-- LEDs -->
+    <!-- CPU IHS dorado -->
+    <linearGradient id="cpuGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4d98a"/>
+      <stop offset="50%" stop-color="#d4a84b"/>
+      <stop offset="100%" stop-color="#8c6a25"/>
+    </linearGradient>
+
+    <!-- LEDs glow -->
     <radialGradient id="ledCyan">
-      <stop offset="0%" stop-color="#00fff7"/>
+      <stop offset="0%" stop-color="#00fff7" stop-opacity="1"/>
       <stop offset="100%" stop-color="#00fff7" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="ledMagenta">
-      <stop offset="0%" stop-color="#ff00e5"/>
+      <stop offset="0%" stop-color="#ff00e5" stop-opacity="1"/>
       <stop offset="100%" stop-color="#ff00e5" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="ledAmber">
-      <stop offset="0%" stop-color="#f5ff00"/>
+      <stop offset="0%" stop-color="#f5ff00" stop-opacity="1"/>
       <stop offset="100%" stop-color="#f5ff00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ledPurple">
+      <stop offset="0%" stop-color="#c9a0ff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#c9a0ff" stop-opacity="0"/>
     </radialGradient>
 
     <!-- Sombra bajo el PC -->
     <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#000000" stop-opacity="0.9"/>
-      <stop offset="70%" stop-color="#000000" stop-opacity="0.4"/>
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.85"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Filtro de glow general -->
+    <!-- Glow filter -->
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-
-    <!-- Filtro de glow suave -->
     <filter id="glowSoft" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="6" result="blur"/>
       <feMerge>
@@ -628,509 +630,529 @@
       </feMerge>
     </filter>
 
-    <!-- Rejilla metálica para el frontal -->
-    <pattern id="meshPattern" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-      <rect width="6" height="6" fill="#08080f"/>
-      <circle cx="3" cy="3" r="0.6" fill="#1a1a2e"/>
+    <!-- Rejilla frontal (mallada) -->
+    <pattern id="meshPattern" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#050510"/>
+      <circle cx="4" cy="4" r="0.9" fill="#1a1a2e"/>
     </pattern>
 
     <!-- Trazas del PCB -->
-    <pattern id="pcbTraces" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-      <path d="M 0 10 H 8 M 12 10 H 20 M 10 0 V 8 M 10 12 V 20" stroke="#1a4a30" stroke-width="0.5" fill="none" opacity="0.6"/>
+    <pattern id="pcbTraces" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 0 12 H 10 M 14 12 H 24 M 12 0 V 10 M 12 14 V 24" stroke="#1a4a30" stroke-width="0.6" fill="none" opacity="0.7"/>
     </pattern>
   </defs>
 
-  <!-- ====================== SOMBRA BAJO EL PC ====================== -->
-  <ellipse cx="450" cy="640" rx="300" ry="35" fill="url(#shadow)" opacity="0.85"/>
+  <!-- ============ SOMBRA BAJO EL PC ============ -->
+  <ellipse cx="400" cy="650" rx="260" ry="20" fill="url(#shadow)" opacity="0.8"/>
 
-  <!-- ====================== SUELO (reflejo) ====================== -->
-  <path d="M 150 640 L 450 580 L 750 640 L 450 700 Z"
+  <!-- ============ REFLEJO EN EL SUELO ============ -->
+  <path d="M 200 640 L 600 640 L 640 660 L 160 660 Z"
         fill="#050510"
         stroke="rgba(0, 255, 247, 0.15)"
         stroke-width="0.5"
-        opacity="0.6"/>
+        opacity="0.5"/>
 
-  <!-- ====================== CHASIS (caja isométrica) ====================== -->
-  <g class="pc-part pc-part--case" data-part="case">
+  <!-- ============ MARCO EXTERIOR DEL CHASIS ============ -->
+  <rect x="200" y="80" width="400" height="560" rx="8"
+        fill="url(#caseFrame)"
+        stroke="url(#caseFrame)"
+        stroke-width="2"/>
 
-    <!-- Cara superior -->
-    <path d="M 300 180 L 450 105 L 600 180 L 450 255 Z"
-          fill="url(#caseTop)"
-          stroke="rgba(0, 255, 247, 0.4)"
-          stroke-width="1.2"
-          stroke-linejoin="round"/>
+  <!-- Borde dorado exterior -->
+  <rect x="200" y="80" width="400" height="560" rx="8"
+        fill="none"
+        stroke="#d4a84b"
+        stroke-width="2"
+        opacity="0.75"/>
 
-    <!-- Cara izquierda (fondo de la caja) -->
-    <path d="M 300 180 L 450 255 L 450 605 L 300 530 Z"
-          fill="url(#caseLeft)"
-          stroke="rgba(0, 255, 247, 0.35)"
-          stroke-width="1.2"
-          stroke-linejoin="round"/>
+  <!-- Borde interior del cristal (donde empieza el cristal) -->
+  <rect x="220" y="100" width="360" height="520" rx="4"
+        fill="none"
+        stroke="rgba(0, 255, 247, 0.35)"
+        stroke-width="1"/>
 
-    <!-- Cara derecha (frente con cristal) -->
-    <path d="M 450 255 L 600 180 L 600 530 L 450 605 Z"
-          fill="url(#caseRight)"
-          stroke="rgba(0, 255, 247, 0.35)"
-          stroke-width="1.2"
-          stroke-linejoin="round"/>
+  <!-- ============ INTERIOR DEL CHASIS (fondo oscuro) ============ -->
+  <rect x="220" y="100" width="360" height="520" rx="4"
+        fill="url(#caseInner)"/>
 
-    <!-- Detalle: bisel dorado en la arista superior -->
-    <path d="M 300 180 L 450 105 L 600 180"
-          fill="none"
-          stroke="#d4a84b"
-          stroke-width="2"
-          stroke-linejoin="round"
-          opacity="0.85"/>
-    <path d="M 300 182 L 450 107 L 600 182"
-          fill="none"
-          stroke="rgba(244, 217, 138, 0.4)"
-          stroke-width="0.8"
-          stroke-linejoin="round"/>
+  <!-- ============ REJILLA FRONTAL (parte inferior) ============ -->
+  <rect x="220" y="540" width="360" height="80"
+        fill="url(#meshPattern)"
+        opacity="0.9"/>
 
-    <!-- Detalle: rejilla frontal (izquierda del chasis) -->
-    <rect x="315" y="215" width="120" height="300"
-          fill="url(#meshPattern)"
-          stroke="rgba(0, 255, 247, 0.25)"
-          stroke-width="0.8"
-          transform="skewY(-30) translate(150, 100)"
-          opacity="0.7"/>
-
-    <!-- Detalle: tornillos en las esquinas superiores -->
-    <circle cx="310" cy="185" r="3" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.8"/>
-    <circle cx="590" cy="185" r="3" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.8"/>
-    <circle cx="440" cy="110" r="3" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.8"/>
-
-    <!-- Detalle: patas del chasis -->
-    <rect x="315" y="535" width="8" height="12" fill="#1a1a2e" rx="1"/>
-    <rect x="580" y="535" width="8" height="12" fill="#1a1a2e" rx="1"/>
-    <rect x="450" y="610" width="8" height="12" fill="#1a1a2e" rx="1"/>
-
-    <!-- LED de encendido en el frontal -->
-    <circle cx="560" cy="200" r="4" fill="#00fff7" filter="url(#glow)">
-      <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+  <!-- ============ VENTILADORES FRONTALES LED (parte inferior) ============ -->
+  <!-- Ventilador 1 -->
+  <g transform="translate(290, 580)">
+    <circle cx="0" cy="0" r="30" fill="#050510" stroke="rgba(0, 255, 247, 0.5)" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="26" fill="none" stroke="#1a1a2e" stroke-width="1"/>
+    <g class="pc-fan__blades">
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(120)"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(240)"/>
+    </g>
+    <circle cx="0" cy="0" r="5" fill="#1a1a2e" stroke="#00fff7" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2" fill="#00fff7" filter="url(#glow)">
+      <animate attributeName="opacity" values="1;0.5;1" dur="1.8s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="560" cy="200" r="8" fill="url(#ledCyan)" opacity="0.6">
-      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite"/>
-    </circle>
-
-    <!-- LED rojo de actividad -->
-    <circle cx="575" cy="200" r="2.5" fill="#ff003c" filter="url(#glow)">
-      <animate attributeName="opacity" values="0.3;1;0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-    </circle>
-
-    <!-- ============ CRISTAL TEMPLADO (cara derecha, delante) ============ -->
-    <path d="M 460 260 L 590 190 L 590 515 L 460 585 Z"
-          fill="url(#glass)"
-          stroke="rgba(0, 255, 247, 0.6)"
-          stroke-width="1.2"
-          opacity="0.9"/>
-
-    <!-- Reflejo diagonal del cristal -->
-    <path d="M 460 260 L 590 190 L 590 280 L 460 350 Z"
-          fill="url(#glassReflect)"
-          opacity="0.8"/>
-
-    <!-- Reflejo inferior -->
-    <path d="M 460 500 L 590 430 L 590 515 L 460 585 Z"
-          fill="rgba(255, 255, 255, 0.03)"
-          opacity="0.6"/>
-
-    <!-- Tornillos del cristal -->
-    <circle cx="465" cy="265" r="2.5" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.6"/>
-    <circle cx="585" cy="195" r="2.5" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.6"/>
-    <circle cx="465" cy="580" r="2.5" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.6"/>
-    <circle cx="585" cy="510" r="2.5" fill="#3a3a4a" stroke="#d4a84b" stroke-width="0.6"/>
-
-    <!-- Logo/branding en el cristal -->
-    <text x="520" y="555" font-family="Bebas Neue, Arial Narrow, sans-serif" font-size="14" fill="#d4a84b" opacity="0.7" letter-spacing="3" text-anchor="middle">JAVIER</text>
-    <text x="520" y="570" font-family="Bebas Neue, Arial Narrow, sans-serif" font-size="8" fill="rgba(244, 217, 138, 0.5)" letter-spacing="4" text-anchor="middle">GAMING · CUSTOM</text>
   </g>
 
-  <!-- ====================== PLACA BASE ====================== -->
+  <!-- Ventilador 2 -->
+  <g transform="translate(400, 580)">
+    <circle cx="0" cy="0" r="30" fill="#050510" stroke="rgba(0, 255, 247, 0.5)" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="26" fill="none" stroke="#1a1a2e" stroke-width="1"/>
+    <g class="pc-fan__blades">
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(120)"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(240)"/>
+    </g>
+    <circle cx="0" cy="0" r="5" fill="#1a1a2e" stroke="#00fff7" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2" fill="#00fff7" filter="url(#glow)">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Ventilador 3 -->
+  <g transform="translate(510, 580)">
+    <circle cx="0" cy="0" r="30" fill="#050510" stroke="rgba(0, 255, 247, 0.5)" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="26" fill="none" stroke="#1a1a2e" stroke-width="1"/>
+    <g class="pc-fan__blades">
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(120)"/>
+      <path d="M 0,-20 Q 10,-6 0,0 Q -10,-6 0,-20 Z" fill="#00fff7" opacity="0.65" transform="rotate(240)"/>
+    </g>
+    <circle cx="0" cy="0" r="5" fill="#1a1a2e" stroke="#00fff7" stroke-width="0.8"/>
+    <circle cx="0" cy="0" r="2" fill="#00fff7" filter="url(#glow)">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- ============ PLACA BASE ============ -->
   <g class="pc-part pc-part--mobo" data-part="mobo">
     <!-- Superficie del PCB -->
-    <path d="M 340 200 L 450 260 L 450 550 L 340 490 Z"
-          fill="url(#pcb)"
+    <rect x="240" y="120" width="320" height="400" rx="2"
+          fill="url(#pcbGreen)"
           stroke="rgba(0, 255, 247, 0.35)"
-          stroke-width="1.2"
-          stroke-linejoin="round"/>
+          stroke-width="1.2"/>
 
-    <!-- Trazas del PCB (patrón) -->
-    <path d="M 340 200 L 450 260 L 450 550 L 340 490 Z"
+    <!-- Trazas del PCB -->
+    <rect x="240" y="120" width="320" height="400" rx="2"
           fill="url(#pcbTraces)"
-          opacity="0.8"/>
+          opacity="0.9"/>
 
-    <!-- Chipset (rectángulo metálico con disipador) -->
-    <path d="M 400 400 L 435 420 L 435 445 L 400 425 Z"
-          fill="#2a2a3a"
-          stroke="#d4a84b"
-          stroke-width="0.8"/>
-    <path d="M 405 405 L 430 418 L 430 440 L 405 427 Z"
-          fill="url(#metal)"
-          opacity="0.85"/>
-    <!-- Detalle: aletas del disipador -->
-    <line x1="408" y1="410" x2="408" y2="433" stroke="#606070" stroke-width="0.6"/>
-    <line x1="414" y1="413" x2="414" y2="436" stroke="#606070" stroke-width="0.6"/>
-    <line x1="420" y1="416" x2="420" y2="439" stroke="#606070" stroke-width="0.6"/>
-    <line x1="426" y1="419" x2="426" y2="442" stroke="#606070" stroke-width="0.6"/>
+    <!-- Detalle: tornillos en las esquinas -->
+    <circle cx="250" cy="130" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="550" cy="130" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="250" cy="510" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="550" cy="510" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
 
-    <!-- Conectores y detalles -->
-    <rect x="355" y="230" width="30" height="15" fill="#1a1a2e" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5" transform="skewY(30)"/>
-    <rect x="355" y="260" width="30" height="8" fill="#1a1a2e" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5" transform="skewY(30)"/>
+    <!-- Detalle: chipset con disipador (abajo a la derecha) -->
+    <rect x="490" y="430" width="50" height="50" rx="2"
+          fill="#2a2a3a" stroke="#d4a84b" stroke-width="0.8"/>
+    <rect x="495" y="435" width="40" height="40" rx="1"
+          fill="url(#metalHeat)" opacity="0.85"/>
+    <!-- Aletas del disipador -->
+    <line x1="500" y1="440" x2="500" y2="470" stroke="#505060" stroke-width="0.8"/>
+    <line x1="508" y1="440" x2="508" y2="470" stroke="#505060" stroke-width="0.8"/>
+    <line x1="516" y1="440" x2="516" y2="470" stroke="#505060" stroke-width="0.8"/>
+    <line x1="524" y1="440" x2="524" y2="470" stroke="#505060" stroke-width="0.8"/>
 
-    <!-- VRM con disipadores -->
-    <path d="M 380 220 L 400 230 L 400 260 L 380 250 Z" fill="#2a2a3a" stroke="#d4a84b" stroke-width="0.6"/>
-    <path d="M 405 235 L 425 245 L 425 275 L 405 265 Z" fill="#2a2a3a" stroke="#d4a84b" stroke-width="0.6"/>
+    <!-- Detalle: VRM (reguladores de voltaje) arriba -->
+    <rect x="300" y="125" width="90" height="15" rx="1"
+          fill="#2a2a3a" stroke="#d4a84b" stroke-width="0.6"/>
+    <line x1="310" y1="128" x2="310" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="320" y1="128" x2="320" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="330" y1="128" x2="330" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="340" y1="128" x2="340" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="350" y1="128" x2="350" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="360" y1="128" x2="360" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="370" y1="128" x2="370" y2="137" stroke="#505060" stroke-width="0.5"/>
+    <line x1="380" y1="128" x2="380" y2="137" stroke="#505060" stroke-width="0.5"/>
+
+    <!-- Detalle: conectores SATA y headers -->
+    <rect x="245" y="180" width="15" height="60" rx="1" fill="#1a1a2e" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.6"/>
+    <rect x="245" y="260" width="15" height="40" rx="1" fill="#1a1a2e" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.6"/>
+
+    <!-- Detalle: puertos traseros (I/O shield) -->
+    <rect x="540" y="140" width="20" height="120" rx="1"
+          fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <rect x="545" y="145" width="10" height="8" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="158" width="10" height="8" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="171" width="10" height="8" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="184" width="10" height="15" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="204" width="10" height="8" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="217" width="10" height="20" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
+    <rect x="545" y="242" width="10" height="12" fill="#0a0a19" stroke="rgba(0, 255, 247, 0.4)" stroke-width="0.4"/>
   </g>
 
-  <!-- ====================== RAM (4 módulos) ====================== -->
+  <!-- ============ CPU CON DISIPADOR ============ -->
+  <g class="pc-part pc-part--cpu" data-part="cpu">
+    <!-- Socket base -->
+    <rect x="320" y="200" width="70" height="70" rx="2"
+          fill="#1a1200" stroke="#ffd166" stroke-width="1"/>
+
+    <!-- IHS (Integrated Heat Spreader, dorado) -->
+    <rect x="327" y="207" width="56" height="56" rx="2"
+          fill="url(#cpuGold)" stroke="#8c6a25" stroke-width="0.8"/>
+
+    <!-- Texto grabado -->
+    <text x="355" y="238" font-family="JetBrains Mono, monospace" font-size="7" fill="#5a4020" text-anchor="middle">CPU</text>
+
+    <!-- Base del disipador (encima de la CPU) -->
+    <rect x="315" y="185" width="80" height="15" rx="2"
+          fill="url(#metalHeat)" stroke="#d4a84b" stroke-width="0.8"/>
+
+    <!-- Aletas del disipador -->
+    <rect x="315" y="150" width="80" height="40" rx="2"
+          fill="url(#metalHeat)" stroke="#d4a84b" stroke-width="0.8"/>
+    <line x1="325" y1="150" x2="325" y2="190" stroke="#505060" stroke-width="1"/>
+    <line x1="337" y1="150" x2="337" y2="190" stroke="#505060" stroke-width="1"/>
+    <line x1="349" y1="150" x2="349" y2="190" stroke="#505060" stroke-width="1"/>
+    <line x1="361" y1="150" x2="361" y2="190" stroke="#505060" stroke-width="1"/>
+    <line x1="373" y1="150" x2="373" y2="190" stroke="#505060" stroke-width="1"/>
+    <line x1="385" y1="150" x2="385" y2="190" stroke="#505060" stroke-width="1"/>
+
+    <!-- Ventilador del disipador -->
+    <g transform="translate(355, 130)">
+      <circle cx="0" cy="0" r="28" fill="#0a0a19" stroke="#d4a84b" stroke-width="1.2"/>
+      <circle cx="0" cy="0" r="24" fill="none" stroke="#505060" stroke-width="0.6"/>
+      <g class="pc-fan__blades">
+        <path d="M 0,-18 Q 8,-6 0,0 Q -8,-6 0,-18 Z" fill="#ffd166" opacity="0.65"/>
+        <path d="M 0,-18 Q 8,-6 0,0 Q -8,-6 0,-18 Z" fill="#ffd166" opacity="0.65" transform="rotate(120)"/>
+        <path d="M 0,-18 Q 8,-6 0,0 Q -8,-6 0,-18 Z" fill="#ffd166" opacity="0.65" transform="rotate(240)"/>
+      </g>
+      <circle cx="0" cy="0" r="4" fill="#1a1200" stroke="#ffd166" stroke-width="0.8"/>
+      <circle cx="0" cy="0" r="2" fill="#ffd166" filter="url(#glow)">
+        <animate attributeName="opacity" values="1;0.6;1" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- ============ RAM (4 módulos) ============ -->
   <g class="pc-part pc-part--ram" data-part="ram">
     <!-- Módulo 1 -->
-    <g transform="translate(365, 275) skewY(30)">
-      <rect x="0" y="0" width="8" height="70" fill="#0a1a10" stroke="#ff6b8a" stroke-width="0.8"/>
-      <rect x="1" y="5" width="6" height="60" fill="#051008"/>
+    <g transform="translate(410, 170)">
+      <rect x="0" y="0" width="14" height="100" rx="1"
+            fill="url(#ramHeat)" stroke="#b34d5e" stroke-width="0.8"/>
       <!-- Chips -->
-      <rect x="1.5" y="8" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="15" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="22" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="30" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="38" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="46" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="54" width="5" height="4" fill="#1a1a2e"/>
+      <rect x="2" y="8" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="18" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="28" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="38" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="48" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="58" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="68" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="78" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="88" width="10" height="6" fill="#1a1a2e"/>
       <!-- LED superior -->
-      <rect x="1" y="0" width="6" height="1.5" fill="#ff6b8a" filter="url(#glow)">
+      <rect x="0" y="0" width="14" height="2" fill="#ff6b8a" filter="url(#glow)">
         <animate attributeName="opacity" values="1;0.5;1" dur="1.8s" repeatCount="indefinite"/>
       </rect>
     </g>
 
     <!-- Módulo 2 -->
-    <g transform="translate(378, 282) skewY(30)">
-      <rect x="0" y="0" width="8" height="70" fill="#0a1a10" stroke="#ff6b8a" stroke-width="0.8"/>
-      <rect x="1" y="5" width="6" height="60" fill="#051008"/>
-      <rect x="1.5" y="8" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="15" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="22" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="30" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="38" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="46" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="54" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1" y="0" width="6" height="1.5" fill="#ff6b8a" filter="url(#glow)">
-        <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+    <g transform="translate(428, 170)">
+      <rect x="0" y="0" width="14" height="100" rx="1"
+            fill="url(#ramHeat)" stroke="#b34d5e" stroke-width="0.8"/>
+      <rect x="2" y="8" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="18" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="28" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="38" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="48" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="58" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="68" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="78" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="88" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="0" y="0" width="14" height="2" fill="#ff6b8a" filter="url(#glow)">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
       </rect>
     </g>
 
     <!-- Módulo 3 -->
-    <g transform="translate(391, 289) skewY(30)">
-      <rect x="0" y="0" width="8" height="70" fill="#0a1a10" stroke="#ff6b8a" stroke-width="0.8"/>
-      <rect x="1" y="5" width="6" height="60" fill="#051008"/>
-      <rect x="1.5" y="8" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="15" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="22" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="30" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="38" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="46" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="54" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1" y="0" width="6" height="1.5" fill="#ff6b8a" filter="url(#glow)">
-        <animate attributeName="opacity" values="1;0.5;1" dur="2.2s" repeatCount="indefinite"/>
+    <g transform="translate(446, 170)">
+      <rect x="0" y="0" width="14" height="100" rx="1"
+            fill="url(#ramHeat)" stroke="#b34d5e" stroke-width="0.8"/>
+      <rect x="2" y="8" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="18" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="28" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="38" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="48" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="58" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="68" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="78" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="88" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="0" y="0" width="14" height="2" fill="#ff6b8a" filter="url(#glow)">
+        <animate attributeName="opacity" values="1;0.4;1" dur="2.2s" repeatCount="indefinite"/>
       </rect>
     </g>
 
     <!-- Módulo 4 -->
-    <g transform="translate(404, 296) skewY(30)">
-      <rect x="0" y="0" width="8" height="70" fill="#0a1a10" stroke="#ff6b8a" stroke-width="0.8"/>
-      <rect x="1" y="5" width="6" height="60" fill="#051008"/>
-      <rect x="1.5" y="8" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="15" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="22" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="30" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="38" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="46" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1.5" y="54" width="5" height="4" fill="#1a1a2e"/>
-      <rect x="1" y="0" width="6" height="1.5" fill="#ff6b8a" filter="url(#glow)">
+    <g transform="translate(464, 170)">
+      <rect x="0" y="0" width="14" height="100" rx="1"
+            fill="url(#ramHeat)" stroke="#b34d5e" stroke-width="0.8"/>
+      <rect x="2" y="8" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="18" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="28" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="38" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="48" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="58" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="68" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="78" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="2" y="88" width="10" height="6" fill="#1a1a2e"/>
+      <rect x="0" y="0" width="14" height="2" fill="#ff6b8a" filter="url(#glow)">
         <animate attributeName="opacity" values="1;0.5;1" dur="1.6s" repeatCount="indefinite"/>
       </rect>
     </g>
   </g>
 
-  <!-- ====================== CPU CON DISIPADOR ====================== -->
-  <g class="pc-part pc-part--cpu" data-part="cpu">
-    <!-- Base del socket -->
-    <path d="M 355 330 L 405 355 L 405 395 L 355 370 Z"
-          fill="#1a1200"
-          stroke="#ffd166"
-          stroke-width="1"/>
-
-    <!-- IHS (Integrated Heat Spreader) -->
-    <path d="M 360 335 L 400 355 L 400 388 L 360 368 Z"
-          fill="url(#cpuIHS)"
-          stroke="#8c6a25"
-          stroke-width="0.8"/>
-
-    <!-- Texto grabado -->
-    <text x="380" y="360" font-family="monospace" font-size="4" fill="#5a4020" text-anchor="middle" transform="rotate(27, 380, 360)">CPU</text>
-
-    <!-- Disipador encima (aletas) -->
-    <path d="M 350 315 L 410 345 L 410 360 L 350 330 Z"
-          fill="url(#metal)"
-          stroke="#d4a84b"
-          stroke-width="0.8"/>
-    <!-- Aletas -->
-    <line x1="355" y1="320" x2="355" y2="330" stroke="#606070" stroke-width="0.8"/>
-    <line x1="365" y1="325" x2="365" y2="335" stroke="#606070" stroke-width="0.8"/>
-    <line x1="375" y1="330" x2="375" y2="340" stroke="#606070" stroke-width="0.8"/>
-    <line x1="385" y1="335" x2="385" y2="345" stroke="#606070" stroke-width="0.8"/>
-    <line x1="395" y1="340" x2="395" y2="350" stroke="#606070" stroke-width="0.8"/>
-    <line x1="405" y1="345" x2="405" y2="355" stroke="#606070" stroke-width="0.8"/>
-
-    <!-- Ventilador del disipador -->
-    <g transform="translate(380, 300)">
-      <ellipse cx="0" cy="0" rx="30" ry="17" fill="#0a0a19" stroke="#d4a84b" stroke-width="1"/>
-      <ellipse cx="0" cy="0" rx="26" ry="15" fill="none" stroke="#606070" stroke-width="0.6"/>
-      <!-- Aspas -->
-      <g class="pc-fan__blades">
-        <path d="M 0,-12 Q 6,-4 0,0 Q -6,-4 0,-12 Z" fill="url(#metal)" opacity="0.85"/>
-        <path d="M 0,-12 Q 6,-4 0,0 Q -6,-4 0,-12 Z" fill="url(#metal)" opacity="0.85" transform="rotate(120)"/>
-        <path d="M 0,-12 Q 6,-4 0,0 Q -6,-4 0,-12 Z" fill="url(#metal)" opacity="0.85" transform="rotate(240)"/>
-      </g>
-      <circle cx="0" cy="0" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
-      <circle cx="0" cy="0" r="1.5" fill="#ffd166" filter="url(#glow)">
-        <animate attributeName="opacity" values="1;0.6;1" dur="1.4s" repeatCount="indefinite"/>
-      </circle>
-    </g>
-
-    <!-- Tubos de calor -->
-    <path d="M 355 340 Q 340 320 355 300" fill="none" stroke="#a0a0b0" stroke-width="2" opacity="0.7"/>
-    <path d="M 400 355 Q 415 335 400 315" fill="none" stroke="#a0a0b0" stroke-width="2" opacity="0.7"/>
-  </g>
-
-  <!-- ====================== GPU ====================== -->
+  <!-- ============ GPU ============ -->
   <g class="pc-part pc-part--gpu" data-part="gpu">
-    <!-- PCB (base) -->
-    <path d="M 340 420 L 480 490 L 480 530 L 340 460 Z"
-          fill="url(#gpuPcb)"
-          stroke="#7fd8c8"
-          stroke-width="1.2"/>
+    <!-- PCB base -->
+    <rect x="270" y="320" width="260" height="90" rx="2"
+          fill="url(#gpuBoard)" stroke="#7fd8c8" stroke-width="1.2"/>
 
-    <!-- Backplate metálico -->
-    <path d="M 340 415 L 480 485 L 480 495 L 340 425 Z"
-          fill="#1a1a2e"
-          stroke="#7fd8c8"
-          stroke-width="0.8"/>
-    <path d="M 345 418 L 475 487 L 475 492 L 345 423 Z"
-          fill="#2a2a3a"/>
+    <!-- Backplate metálico (parte superior) -->
+    <rect x="270" y="315" width="260" height="15" rx="2"
+          fill="url(#gpuPlate)" stroke="#7fd8c8" stroke-width="0.8"/>
+    <rect x="275" y="318" width="250" height="9" rx="1"
+          fill="#2a2a3a" opacity="0.7"/>
 
     <!-- 3 ventiladores -->
     <!-- Ventilador 1 -->
-    <g transform="translate(370, 445)">
-      <ellipse cx="0" cy="0" rx="22" ry="12" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1"/>
-      <ellipse cx="0" cy="0" rx="19" ry="10" fill="none" stroke="#a0a0b0" stroke-width="0.5"/>
+    <g transform="translate(320, 370)">
+      <circle cx="0" cy="0" r="26" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1.2"/>
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#505060" stroke-width="0.6"/>
       <g class="pc-fan__blades">
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
       </g>
-      <circle cx="0" cy="0" r="2" fill="#0a0a19" stroke="#7fd8c8" stroke-width="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#0a1a10" stroke="#7fd8c8" stroke-width="0.6"/>
     </g>
 
     <!-- Ventilador 2 -->
-    <g transform="translate(410, 465)">
-      <ellipse cx="0" cy="0" rx="22" ry="12" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1"/>
-      <ellipse cx="0" cy="0" rx="19" ry="10" fill="none" stroke="#a0a0b0" stroke-width="0.5"/>
+    <g transform="translate(400, 370)">
+      <circle cx="0" cy="0" r="26" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1.2"/>
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#505060" stroke-width="0.6"/>
       <g class="pc-fan__blades">
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
       </g>
-      <circle cx="0" cy="0" r="2" fill="#0a0a19" stroke="#7fd8c8" stroke-width="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#0a1a10" stroke="#7fd8c8" stroke-width="0.6"/>
     </g>
 
     <!-- Ventilador 3 -->
-    <g transform="translate(450, 485)">
-      <ellipse cx="0" cy="0" rx="22" ry="12" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1"/>
-      <ellipse cx="0" cy="0" rx="19" ry="10" fill="none" stroke="#a0a0b0" stroke-width="0.5"/>
+    <g transform="translate(480, 370)">
+      <circle cx="0" cy="0" r="26" fill="#0a0a19" stroke="#7fd8c8" stroke-width="1.2"/>
+      <circle cx="0" cy="0" r="22" fill="none" stroke="#505060" stroke-width="0.6"/>
       <g class="pc-fan__blades">
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
-        <path d="M 0,-8 Q 4,-3 0,0 Q -4,-3 0,-8 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(120)"/>
+        <path d="M 0,-16 Q 7,-5 0,0 Q -7,-5 0,-16 Z" fill="#7fd8c8" opacity="0.7" transform="rotate(240)"/>
       </g>
-      <circle cx="0" cy="0" r="2" fill="#0a0a19" stroke="#7fd8c8" stroke-width="0.6"/>
+      <circle cx="0" cy="0" r="4" fill="#0a1a10" stroke="#7fd8c8" stroke-width="0.6"/>
     </g>
 
-    <!-- Cable de alimentación PCIe (mallado) -->
-    <path d="M 480 490 Q 495 485 495 470"
-          fill="none"
-          stroke="#2a2a3a"
-          stroke-width="5"
-          stroke-linecap="round"/>
-    <path d="M 480 490 Q 495 485 495 470"
-          fill="none"
-          stroke="#1a1a2e"
-          stroke-width="5"
-          stroke-dasharray="1 2"
-          stroke-linecap="round"/>
+    <!-- Cable de alimentación PCIe mallado -->
+    <path d="M 530 320 Q 555 305 555 280 Q 555 260 540 250"
+          fill="none" stroke="#1a1a2e" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 530 320 Q 555 305 555 280 Q 555 260 540 250"
+          fill="none" stroke="#2a2a3a" stroke-width="8" stroke-dasharray="1 2" stroke-linecap="round" opacity="0.7"/>
 
-    <!-- LED superior -->
-    <path d="M 345 418 L 475 487" stroke="#7fd8c8" stroke-width="1.5" opacity="0.9" filter="url(#glow)">
-      <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2.4s" repeatCount="indefinite"/>
-    </path>
+    <!-- Conector PCIe (parte inferior izquierda) -->
+    <rect x="270" y="405" width="40" height="8" rx="1"
+          fill="#c9a0ff" opacity="0.9"/>
+    <line x1="280" y1="408" x2="280" y2="412" stroke="#0a1a10" stroke-width="0.8"/>
+    <line x1="290" y1="408" x2="290" y2="412" stroke="#0a1a10" stroke-width="0.8"/>
+    <line x1="300" y1="408" x2="300" y2="412" stroke="#0a1a10" stroke-width="0.8"/>
+
+    <!-- LED superior (línea) -->
+    <rect x="275" y="318" width="250" height="1.5" fill="#7fd8c8" filter="url(#glow)">
+      <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite"/>
+    </rect>
   </g>
 
-  <!-- ====================== SSD NVMe ====================== -->
+  <!-- ============ SSD NVMe ============ -->
   <g class="pc-part pc-part--storage" data-part="storage">
-    <!-- PCB -->
-    <path d="M 350 500 L 430 540 L 430 555 L 350 515 Z"
-          fill="#0a1a10"
-          stroke="#c9a0ff"
-          stroke-width="1"/>
+    <!-- PCB base -->
+    <rect x="280" y="440" width="150" height="35" rx="2"
+          fill="#0a1a10" stroke="#c9a0ff" stroke-width="1"/>
 
     <!-- Chips de memoria -->
-    <path d="M 358 505 L 378 515 L 378 525 L 358 515 Z"
-          fill="#1a1a2e"
-          stroke="#c9a0ff"
-          stroke-width="0.5"/>
-    <path d="M 385 520 L 405 530 L 405 540 L 385 530 Z"
-          fill="#1a1a2e"
-          stroke="#c9a0ff"
-          stroke-width="0.5"/>
+    <rect x="290" y="446" width="30" height="10" fill="#1a1a2e" stroke="#c9a0ff" stroke-width="0.5"/>
+    <rect x="330" y="446" width="30" height="10" fill="#1a1a2e" stroke="#c9a0ff" stroke-width="0.5"/>
 
     <!-- Disipador con aletas -->
-    <path d="M 355 495 L 425 530 L 425 540 L 355 505 Z"
-          fill="url(#metal)"
-          stroke="#c9a0ff"
-          stroke-width="0.6"
-          opacity="0.9"/>
-    <line x1="365" y1="500" x2="365" y2="510" stroke="#606070" stroke-width="0.5"/>
-    <line x1="375" y1="505" x2="375" y2="515" stroke="#606070" stroke-width="0.5"/>
-    <line x1="385" y1="510" x2="385" y2="520" stroke="#606070" stroke-width="0.5"/>
-    <line x1="395" y1="515" x2="395" y2="525" stroke="#606070" stroke-width="0.5"/>
-    <line x1="405" y1="520" x2="405" y2="530" stroke="#606070" stroke-width="0.5"/>
+    <rect x="285" y="435" width="140" height="8" rx="1"
+          fill="url(#metalHeat)" stroke="#c9a0ff" stroke-width="0.6"/>
+    <line x1="295" y1="435" x2="295" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="310" y1="435" x2="310" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="325" y1="435" x2="325" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="340" y1="435" x2="340" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="355" y1="435" x2="355" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="370" y1="435" x2="370" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="385" y1="435" x2="385" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="400" y1="435" x2="400" y2="443" stroke="#505060" stroke-width="0.6"/>
+    <line x1="415" y1="435" x2="415" y2="443" stroke="#505060" stroke-width="0.6"/>
 
     <!-- LED -->
-    <circle cx="410" cy="533" r="1.5" fill="#c9a0ff" filter="url(#glow)">
+    <circle cx="420" cy="460" r="2" fill="#c9a0ff" filter="url(#glow)">
       <animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/>
     </circle>
   </g>
 
-  <!-- ====================== REFRIGERACIÓN LÍQUIDA (AIO) ====================== -->
+  <!-- ============ REFRIGERACIÓN LÍQUIDA (AIO) ============ -->
   <g class="pc-part pc-part--cooling" data-part="cooling">
-    <!-- Radiador (con aletas) -->
-    <path d="M 500 240 L 590 285 L 590 420 L 500 375 Z"
-          fill="#0a0a19"
-          stroke="#a0c4ff"
-          stroke-width="1.2"/>
+    <!-- Radiador (arriba del chasis) -->
+    <rect x="270" y="105" width="240" height="30" rx="2"
+          fill="#0a0a19" stroke="#a0c4ff" stroke-width="1.2"/>
+
     <!-- Aletas del radiador -->
-    <line x1="510" y1="245" x2="510" y2="380" stroke="#2a2a3a" stroke-width="1.2"/>
-    <line x1="525" y1="252" x2="525" y2="387" stroke="#2a2a3a" stroke-width="1.2"/>
-    <line x1="540" y1="260" x2="540" y2="395" stroke="#2a2a3a" stroke-width="1.2"/>
-    <line x1="555" y1="267" x2="555" y2="402" stroke="#2a2a3a" stroke-width="1.2"/>
-    <line x1="570" y1="275" x2="570" y2="410" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="285" y1="105" x2="285" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="300" y1="105" x2="300" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="315" y1="105" x2="315" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="330" y1="105" x2="330" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="345" y1="105" x2="345" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="360" y1="105" x2="360" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="375" y1="105" x2="375" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="390" y1="105" x2="390" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="405" y1="105" x2="405" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="420" y1="105" x2="420" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="435" y1="105" x2="435" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="450" y1="105" x2="450" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="465" y1="105" x2="465" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="480" y1="105" x2="480" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
+    <line x1="495" y1="105" x2="495" y2="135" stroke="#2a2a3a" stroke-width="1.2"/>
 
-    <!-- Ventiladores del radiador -->
-    <g transform="translate(545, 285)">
-      <ellipse cx="0" cy="0" rx="20" ry="11" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.8"/>
+    <!-- Ventiladores del radiador (pequeños, superpuestos) -->
+    <g transform="translate(330, 120)">
+      <circle cx="0" cy="0" r="10" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.8"/>
       <g class="pc-fan__blades">
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75"/>
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(120)"/>
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(240)"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(120)"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(240)"/>
       </g>
-      <circle cx="0" cy="0" r="1.8" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.5"/>
+      <circle cx="0" cy="0" r="1.5" fill="#a0c4ff"/>
     </g>
-    <g transform="translate(545, 335)">
-      <ellipse cx="0" cy="0" rx="20" ry="11" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.8"/>
+    <g transform="translate(450, 120)">
+      <circle cx="0" cy="0" r="10" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.8"/>
       <g class="pc-fan__blades">
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75"/>
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(120)"/>
-        <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(240)"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(120)"/>
+        <path d="M 0,-6 Q 3,-2 0,0 Q -3,-2 0,-6 Z" fill="#a0c4ff" opacity="0.75" transform="rotate(240)"/>
       </g>
-      <circle cx="0" cy="0" r="1.8" fill="#0a0a19" stroke="#a0c4ff" stroke-width="0.5"/>
+      <circle cx="0" cy="0" r="1.5" fill="#a0c4ff"/>
     </g>
 
-    <!-- Bomba (bloque sobre la CPU) -->
-    <ellipse cx="380" cy="280" rx="28" ry="16" fill="#0a0a19" stroke="#a0c4ff" stroke-width="1.2"/>
-    <ellipse cx="380" cy="280" rx="22" ry="12" fill="none" stroke="#a0c4ff" stroke-width="0.6" opacity="0.6"/>
-    <circle cx="380" cy="280" r="10" fill="#1a1a2e" stroke="#a0c4ff" stroke-width="1"/>
-    <circle cx="380" cy="280" r="4" fill="#a0c4ff" filter="url(#glow)">
-      <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
-    </circle>
-
-    <!-- Tubos con líquido -->
-    <!-- Tubo 1: bomba → radiador (superior) -->
-    <path d="M 400 270 Q 450 250 500 260" fill="none" stroke="#2a2a3a" stroke-width="7" stroke-linecap="round"/>
-    <path d="M 400 270 Q 450 250 500 260" fill="none" stroke="#a0c4ff" stroke-width="3" stroke-linecap="round" opacity="0.7">
-      <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="2s" repeatCount="indefinite"/>
+    <!-- Tubos que van del radiador a la bomba (sobre la CPU) -->
+    <!-- Tubo 1 -->
+    <path d="M 320 135 Q 300 155 320 175" fill="none" stroke="#1a1a2e" stroke-width="9" stroke-linecap="round"/>
+    <path d="M 320 135 Q 300 155 320 175" fill="none" stroke="#a0c4ff" stroke-width="4" stroke-linecap="round" opacity="0.75">
+      <animate attributeName="stroke-dashoffset" from="0" to="-60" dur="2s" repeatCount="indefinite"/>
     </path>
 
-    <!-- Tubo 2: radiador → bomba (inferior) -->
-    <path d="M 400 290 Q 450 300 500 300" fill="none" stroke="#2a2a3a" stroke-width="7" stroke-linecap="round"/>
-    <path d="M 400 290 Q 450 300 500 300" fill="none" stroke="#a0c4ff" stroke-width="3" stroke-linecap="round" opacity="0.7">
-      <animate attributeName="stroke-dashoffset" from="0" to="40" dur="2s" repeatCount="indefinite"/>
+    <!-- Tubo 2 -->
+    <path d="M 390 135 Q 410 155 390 175" fill="none" stroke="#1a1a2e" stroke-width="9" stroke-linecap="round"/>
+    <path d="M 390 135 Q 410 155 390 175" fill="none" stroke="#a0c4ff" stroke-width="4" stroke-linecap="round" opacity="0.75">
+      <animate attributeName="stroke-dashoffset" from="0" to="60" dur="2s" repeatCount="indefinite"/>
     </path>
   </g>
 
-  <!-- ====================== FUENTE DE ALIMENTACIÓN ====================== -->
+  <!-- ============ FUENTE DE ALIMENTACIÓN ============ -->
   <g class="pc-part pc-part--psu" data-part="psu">
-    <!-- Cuerpo de la fuente -->
-    <path d="M 340 555 L 450 610 L 450 640 L 340 585 Z"
-          fill="url(#psuBody)"
-          stroke="#f4d98a"
-          stroke-width="1.2"/>
+    <!-- Cuerpo -->
+    <rect x="240" y="490" width="320" height="45" rx="2"
+          fill="url(#psuBody)" stroke="#f4d98a" stroke-width="1.2"/>
 
     <!-- Rejilla frontal -->
-    <ellipse cx="395" cy="585" rx="20" ry="11" fill="#0a0a19" stroke="#f4d98a" stroke-width="0.8"/>
+    <ellipse cx="300" cy="512" rx="18" ry="10" fill="#0a0a19" stroke="#f4d98a" stroke-width="0.8"/>
     <g class="pc-fan__blades">
-      <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#f4d98a" opacity="0.5" transform="translate(395, 585)"/>
-      <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#f4d98a" opacity="0.5" transform="translate(395, 585) rotate(120)"/>
-      <path d="M 0,-7 Q 4,-3 0,0 Q -4,-3 0,-7 Z" fill="#f4d98a" opacity="0.5" transform="translate(395, 585) rotate(240)"/>
+      <path d="M 0,-7 Q 4,-2 0,0 Q -4,-2 0,-7 Z" fill="#f4d98a" opacity="0.55" transform="translate(300, 512)"/>
+      <path d="M 0,-7 Q 4,-2 0,0 Q -4,-2 0,-7 Z" fill="#f4d98a" opacity="0.55" transform="translate(300, 512) rotate(120)"/>
+      <path d="M 0,-7 Q 4,-2 0,0 Q -4,-2 0,-7 Z" fill="#f4d98a" opacity="0.55" transform="translate(300, 512) rotate(240)"/>
     </g>
 
-    <!-- Cables mallados saliendo (24-pin + CPU) -->
-    <path d="M 450 600 Q 480 590 480 560 Q 480 530 460 500"
-          fill="none"
-          stroke="#1a1a2e"
-          stroke-width="8"
-          stroke-linecap="round"/>
-    <path d="M 450 600 Q 480 590 480 560 Q 480 530 460 500"
-          fill="none"
-          stroke="#2a2a3a"
-          stroke-width="8"
-          stroke-dasharray="1 2"
-          stroke-linecap="round"
-          opacity="0.7"/>
+    <!-- Etiqueta lateral -->
+    <rect x="340" y="497" width="180" height="30" rx="1"
+          fill="#0a0804" stroke="rgba(244, 217, 138, 0.3)" stroke-width="0.5"/>
+    <text x="430" y="512" font-family="JetBrains Mono, monospace" font-size="7" fill="#f4d98a" text-anchor="middle" opacity="0.7">80+ GOLD · 850W</text>
+    <text x="430" y="522" font-family="JetBrains Mono, monospace" font-size="5" fill="#7a90b0" text-anchor="middle" opacity="0.6">MODULAR</text>
 
-    <!-- Cable PCIe saliendo -->
-    <path d="M 455 615 Q 490 620 500 600"
-          fill="none"
-          stroke="#1a1a2e"
-          stroke-width="6"
-          stroke-linecap="round"/>
+    <!-- Cables mallados saliendo (hacia arriba, hacia la placa) -->
+    <path d="M 260 490 Q 250 470 260 450 Q 270 430 265 400"
+          fill="none" stroke="#1a1a2e" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 260 490 Q 250 470 260 450 Q 270 430 265 400"
+          fill="none" stroke="#2a2a3a" stroke-width="10" stroke-dasharray="1 2" stroke-linecap="round" opacity="0.7"/>
 
-    <!-- LED de encendido -->
-    <circle cx="355" cy="580" r="1.8" fill="#f4d98a" filter="url(#glow)">
+    <!-- LED -->
+    <circle cx="545" cy="497" r="2.5" fill="#f4d98a" filter="url(#glow)">
       <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite"/>
     </circle>
   </g>
 
-  <!-- ====================== DECORACIÓN: marcas de medición ====================== -->
+  <!-- ============ CRISTAL TEMPLADO (delante de todo) ============ -->
+  <g class="pc-part pc-part--glass" aria-hidden="true" pointer-events="none">
+    <!-- Superficie del cristal -->
+    <rect x="220" y="100" width="360" height="520" rx="4"
+          fill="url(#glassFront)"
+          opacity="0.9"/>
+
+    <!-- Reflejo diagonal (de arriba-izquierda a abajo-derecha) -->
+    <path d="M 220 100 L 400 100 L 220 280 Z"
+          fill="url(#glassReflect)"
+          opacity="0.7"/>
+
+    <!-- Reflejo inferior sutil -->
+    <path d="M 220 460 L 580 620 L 220 620 Z"
+          fill="rgba(255, 255, 255, 0.02)"
+          opacity="0.6"/>
+
+    <!-- Tornillos del cristal -->
+    <circle cx="230" cy="110" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="570" cy="110" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="230" cy="610" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="570" cy="610" r="3" fill="#1a1a2e" stroke="#d4a84b" stroke-width="0.8"/>
+
+    <!-- Branding grabado en el cristal -->
+    <text x="400" y="590" font-family="Bebas Neue, Arial Narrow, sans-serif" font-size="18" fill="#d4a84b" letter-spacing="6" text-anchor="middle" opacity="0.85">JAVIER</text>
+    <text x="400" y="604" font-family="JetBrains Mono, monospace" font-size="7" fill="rgba(244, 217, 138, 0.55)" letter-spacing="5" text-anchor="middle">GAMING · CUSTOM · 2023</text>
+  </g>
+
+  <!-- ============ LED DE ENCENDIDO (esquina superior derecha, sobre el marco) ============ -->
+  <circle cx="585" cy="90" r="4" fill="#00fff7" filter="url(#glow)">
+    <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="585" cy="90" r="8" fill="url(#ledCyan)" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- LED de actividad (parpadeo rápido) -->
+  <circle cx="585" cy="100" r="2" fill="#ff003c" filter="url(#glow)">
+    <animate attributeName="opacity" values="0.3;1;0.3;1;0.3;0.3" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ============ DECORACIÓN EXTERIOR ============ -->
   <g class="pc-deco" aria-hidden="true" opacity="0.4">
-    <!-- Líneas horizontales superior e inferior -->
-    <line x1="60" y1="40" x2="840" y2="40" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5"/>
-    <line x1="60" y1="660" x2="840" y2="660" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5"/>
+    <!-- Líneas de marco superior e inferior -->
+    <line x1="60" y1="40" x2="740" y2="40" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5"/>
+    <line x1="60" y1="680" x2="740" y2="680" stroke="rgba(0, 255, 247, 0.3)" stroke-width="0.5"/>
 
     <!-- Marcas verticales -->
     <line x1="60" y1="35" x2="60" y2="45" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
-    <line x1="840" y1="35" x2="840" y2="45" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
-    <line x1="60" y1="655" x2="60" y2="665" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
-    <line x1="840" y1="655" x2="840" y2="665" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
+    <line x1="740" y1="35" x2="740" y2="45" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
+    <line x1="60" y1="675" x2="60" y2="685" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
+    <line x1="740" y1="675" x2="740" y2="685" stroke="rgba(0, 255, 247, 0.5)" stroke-width="0.8"/>
 
     <!-- Círculos decorativos en las esquinas -->
     <circle cx="60" cy="40" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
-    <circle cx="840" cy="40" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
-    <circle cx="60" cy="660" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
-    <circle cx="840" cy="660" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="740" cy="40" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="60" cy="680" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
+    <circle cx="740" cy="680" r="3" fill="none" stroke="#d4a84b" stroke-width="0.8"/>
 
-    <!-- Texto de especificación -->
-    <text x="450" y="30" font-family="JetBrains Mono, monospace" font-size="8" fill="#d4a84b" letter-spacing="4" text-anchor="middle" opacity="0.7">// PC GAMING · CUSTOM BUILD //</text>
-    <text x="450" y="685" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a90b0" letter-spacing="3" text-anchor="middle" opacity="0.6">SPEC: MODEL 01 · 2023</text>
+    <!-- Texto de especificación arriba -->
+    <text x="400" y="30" font-family="JetBrains Mono, monospace" font-size="8" fill="#d4a84b" letter-spacing="5" text-anchor="middle" opacity="0.75">// PC GAMING · CUSTOM BUILD //</text>
+    <!-- Texto de especificación abajo -->
+    <text x="400" y="700" font-family="JetBrains Mono, monospace" font-size="7" fill="#7a90b0" letter-spacing="4" text-anchor="middle" opacity="0.6">SPEC: MODEL 01 · BUILT BY JAVIER</text>
   </g>
 </svg>
           <div class="pc-tooltip" id="pc-tooltip" role="tooltip" aria-hidden="true">
