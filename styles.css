@@ -4168,6 +4168,41 @@ html[data-theme="light"] .city-bg{
   z-index: 3;
   filter: brightness(.8);
 }
+
+/* =========================================================
+   NUEVO: posiciones 5 a 10 para el abanico completo (11 cartas)
+   ========================================================= */
+.game-card[data-pos="5"]{
+  transform: translate3d(250px, -20px, -240px) rotateY(-42deg) scale(.7);
+  z-index: 2;
+  filter: brightness(.7);
+}
+.game-card[data-pos="6"]{
+  transform: translate3d(-250px, -20px, -240px) rotateY(42deg) scale(.7);
+  z-index: 2;
+  filter: brightness(.7);
+}
+.game-card[data-pos="7"]{
+  transform: translate3d(290px, -30px, -300px) rotateY(-50deg) scale(.6);
+  z-index: 1;
+  filter: brightness(.55);
+}
+.game-card[data-pos="8"]{
+  transform: translate3d(-290px, -30px, -300px) rotateY(50deg) scale(.6);
+  z-index: 1;
+  filter: brightness(.55);
+}
+.game-card[data-pos="9"]{
+  transform: translate3d(0, -30px, -340px) rotateY(0deg) scale(.5);
+  z-index: 0;
+  filter: brightness(.45);
+}
+.game-card[data-pos="10"]{
+  transform: translate3d(0, -40px, -380px) rotateY(0deg) scale(.45);
+  z-index: 0;
+  filter: brightness(.4);
+}
+
 .game-card:hover .game-card__inner,
 .game-card:focus-visible .game-card__inner{
   border-color: var(--gold-bright);
@@ -4455,6 +4490,12 @@ html, body,
   .game-card[data-pos="2"]{ transform: translate3d(-110px, 0, -20px) rotateY(20deg) scale(.9) }
   .game-card[data-pos="3"]{ transform: translate3d(180px, -10px, -140px) rotateY(-32deg) scale(.8) }
   .game-card[data-pos="4"]{ transform: translate3d(-180px, -10px, -140px) rotateY(32deg) scale(.8) }
+  .game-card[data-pos="5"]{ transform: translate3d(210px, -20px, -210px) rotateY(-40deg) scale(.68) }
+  .game-card[data-pos="6"]{ transform: translate3d(-210px, -20px, -210px) rotateY(40deg) scale(.68) }
+  .game-card[data-pos="7"]{ transform: translate3d(240px, -30px, -260px) rotateY(-48deg) scale(.58) }
+  .game-card[data-pos="8"]{ transform: translate3d(-240px, -30px, -260px) rotateY(48deg) scale(.58) }
+  .game-card[data-pos="9"]{ transform: translate3d(0, -30px, -300px) rotateY(0deg) scale(.48) }
+  .game-card[data-pos="10"]{ transform: translate3d(0, -40px, -340px) rotateY(0deg) scale(.42) }
 }
 
 @media (max-width: 700px){
