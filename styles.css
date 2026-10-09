@@ -4533,6 +4533,11 @@ html, body,
     padding: 30px 20px;
     z-index: 400;
   }
+  .game-card:last-child:nth-child(odd){
+  grid-column: 1 / -1;
+  max-width: 50%;
+  margin-inline: auto;
+}
   .games-panel__poster-wrap{ max-width: 160px }
 }
 
