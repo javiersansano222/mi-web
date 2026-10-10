@@ -2089,8 +2089,7 @@
         matrixFrame = requestAnimationFrame(matrixStep);
       }
     });
-  }
-    /* =========================================================
+      /* =========================================================
      25. POP-UP DE VÍDEO — Próximo proyecto
      ========================================================= */
   const videoModal = $("#video-modal");
@@ -2099,7 +2098,6 @@
   const videoModalBackdrop = $("#video-modal-backdrop");
 
   if (videoModal && videoModalVideo && videoModalClose) {
-    const VIDEO_SESSION_KEY = "portfolio-video-seen";
     let videoAutoCloseTimer = null;
 
     const openVideoModal = () => {
@@ -2126,7 +2124,6 @@
       videoModal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
       videoModalVideo.pause();
-      try { sessionStorage.setItem(VIDEO_SESSION_KEY, "1"); } catch {}
     };
 
     // Al terminar el vídeo, esperar 2s para que el usuario vea el botón
@@ -2143,22 +2140,16 @@
       }
     });
 
-    // Solo mostrar en la primera visita de la sesión
-    let alreadySeen = false;
-    try { alreadySeen = sessionStorage.getItem(VIDEO_SESSION_KEY) === "1"; } catch {}
-
-    if (!alreadySeen) {
-      // Esperar a que la intro termine
-      const waitForIntro = () => {
-        if (!document.body.classList.contains("is-loading")) {
-          setTimeout(openVideoModal, 900);
-        } else {
-          setTimeout(waitForIntro, 400);
-        }
-      };
-      waitForIntro();
-    }
+    // Mostrar SIEMPRE (cada recarga)
+    const waitForIntro = () => {
+      if (!document.body.classList.contains("is-loading")) {
+        setTimeout(openVideoModal, 900);
+      } else {
+        setTimeout(waitForIntro, 400);
+      }
+    };
+    waitForIntro();
   }
-
+  }
   console.info("[script] Todo listo.");
 })();
