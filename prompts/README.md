@@ -237,6 +237,36 @@ Las claves de API se encuentran en `script.js` y `estate-genoves.html`. **Este p
 
 ---
 
+### ADR-004: Web3Forms para formularios de contacto
+
+**Fecha:** Octubre 2026
+**Estado:** Aceptada
+
+**Contexto**
+Necesitaba formularios que enviaran correos reales sin backend. Los 
+candidatos eran FormSubmit, Formspree y Web3Forms.
+
+**Decisión**
+Usar Web3Forms con `access_key` pública en el HTML.
+
+**Alternativas consideradas**
+- **FormSubmit**: probado. Muestra su propia página "Thanks!" en lugar del 
+  `_next` esperado hasta que el formulario se activa. Sin registro, sin panel 
+  de control. ❌ Más opaco.
+- **Formspree**: 50 envíos/mes gratis con panel. ✅ Bueno, pero requiere 
+  registro y el límite es bajo.
+- **FormSubmit con _next**: la redirección no funcionaba correctamente.
+- **Formulario propio con backend**: demasiado para un portafolio.
+
+**Consecuencias**
+- ✅ 250 envíos/mes gratis (5× más que Formspree).
+- ✅ Panel de control para ver submissions (tenemos 15 registrados).
+- ✅ Redirección personalizada a página `gracias.html`.
+- ✅ Fácil de integrar con `action` + `access_key`.
+- ✅ Funciona sin necesidad de backend.
+- ⚠️ El autoresponder (respuesta automática) es de pago (~10€/mes).
+- ⚠️ Dependencia de un servicio externo.
+
 ## 📄 Licencia y créditos
 
 - **Contenido y código:** © 2026 Javier Sansano Martínez.
@@ -258,9 +288,7 @@ Las claves de API se encuentran en `script.js` y `estate-genoves.html`. **Este p
 
 ---
 
-<div align="center">
 
-**Hecho con curiosidad, disciplina y mucho ☕**
 
 *Un paso cada día. Una idea cada vez.*
 
