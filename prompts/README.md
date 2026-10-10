@@ -121,7 +121,7 @@ mi-web/
     ├── skyrim-tag-page-cover-art.avif
     ├── pc.jpg
     ├── og-image.jpg
-    └── custom_gaming_pc.glb   # Modelo 3D del PC (no implementado aún)
+    
 ```
 
 ---
