@@ -130,6 +130,122 @@ html[data-era="neon-nocturno"]{
   --deco-sun: none;
 }
 
+/* =========================================================
+   FONDO ENRIQUECIDO — solo paleta Neón Nocturno
+   ========================================================= */
+
+/* 1. Añadir más halos de color al fondo del ocean */
+html[data-era="neon-nocturno"] .ocean {
+  background:
+    radial-gradient(ellipse 55% 45% at 12% 18%,
+      rgba(0, 255, 247, 0.35), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 78%,
+      rgba(255, 0, 229, 0.32), transparent 60%),
+    radial-gradient(ellipse 45% 35% at 50% 95%,
+      rgba(245, 255, 0, 0.15), transparent 65%),
+    radial-gradient(ellipse 40% 30% at 80% 10%,
+      rgba(138, 43, 226, 0.22), transparent 65%),
+    linear-gradient(180deg, #050510 0%, #0a0a1a 45%, #12001f 75%, #050510 100%);
+}
+
+/* 2. Halo del ocean más intenso y con dos colores */
+html[data-era="neon-nocturno"] .ocean__glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 30% 40%,
+      rgba(0, 255, 247, 0.45), transparent 65%),
+    radial-gradient(ellipse 60% 50% at 70% 60%,
+      rgba(255, 0, 229, 0.35), transparent 65%);
+  filter: blur(80px);
+  opacity: 0.9;
+}
+
+/* 3. Rejilla con más contraste */
+html[data-era="neon-nocturno"] .ocean::after {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      rgba(0, 255, 247, 0.08) 3px,
+      rgba(0, 255, 247, 0.08) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 80px,
+      rgba(255, 0, 229, 0.04) 80px,
+      rgba(255, 0, 229, 0.04) 81px
+    );
+}
+
+/* 4. Rejilla de fondo general más visible */
+html[data-era="neon-nocturno"] .city-bg::before {
+  background-image:
+    linear-gradient(to right,
+      rgba(0, 255, 247, 0.55) 1px,
+      transparent 1px),
+    linear-gradient(to bottom,
+      rgba(0, 255, 247, 0.55) 1px,
+      transparent 1px);
+}
+
+/* 5. Burbujas más visibles */
+html[data-era="neon-nocturno"] .bubble {
+  border-color: rgba(0, 255, 247, 0.85);
+  box-shadow:
+    inset 0 0 8px rgba(0, 255, 247, 0.6),
+    0 0 18px rgba(0, 255, 247, 0.5),
+    0 0 30px rgba(255, 0, 229, 0.25);
+}
+
+/* 6. Partículas con más brillo */
+html[data-era="neon-nocturno"] #particles {
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(0, 255, 247, 0.8));
+}
+
+/* 7. Cabecera con un poco de color de fondo */
+html[data-era="neon-nocturno"] .site-header {
+  background: linear-gradient(180deg,
+    rgba(5, 5, 16, 0.98) 0%,
+    rgba(10, 10, 30, 0.95) 100%) !important;
+  box-shadow:
+    0 1px 0 rgba(0, 255, 247, 0.15),
+    0 4px 20px rgba(0, 255, 247, 0.05);
+}
+
+/* 8. Barra de bienvenida con más glow */
+html[data-era="neon-nocturno"] .welcome-bar {
+  background: linear-gradient(180deg,
+    rgba(0, 255, 247, 0.18) 0%,
+    rgba(5, 5, 16, 0.95) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 255, 247, 0.5),
+    inset 0 -1px 0 rgba(255, 0, 229, 0.2),
+    0 1px 0 rgba(0, 255, 247, 0.25);
+}
+
+/* 9. Línea horizontal de neón que recorre el fondo */
+html[data-era="neon-nocturno"] .ocean .deco-rays {
+  display: block !important;
+  background:
+    linear-gradient(180deg,
+      transparent 0%,
+      transparent 47%,
+      rgba(255, 0, 229, 0.08) 49%,
+      rgba(0, 255, 247, 0.15) 50%,
+      rgba(255, 0, 229, 0.08) 51%,
+      transparent 53%,
+      transparent 100%);
+  opacity: 1;
+  animation: neon-scan 8s ease-in-out infinite;
+}
+
+@keyframes neon-scan {
+  0%, 100% { transform: translateY(-20vh); opacity: 0; }
+  50%      { transform: translateY(20vh);  opacity: 1; }
+}
+
 html[data-era="matrix-verde"]{
   --gold: #00ff41;
   --gold-bright: #b8ffbe;
@@ -3965,6 +4081,30 @@ html[data-theme="light"] .geo-welcome{
 .deco-rays{ display: var(--deco-rays, none) }
 .deco-rain{ display: var(--deco-rain, none) }
 .deco-sun{ display: var(--deco-sun, none) }
+
+/* Asegurar que el canvas Matrix solo se muestra en la paleta matrix-verde */
+html[data-era="neon-nocturno"] .deco-matrix,
+html[data-era="blade-runner"] .deco-matrix,
+html[data-era="vaporwave"] .deco-matrix,
+html[data-era="sangre-neon"] .deco-matrix,
+html[data-era="ultravioleta"] .deco-matrix {
+  display: none !important;
+}
+
+html[data-era="matrix-verde"] .deco-matrix {
+  display: block !important;
+}
+
+/* El canvas Matrix solo tiene fondo negro en su propia paleta */
+html[data-era="neon-nocturno"] #matrix-canvas,
+html[data-era="blade-runner"] #matrix-canvas,
+html[data-era="vaporwave"] #matrix-canvas,
+html[data-era="sangre-neon"] #matrix-canvas,
+html[data-era="ultravioleta"] #matrix-canvas {
+  background: transparent !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 /* --- Matrix: lluvia de código (canvas) --- */
 .deco-matrix{
