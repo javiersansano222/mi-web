@@ -903,6 +903,7 @@
       if (chatInput) chatInput.placeholder = t.placeholder;
       const quickBtns = $$(".chat__quick-btn", chatQuick || document);
       const quickMap = ["projects", "contact", "studies", "pc", "games"];
+
       quickBtns.forEach((btn, i) => {
         const key = quickMap[i];
         if (key && t.quick[key]) btn.textContent = t.quick[key];
@@ -1038,7 +1039,7 @@
   }
 
   /* =========================================================
-     14. NASA APOD
+     14. NASA APOD (con caché en localStorage)
      ========================================================= */
   const NASA_API_KEY = "STsrnenqw6mMNKQdq19HYWDUdkDKVD7QqNl11Wp3";
 
@@ -1052,8 +1053,97 @@
   const apodDatePicker = $("#apod-date-picker");
   const apodToday = $("#apod-today");
 
+  /* --- Caché APOD --- */
+  const APOD_CACHE_KEY = "portfolio-apod-cache";
+  const APOD_CACHE_TTL = 24 * 60 * 60 * 1000;        // 24 horas = "fresca"
+  const APOD_CACHE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30 días = "usable como fallback"
+
+  const getApodCache = () => {
+    try {
+      const raw = safeGet(APOD_CACHE_KEY);
+      if (!raw) return null;
+      const cache = JSON.parse(raw);
+      if (!cache || !cache.data) return null;
+      return cache;
+    } catch {
+      return null;
+    }
+  };
+
+  const setApodCache = (data) => {
+    try {
+      safeSet(APOD_CACHE_KEY, JSON.stringify({
+        time: Date.now(),
+        data: data
+      }));
+    } catch {}
+  };
+
+  const isCacheFresh = (cache) => {
+    return cache && (Date.now() - cache.time < APOD_CACHE_TTL);
+  };
+
+  const isCacheUsable = (cache) => {
+    return cache && (Date.now() - cache.time < APOD_CACHE_MAX_AGE);
+  };
+
+  /* --- Renderizar APOD (desde API o desde caché) --- */
+  const renderApod = (apod, fromCache = false) => {
+    if (!apod || !apodMedia) return;
+
+    if (apodTitle) apodTitle.textContent = apod.title || "Sin título";
+    if (apodDate) {
+      apodDate.textContent = (apod.date || "—") + (fromCache ? " · guardada" : "");
+    }
+    if (apodType) apodType.textContent = apod.media_type === "video" ? "Vídeo" : "Imagen";
+    if (apodExplanation) apodExplanation.textContent = apod.explanation || "—";
+    if (apodLink) apodLink.href = apod.hdurl || apod.url || "#";
+
+    const media = apod.media_type === "video"
+      ? apod.url
+      : (apod.url || apod.hdurl);
+
+    apodMedia.innerHTML = "";
+
+    if (apod.media_type === "video") {
+      if (media && media.includes("youtube")) {
+        const embedUrl = media.replace("watch?v=", "embed/").replace("http://", "https://");
+        apodMedia.innerHTML = `<iframe src="${escapeHTML(embedUrl)}" allowfullscreen loading="lazy" title="${escapeHTML(apod.title)}"></iframe>`;
+      } else {
+        apodMedia.innerHTML = `<video src="${escapeHTML(media)}" controls poster="${escapeHTML(apod.thumbnail_url || '')}" preload="metadata"></video>`;
+      }
+    } else {
+      const img = document.createElement("img");
+      img.src = media;
+      img.alt = apod.title || "APOD";
+      img.loading = "lazy";
+      img.onerror = () => {
+        apodMedia.innerHTML = `
+          <div class="apod__placeholder">
+            <span class="apod__placeholder-icon">✳</span>
+            <strong>Imagen no disponible</strong>
+            <small>La imagen de hoy no carga ahora mismo. <a href="${escapeHTML(apod.hdurl || apod.url || '#')}" target="_blank" rel="noopener">Ver en NASA</a>.</small>
+          </div>
+        `;
+      };
+      apodMedia.appendChild(img);
+    }
+
+    if (apodLoader) apodLoader.classList.add("is-hidden");
+  };
+
+  /* --- Placeholder de error (con fallback a caché) --- */
   const mostrarApodError = (err) => {
     if (apodLoader) apodLoader.classList.add("is-hidden");
+
+    // Antes de mostrar el error, intentar usar caché antigua como fallback
+    const cache = getApodCache();
+    if (isCacheUsable(cache)) {
+      console.info("[apod] API falló, usando caché como fallback");
+      renderApod(cache.data, true);
+      return;
+    }
+
     if (apodMedia) {
       apodMedia.innerHTML = `
         <div class="apod__placeholder">
@@ -1078,9 +1168,21 @@
     if (apodType) apodType.textContent = "Sin conexión";
   };
 
+  /* --- Cargar APOD (con caché) --- */
   const loadApod = async (date) => {
     if (!apodMedia) return;
 
+    // 1. Si NO se ha pedido fecha concreta, mirar caché fresca primero
+    if (!date) {
+      const cache = getApodCache();
+      if (isCacheFresh(cache)) {
+        console.info("[apod] Sirviendo desde caché (fresca):", cache.data.title);
+        renderApod(cache.data, true);
+        return;
+      }
+    }
+
+    // 2. Mostrar loader
     if (apodLoader) apodLoader.classList.remove("is-hidden");
     if (apodTitle) apodTitle.textContent = "Cargando…";
     if (apodExplanation) apodExplanation.textContent = "—";
@@ -1095,7 +1197,7 @@
       let url = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&thumbs=true`;
       if (date) url += `&date=${date}`;
 
-      console.info("[apod] Consultando:", date || "hoy");
+      console.info("[apod] Consultando API:", date || "hoy");
 
       const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeoutId);
@@ -1129,35 +1231,12 @@
         return;
       }
 
-      if (apodTitle) apodTitle.textContent = apod.title || "Sin título";
-      if (apodDate) apodDate.textContent = apod.date || "—";
-      if (apodType) apodType.textContent = apod.media_type === "video" ? "Vídeo" : "Imagen";
-      if (apodExplanation) apodExplanation.textContent = apod.explanation || "—";
-      if (apodLink) apodLink.href = apod.hdurl || apod.url || "#";
+      // 3. ¡ÉXITO! Guardar en caché
+      setApodCache(apod);
+      console.info("[apod] Guardado en caché:", apod.title);
 
-      const media = apod.media_type === "video"
-        ? apod.url
-        : (apod.url || apod.hdurl);
-
-      if (apod.media_type === "video") {
-        if (media && media.includes("youtube")) {
-          const embedUrl = media.replace("watch?v=", "embed/").replace("http://", "https://");
-          apodMedia.innerHTML = `<iframe src="${escapeHTML(embedUrl)}" allowfullscreen loading="lazy" title="${escapeHTML(apod.title)}"></iframe>`;
-        } else {
-          apodMedia.innerHTML = `<video src="${escapeHTML(media)}" controls poster="${escapeHTML(apod.thumbnail_url || '')}" preload="metadata"></video>`;
-        }
-      } else {
-        const img = document.createElement("img");
-        img.src = media;
-        img.alt = apod.title || "APOD";
-        img.loading = "lazy";
-        img.onerror = () => mostrarApodError({ code: 0, msg: "Imagen no disponible" });
-        apodMedia.appendChild(img);
-      }
-
-      if (apodLoader) apodLoader.classList.add("is-hidden");
-
-      console.info("[apod] Cargado:", apod.title);
+      // 4. Renderizar
+      renderApod(apod);
 
     } catch (err) {
       clearTimeout(timeoutId);
