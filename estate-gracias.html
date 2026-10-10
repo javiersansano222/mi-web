@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gracias — Estate Genovés</title>
+<meta name="description" content="Mensaje recibido. Estate Genovés te contactará en breve.">
+<meta name="theme-color" content="#1b1814">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --sand:#e8dfcf;
+  --stone:#c9bfae;
+  --off:#f7f3ec;
+  --ink:#1b1814;
+  --acc:#9c8158;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:Inter,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--ink);
+  color:var(--off);
+  font-weight:300;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:40px 20px;
+  overflow-x:hidden;
+}
+
+/* Fondo con textura sutil */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%,
+      rgba(156,129,88,.18), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 100%,
+      rgba(201,191,174,.08), transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Marco decorativo */
+.frame{
+  position:relative;
+  max-width:640px;
+  width:100%;
+  padding:70px 50px 60px;
+  border:1px solid var(--acc);
+  outline:1px solid rgba(156,129,88,.3);
+  outline-offset:6px;
+  background:rgba(27,24,20,.6);
+  backdrop-filter:blur(10px);
+  text-align:center;
+  z-index:1;
+}
+
+.frame::before,
+.frame::after{
+  content:"";
+  position:absolute;
+  width:18px;
+  height:18px;
+  pointer-events:none;
+}
+.frame::before{
+  top:6px;left:6px;
+  border-top:1px solid var(--acc);
+  border-left:1px solid var(--acc);
+}
+.frame::after{
+  bottom:6px;right:6px;
+  border-bottom:1px solid var(--acc);
+  border-right:1px solid var(--acc);
+}
+
+/* Símbolo superior */
+.symbol{
+  font-size:44px;
+  color:var(--acc);
+  margin-bottom:26px;
+  letter-spacing:.1em;
+  text-shadow:0 0 20px rgba(156,129,88,.5);
+}
+
+/* Eyebrow */
+.eyebrow{
+  font-family:var(--sans);
+  font-size:.7rem;
+  letter-spacing:.4em;
+  text-transform:uppercase;
+  color:var(--acc);
+  margin-bottom:22px;
+  font-weight:400;
+}
+
+/* Título */
+h1{
+  font-family:var(--serif);
+  font-weight:500;
+  font-size:clamp(2.4rem,6vw,3.8rem);
+  line-height:1;
+  letter-spacing:-.01em;
+  margin-bottom:24px;
+  color:var(--off);
+}
+h1 em{
+  font-style:italic;
+  color:var(--acc);
+  font-weight:500;
+}
+
+/* Divisor */
+.divider{
+  width:60px;
+  height:1px;
+  background:var(--acc);
+  margin:0 auto 30px;
+  position:relative;
+}
+.divider::before,
+.divider::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:4px;
+  height:4px;
+  background:var(--acc);
+  border-radius:50%;
+  transform:translateY(-50%);
+}
+.divider::before{left:-14px}
+.divider::after{right:-14px}
+
+/* Texto */
+p.text{
+  font-size:1rem;
+  line-height:1.9;
+  color:var(--stone);
+  max-width:460px;
+  margin:0 auto 38px;
+}
+
+/* Botón */
+.btn{
+  display:inline-block;
+  padding:16px 38px;
+  background:var(--off);
+  color:var(--ink);
+  text-decoration:none;
+  font-family:var(--sans);
+  font-size:.72rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  font-weight:500;
+  transition:background .3s,color .3s,transform .3s;
+}
+.btn:hover{
+  background:var(--acc);
+  color:#fff;
+  transform:translateY(-2px);
+}
+
+/* Footer */
+.footer{
+  margin-top:40px;
+  padding-top:26px;
+  border-top:1px dashed rgba(156,129,88,.3);
+  font-size:.75rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--stone);
+  opacity:.7;
+}
+.footer a{
+  color:var(--acc);
+  text-decoration:none;
+  border-bottom:1px solid rgba(156,129,88,.4);
+  transition:color .2s,border-color .2s;
+}
+.footer a:hover{
+  color:var(--off);
+  border-color:var(--acc);
+}
+
+@media(max-width:600px){
+  .frame{padding:50px 28px 44px}
+  h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="symbol" aria-hidden="true">✦</div>
+
+  <p class="eyebrow">Mensaje recibido</p>
+
+  <h1>Gracias por<br><em>escribirnos.</em></h1>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <p class="text">
+    Hemos recibido tu mensaje. En Estate Genovés
+    valoramos cada conversación y te responderemos
+    personalmente en las próximas 24 horas.
+  </p>
+
+  <a class="btn" href="estate-genoves.html">
+    Volver a la colección <span aria-hidden="true">←</span>
+  </a>
+
+  <p class="footer">
+    © 2026 Estate Genovés · Exclusive Properties
+  </p>
+</div>
+
+</body>
+</html>
