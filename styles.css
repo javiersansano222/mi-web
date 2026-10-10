@@ -2656,7 +2656,7 @@ html[data-theme="light"] .chat__send{
   box-shadow: 0 0 8px #7bc9a0;
   animation: blink 1.6s steps(2, start) infinite;
 }
-#hero-art-fallback{ display: none }
+#hero-art-fallback{ display: block }
 
 /* =========================================================
    26. INTRO CINEMATOGRÁFICA
