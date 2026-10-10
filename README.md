@@ -236,36 +236,141 @@ Las claves de API se encuentran en `script.js` y `estate-genoves.html`. **Este p
 | ![Hero](img/og-image.jpg) | *(pendiente)* | *(pendiente)* |
 
 ---
+---
+
+## 🧠 Decisiones de arquitectura (ADR)
+
+Documentación de las decisiones técnicas clave del proyecto, con contexto,
+alternativas consideradas y consecuencias.
+
+---
+
+### ADR-001: Sistema de paletas intercambiables con variables CSS
+
+**Fecha:** Octubre 2026 · **Estado:** Aceptada
+
+**Contexto**
+El portafolio necesitaba destacar visualmente. Un único esquema de color lo haría parecer una plantilla más. Pero cargar CSS diferente por cada paleta aumentaría el peso y el tiempo de carga.
+
+**Decisión**
+Implementar 6 paletas intercambiables (Neón Nocturno, Matrix Verde, Blade Runner, Vaporwave, Sangre Neón, Ultravioleta) mediante variables CSS en `:root` y atributos `data-era` en `<html>`.
+
+**Alternativas consideradas**
+- **CSS separado por paleta**: aumenta el peso, dificulta el mantenimiento y no permite cambio instantáneo sin recargar.
+- **Tailwind con temas**: requiere build y añade ~50 KB de CSS. Innecesario para una web personal.
+- **Paletas predefinidas sin cambio en vivo**: menos interactivo.
+
+**Consecuencias**
+- ✅ Cambio de paleta instantáneo sin recargar la página.
+- ✅ Persistencia en `localStorage` para recordar la preferencia.
+- ✅ Un solo `styles.css` (~40 KB gzip) sirve para todas las paletas.
+- ✅ Fácil añadir nuevas paletas: solo añadir un bloque `html[data-era="..."]`.
+- ⚠️ `styles.css` crece con cada paleta nueva (coste de red despreciable).
+
+---
+
+### ADR-002: JavaScript vanilla en lugar de React o Vue
+
+**Fecha:** Septiembre 2026 · **Estado:** Aceptada
+
+**Contexto**
+El portafolio necesitaba interactividad (chatbot, cambio de tema, consumo de APIs, abanico 3D de intereses). El objetivo era aprender DAM, no aprender un framework.
+
+**Decisión**
+JavaScript vanilla (ES6+) sin frameworks ni bundlers. Todo el código en un `script.js` modular con IIFEs.
+
+**Alternativas consideradas**
+- **React + Vite**: bundle >100 KB, requiere build, añade complejidad para una sola página.
+- **Vue + Nuxt**: mismo problema, con más configuración.
+- **Astro**: genera HTML estático, pero añade dependencias de build.
+
+**Consecuencias**
+- ✅ Bundle final ~30 KB (vs. >100 KB con React).
+- ✅ Lighthouse 90+ sostenido en rendimiento.
+- ✅ Cero dependencias de build, cero node_modules.
+- ✅ Control total sobre cada línea de código.
+- ✅ Aprendizaje de fundamentos reales de JavaScript.
+- ⚠️ Más código manual que escribir.
+- ⚠️ Sin hot reload ni componentización automática.
+
+---
+
+### ADR-003: Hero con SVG animado en lugar de Three.js
+
+**Fecha:** Octubre 2026 · **Estado:** Aceptada
+
+**Contexto**
+El hero necesitaba un elemento visual impactante (una ciudad Art Déco cyberpunk). Inicialmente se implementó con Three.js (rascacielos 3D procedural + WebGL).
+
+**Decisión**
+Sustituir Three.js por un SVG animado con CSS puro. Eliminar el archivo `scene.js` y el canvas 3D del DOM.
+
+**Alternativas consideradas**
+- **Three.js solo en desktop, SVG en móvil**: complejidad de mantenimiento y dos rutas de código.
+- **Vídeo de fondo con la ciudad**: pesa MB, complica responsive.
+- **Solo SVG sin animaciones**: menos impactante, no aporta vida.
+
+**Consecuencias**
+- ✅ Ahorro de ~600 KB (tamaño de Three.js).
+- ✅ Lighthouse 90+ en ambos tipos de dispositivo.
+- ✅ SVG escala perfectamente en cualquier resolución.
+- ✅ Animaciones CSS más ligeras que renderizado WebGL.
+- ✅ Coherencia visual con el resto del portafolio.
+- ⚠️ Menos "wow" tecnológico que WebGL (pero misma sensación visual).
+
+---
 
 ### ADR-004: Web3Forms para formularios de contacto
 
-**Fecha:** Octubre 2026
-**Estado:** Aceptada
+**Fecha:** Octubre 2026 · **Estado:** Aceptada
 
 **Contexto**
-Necesitaba formularios que enviaran correos reales sin backend. Los 
-candidatos eran FormSubmit, Formspree y Web3Forms.
+Necesitaba formularios que enviaran correos reales sin backend. Los candidatos eran FormSubmit, Formspree y Web3Forms.
 
 **Decisión**
 Usar Web3Forms con `access_key` pública en el HTML.
 
 **Alternativas consideradas**
-- **FormSubmit**: probado. Muestra su propia página "Thanks!" en lugar del 
-  `_next` esperado hasta que el formulario se activa. Sin registro, sin panel 
-  de control. ❌ Más opaco.
-- **Formspree**: 50 envíos/mes gratis con panel. ✅ Bueno, pero requiere 
-  registro y el límite es bajo.
-- **FormSubmit con _next**: la redirección no funcionaba correctamente.
+- **FormSubmit**: probado. Muestra su propia página "Thanks!" en lugar del `_next` esperado hasta que el formulario se activa. Más opaco.
+- **Formspree**: 50 envíos/mes gratis con panel. Bueno, pero requiere registro y el límite es bajo.
 - **Formulario propio con backend**: demasiado para un portafolio.
 
 **Consecuencias**
 - ✅ 250 envíos/mes gratis (5× más que Formspree).
-- ✅ Panel de control para ver submissions (tenemos 15 registrados).
+- ✅ Panel de control para ver submissions.
 - ✅ Redirección personalizada a página `gracias.html`.
 - ✅ Fácil de integrar con `action` + `access_key`.
 - ✅ Funciona sin necesidad de backend.
 - ⚠️ El autoresponder (respuesta automática) es de pago (~10€/mes).
 - ⚠️ Dependencia de un servicio externo.
+
+---
+
+### ADR-005: Diagrama SVG interactivo en lugar de modelo 3D del PC
+
+**Fecha:** Octubre 2026 · **Estado:** Aceptada
+
+**Contexto**
+Quería mostrar mi PC gaming en la sección "Dentro del ordenador". Inicialmente consideré un modelo 3D `.glb` con Three.js y carga diferida.
+
+**Decisión**
+Crear un diagrama SVG interactivo con hotspots, tooltips, ventiladores animados con CSS y LEDs parpadeando.
+
+**Alternativas consideradas**
+- **Modelo 3D .glb original**: pesaba 65 MB, 1.035.437 triángulos, 95 materiales. Inviable para una web.
+- **Modelo 3D comprimido con Draco**: bajaba a ~5 MB pero con pérdida notable de calidad.
+- **Modelo 3D solo en desktop con carga diferida**: sigue siendo 5 MB de carga bajo demanda.
+- **Solo foto del PC**: poco interactivo.
+
+**Consecuencias**
+- ✅ Cero peso adicional (SVG pesa ~40 KB).
+- ✅ Lighthouse 90+ intacto.
+- ✅ Interactividad real (hotspots, tooltips, hover).
+- ✅ Coherencia visual con la estética del portafolio.
+- ✅ Muestra comprensión real de los componentes del PC.
+- ⚠️ Menos "wow" tecnológico que un modelo 3D.
+
+---
 
 ## 📄 Licencia y créditos
 
