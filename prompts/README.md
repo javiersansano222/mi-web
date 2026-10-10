@@ -1,16 +1,23 @@
 <div align="center">
 
+<!-- LOGO / TÍTULO -->
 # ✦ Portafolio Javier Sansano ✦
 
 ### Estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM)
 
-Portafolio personal con estética **Art Déco moderna**, experiencia 3D, chatbot multilingüe y APIs en tiempo real.
+Portafolio personal con estética **cyberpunk / neón noir**, chatbot multilingüe, APIs en tiempo real y diagramas SVG interactivos.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-d4a84b?style=for-the-badge&logo=github)](https://javiersansano222.github.io/mi-web/)
+<!-- BADGES -->
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-00fff7?style=for-the-badge&logo=github&logoColor=white)](https://javiersansano222.github.io/mi-web/)
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/es/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
-[![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org/)
+[![Lighthouse](https://img.shields.io/badge/Lighthouse-90%2B-00fff7?style=for-the-badge&logo=lighthouse&logoColor=white)](https://developer.chrome.com/docs/lighthouse/)
+
+<!-- ESTADO DEL PROYECTO -->
+![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-ff00e5?style=flat-square)
+![Commits](https://img.shields.io/github/commit-activity/m/javiersansano222/mi-web?color=00fff7&style=flat-square)
+![Último commit](https://img.shields.io/github/last-commit/javiersansano222/mi-web?color=ff00e5&style=flat-square)
 
 </div>
 
@@ -18,9 +25,9 @@ Portafolio personal con estética **Art Déco moderna**, experiencia 3D, chatbot
 
 ## 📖 Descripción
 
-Portafolio personal de **Javier Sansano Martínez**, estudiante de **Desarrollo de Aplicaciones Multiplataforma**. 
+Portafolio personal de **Javier Sansano Martínez**, estudiante de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.
 
-Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno** y **JavaScript vanilla**, combinando diseño **Art Déco moderno** con tecnologías actuales como WebGL (Three.js) y consumo de APIs REST.
+Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno** y **JavaScript vanilla**, combinando diseño **cyberpunk / neón noir** con tecnologías actuales como consumo de APIs REST, SVG interactivos y chatbot multilingüe.
 
 **🌐 Web en vivo:** [javiersansano222.github.io/mi-web](https://javiersansano222.github.io/mi-web/)
 
@@ -28,26 +35,33 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 
 ## 🎨 Estética y diseño
 
-- **Art Déco moderno** inspirado en Bioshock, con marco dorado y tipografías serif clásicas.
-- **4 paletas de colores** intercambiables: Oro & Noche, Cobre & Esmeralda, Plata & Carbón, Coral & Abismo.
+- **Cyberpunk / neón noir** con paletas intercambiables (cian, magenta, amarillo neón).
+- **6 paletas de colores** seleccionables en tiempo real: Neón Nocturno, Matrix Verde, Blade Runner, Vaporwave, Sangre Neón, Ultravioleta.
 - **Modo claro/oscuro** con persistencia en `localStorage`.
 - **100% responsive** (desktop, tablet, móvil).
-- **Accesibilidad**: `aria-labels`, `role`, `sr-only`, `prefers-reduced-motion`, skip-links.
+- **Accesibilidad**: `aria-labels`, `role`, `sr-only`, `prefers-reduced-motion`, skip-links, contraste cuidado.
+- **Cursor personalizado** en forma de rombo Art Déco / cyberpunk.
+
+### 🧠 Decisiones de diseño
+
+- **Un solo `styles.css`** en vez de CSS modules: el proyecto es una sola página, no hay colisiones, y facilita el theming global con variables CSS.
+- **Vanilla JS en vez de framework**: el objetivo es aprender fundamentos, el bundle final es ~30 KB vs. >100 KB con React.
+- **SVG animado en el hero** en vez de Three.js: el SVG ofrece la misma sensación visual a coste cero, manteniendo Lighthouse en 90+.
 
 ---
 
 ## ✨ Características
 
 ### 🎬 Experiencia de entrada
-- **Intro cinematográfica** con efecto de máquina de escribir sobre el nombre.
+- **Intro cinematográfica** con efecto máquina de escribir sobre el nombre.
 - **Barra de progreso dorada** que aparece en la primera visita.
-- **Fondo Art Déco** con ciudad animada en 3 capas + partículas doradas + burbujas subiendo.
+- **Fondo cyberpunk** con ciudad animada en 3 capas + partículas + burbujas.
 
-### 🖥️ 3D interactivo (Three.js)
-- **Rascacielos Art Déco procedural** en el hero con rotación continua.
-- **Ventanas iluminadas** que parpadean aleatoriamente.
-- **Interacción con el cursor** (parallax + rotación).
-- **Cambia de color** según la paleta activa.
+### 🌆 Hero con ciudad Art Déco
+- **Ciudad en SVG puro** con tres torres escalonadas.
+- **Ventanas que parpadean** aleatoriamente con CSS.
+- **Animaciones** con `@keyframes` y respeto por `prefers-reduced-motion`.
+- **Parallax** con el movimiento del ratón.
 
 ### 💬 Chatbot multilingüe
 - **4 idiomas**: Español (ES), Valencià (VA), English (EN), Français (FR).
@@ -61,27 +75,33 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 - **NASA APOD** → Foto astronómica del día con selector de fecha.
 - **GitHub API** → Listado dinámico de repositorios.
 - **TMDB** → Galería de películas favoritas con pósters reales.
+- **ipwho.is** → Pop-up de bienvenida personalizado por país.
 
 ### 🎮 Secciones de contenido
-- **Hero** con rascacielos 3D y presentación personal.
+- **Hero** con ciudad Art Déco y presentación personal.
 - **Sobre mí** con lista de valores y contador de repos GitHub.
-- **Intereses**:
-  - Videojuegos (con carátulas reales de Fallout, Doom, Skyrim, Bioshock, Cyberpunk 2077).
-  - Cine (con pósters reales de TMDB).
-  - Hardware (con diagrama SVG interactivo).
-- **Dentro del ordenador** → Diagrama SVG de un PC gaming con hotspots interactivos.
+- **NASA APOD** con foto astronómica diaria y selector de fecha.
+- **Intereses**: videojuegos, cine y hardware con filtros y carátulas reales.
+- **Dentro del ordenador** → Diagrama SVG interactivo de un PC gaming con hotspots.
 - **Recorrido** → Timeline con hitos formativos y personales.
-- **Contacto** → Formulario funcional vía Web3Forms + enlaces profesionales.
+- **Contacto** → Formulario funcional vía Web3Forms + WhatsApp + GitHub.
+
+### 🖼️ Diagrama SVG interactivo del PC
+- **Componentes identificables**: CPU, RAM, GPU, SSD, refrigeración, PSU, placa base.
+- **Hotspots con tooltips** explicativos.
+- **Ventiladores animados** con CSS (`transform: rotate`).
+- **LEDs parpadeando** con `@keyframes`.
+- **Modo "resaltar componente"** al pasar el ratón.
+- **Leyenda clicable** con filtros por componente.
 
 ### 🎨 Detalles avanzados
-- **Efecto Matrix** en el menú: los enlaces aparecen codificados con símbolos y se descodifican al pasar el ratón.
+- **Efecto Matrix** en el menú: enlaces codificados que se descodifican al hover.
 - **Indicador de sección activa** en el menú mientras haces scroll.
-- **Cursor personalizado** en forma de rombo Art Déco.
 - **Barra de progreso de lectura** en la parte superior.
-- **Tilt 3D** en las tarjetas de proyectos al pasar el ratón.
-- **Favicon SVG** con el sello "JS" dorado.
-- **Página 404 personalizada** con estética Art Déco.
-- **Página de gracias** tras enviar el formulario.
+- **Favicon SVG** con el sello "JS".
+- **Páginas 404 y gracias personalizadas** con estética coherente.
+- **Abanico 3D de intereses** con navegación por teclado.
+- **Página secundaria "Estate Genovés"** con formulario Web3Forms propio.
 
 ---
 
@@ -90,12 +110,13 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 | Categoría | Tecnología |
 |---|---|
 | **Estructura** | HTML5 semántico |
-| **Estilos** | CSS3 moderno (custom properties, `color-mix`, `:has()`, grid, flexbox, `backdrop-filter`) |
+| **Estilos** | CSS3 moderno (`custom properties`, `color-mix`, `:has()`, grid, flexbox, `backdrop-filter`) |
 | **JavaScript** | Vanilla JS (ES6+, sin frameworks) |
-| **3D** | Three.js r128 (WebGL) |
-| **Tipografía** | Google Fonts: Cinzel + Lora |
-| **APIs** | Open-Meteo, NASA APOD, GitHub, TMDB |
-| **Formulario** | Web3Forms |
+| **Animaciones** | CSS `@keyframes` + IntersectionObserver |
+| **Gráficos** | SVG animado + Canvas 2D (partículas, matrix) |
+| **Tipografía** | Google Fonts (Bebas Neue, JetBrains Mono, y dinámicas por era) |
+| **APIs** | Open-Meteo, NASA APOD, GitHub, TMDB, ipwho.is |
+| **Formularios** | Web3Forms |
 | **Hosting** | GitHub Pages |
 
 ---
@@ -104,15 +125,21 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 
 ```
 mi-web/
-├── index.html              # Página principal
-├── styles.css              # Todos los estilos
-├── script.js               # Lógica principal (chat, temas, APIs, efectos)
-├── scene.js                # Escena 3D del hero (Three.js)
-├── 404.html                # Página 404 personalizada
-├── gracias.html            # Página tras enviar el formulario
-├── favicon.svg             # Favicon del sello JS
-├── README.md               # Este archivo
+├── index.html                # Página principal
+├── styles.css                # Todos los estilos
+├── script.js                 # Lógica principal (chat, temas, APIs, efectos)
+├── 404.html                  # Página 404 personalizada
+├── gracias.html              # Página tras enviar el formulario
+├── estate-genoves.html       # Página secundaria: proyecto Estate Genovés
+├── estate-gracias.html       # Página de gracias específica para Estate Genovés
+├── favicon.svg               # Favicon del sello JS
+├── README.md                 # Este archivo
 ├── .gitignore
+├── docs/
+│   ├── 01-base.md            # Documentación: estructura base
+│   ├── 02-art-deco.md        # Documentación: estética
+│   ├── 03-tema.md            # Documentación: gestión de temas
+│   └── prompt.txt            # Prompt inicial del profesor
 └── img/
     ├── bioshock.png
     ├── cyberpunk.avif
@@ -120,51 +147,38 @@ mi-web/
     ├── fallout new vegas.jpg
     ├── skyrim-tag-page-cover-art.avif
     ├── pc.jpg
-    ├── og-image.jpg
-    
+    └── og-image.jpg
 ```
 
-### ¿Por qué no hay visor 3D del PC?
-Inicialmente consideré integrar un modelo 3D `.glb` de mi PC. 
-Tras analizarlo con gltf-transform, el modelo original pesaba 65 MB 
-con más de 1 millón de triángulos — inviable para una web. 
-Comprimido con Draco bajaba a ~5 MB pero con pérdida notable de calidad.
-
-Decidí quedarme con el diagrama SVG interactivo (componentes, hotspots, 
-tooltips, animaciones CSS) porque:
-- Mantiene Lighthouse en 90+ sin penalización.
-- Es coherente con la estética del portafolio.
-- Ofrece interactividad real sin cargar 65 MB de geometría.
 ---
 
 ## 🚀 Cómo probarlo en local
 
-### Opción 1 — Abrir directamente
-```bash
-# Clonar el repo
-git clone https://github.com/javiersansano222/mi-web.git
-cd mi-web
-
-# Abrir index.html con doble clic
-```
-
-
-### Opción 2 — Live Server (recomendado)
-1. Instalar la extensión **Live Server** en VS Code.
+### Opción 1 — Live Server (recomendado)
+1. Instala la extensión **Live Server** en VS Code.
 2. Clic derecho sobre `index.html` → **"Open with Live Server"**.
 3. Se abre en `http://127.0.0.1:5500/`.
 
-### Opción 3 — Python
+### Opción 2 — Python
 ```bash
 python3 -m http.server 8000
 # Abrir http://localhost:8000
 ```
 
+### Opción 3 — Abrir directamente
+```bash
+git clone https://github.com/javiersansano222/mi-web.git
+cd mi-web
+# Doble clic en index.html
+```
+
+> ⚠️ **Nota:** algunas funciones (APIs con CORS, carga de recursos) funcionan mejor con un servidor local.
+
 ---
 
 ## 🔑 Variables y claves de API
 
-Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públicas por ser un portafolio personal educativo.**
+Las claves de API se encuentran en `script.js` y `estate-genoves.html`. **Este proyecto usa claves públicas por ser un portafolio personal educativo.**
 
 | Variable | Dónde se usa | Requiere key |
 |---|---|---|
@@ -172,6 +186,7 @@ Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públ
 | `GITHUB_USER` | Listado de repos | ❌ No (API pública) |
 | `NASA_API_KEY` | Foto del día | ✅ Sí (gratis en [api.nasa.gov](https://api.nasa.gov/)) |
 | `TMDB_API_KEY` | Galería de películas | ✅ Sí (gratis en [themoviedb.org](https://www.themoviedb.org/settings/api)) |
+| `access_key` (Web3Forms) | Formularios de contacto | ✅ Sí (gratis en [web3forms.com](https://web3forms.com)) |
 
 ---
 
@@ -179,15 +194,17 @@ Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públ
 
 ### Completado
 - [x] Intro cinematográfica
-- [x] Fondo Art Déco animado
-- [x] Tema claro/oscuro + 4 paletas
-- [x] Hero con rascacielos 3D
-- [x] Sección "Sobre mí" con repos GitHub
+- [x] Fondo cyberpunk animado
+- [x] Tema claro/oscuro + 6 paletas intercambiables
+- [x] Hero con ciudad Art Déco en SVG animado
+- [x] Sección "Sobre mí" con repos GitHub dinámicos
 - [x] Sección "Intereses" con videojuegos, cine y hardware
 - [x] Diagrama SVG interactivo del PC
 - [x] Timeline de recorrido
 - [x] Formulario de contacto con Web3Forms
-- [x] Enlaces a GitHub, LinkedIn y proyecto ESTATE GENOVES
+- [x] Página de gracias personalizada
+- [x] Página secundaria "Estate Genovés" con Web3Forms propio
+- [x] Página de gracias específica para Estate Genovés
 - [x] Chatbot multilingüe (ES/VA/EN/FR)
 - [x] Widget del tiempo (Open-Meteo)
 - [x] Foto del día de NASA (APOD)
@@ -198,21 +215,23 @@ Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públ
 - [x] Barra de progreso de lectura
 - [x] Favicon SVG
 - [x] Páginas 404 y gracias personalizadas
+- [x] Lighthouse 90+ en rendimiento y accesibilidad
 
-### Pendiente
-- [ ] Integrar visor 3D del PC con modelo `.glb`
+### Pendiente / Mejoras futuras
+- [ ] Añadir Open Graph completo en `index.html`
 - [ ] Añadir atribución obligatoria de TMDB en el footer
-- [ ] Buscar ciudad Art Déco real en Sketchfab (reemplazar rascacielos procedural)
-- [ ] Añadir sitemap.xml y robots.txt para SEO
-- [ ] Optimizar imágenes (WebP/AVIF)
+- [ ] Añadir `sitemap.xml` y `robots.txt` para SEO
+- [ ] Optimizar imágenes (WebP/AVIF) y añadir `width`/`height`
+- [ ] Implementar PWA (manifest + service worker)
+- [ ] Analítica ligera (Plausible / Umami)
+- [ ] Vídeo propio del PC encendiéndose
+- [ ] Revisar el enlace de LinkedIn (issue abierto)
 
 ---
 
 ## 📸 Capturas
 
-*(Añadir capturas de pantalla de las secciones principales)*
-
-| Hero | Chat multilingüe | Foto NASA |
+| Hero | Chat multilingüe | Diagrama del PC |
 |---|---|---|
 | ![Hero](img/og-image.jpg) | *(pendiente)* | *(pendiente)* |
 
@@ -224,7 +243,9 @@ Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públ
 - **NASA APOD:** datos y fotografías de dominio público por [NASA](https://apod.nasa.gov/).
 - **TMDB:** datos de películas por [The Movie Database](https://www.themoviedb.org/). *Este producto usa la API de TMDB pero no está respaldado ni certificado por TMDB.*
 - **Open-Meteo:** datos meteorológicos por [open-meteo.com](https://open-meteo.com/) (CC BY 4.0).
-- **Tipografías:** [Cinzel](https://fonts.google.com/specimen/Cinzel) y [Lora](https://fonts.google.com/specimen/Lora) de Google Fonts (SIL Open Font License).
+- **ipwho.is:** datos de geolocalización por [ipwho.is](https://ipwho.is/).
+- **Web3Forms:** gestión de formularios por [web3forms.com](https://web3forms.com/).
+- **Tipografías:** [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue) y [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) de Google Fonts (SIL Open Font License).
 
 ---
 
@@ -232,7 +253,7 @@ Las claves de API se encuentran en `script.js`. **Este proyecto usa claves públ
 
 - **Web:** [javiersansano222.github.io/mi-web](https://javiersansano222.github.io/mi-web/)
 - **GitHub:** [@javiersansano222](https://github.com/javiersansano222)
-- **LinkedIn:** *(pendiente de actualizar)*
+- **WhatsApp:** [+34 663 509 281](https://wa.me/34663509281)
 - **Email:** A través del formulario de contacto de la web
 
 ---
