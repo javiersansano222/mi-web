@@ -124,6 +124,17 @@ mi-web/
     
 ```
 
+### ¿Por qué no hay visor 3D del PC?
+Inicialmente consideré integrar un modelo 3D `.glb` de mi PC. 
+Tras analizarlo con gltf-transform, el modelo original pesaba 65 MB 
+con más de 1 millón de triángulos — inviable para una web. 
+Comprimido con Draco bajaba a ~5 MB pero con pérdida notable de calidad.
+
+Decidí quedarme con el diagrama SVG interactivo (componentes, hotspots, 
+tooltips, animaciones CSS) porque:
+- Mantiene Lighthouse en 90+ sin penalización.
+- Es coherente con la estética del portafolio.
+- Ofrece interactividad real sin cargar 65 MB de geometría.
 ---
 
 ## 🚀 Cómo probarlo en local
@@ -137,7 +148,6 @@ cd mi-web
 # Abrir index.html con doble clic
 ```
 
-> ⚠️ **Nota:** algunas funciones como el modelo 3D `.glb` **requieren un servidor local** (por política CORS del navegador).
 
 ### Opción 2 — Live Server (recomendado)
 1. Instalar la extensión **Live Server** en VS Code.
