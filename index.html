@@ -1233,39 +1233,55 @@
         <span class="contact__small">SE ABRIRÁ WHATSAPP CON EL MENSAJE LISTO PARA ENVIAR</span>
 
         <form class="contact-form"
-              action="https://api.web3forms.com/submit"
-              method="POST">
-          <input type="hidden" name="access_key" value="b5eb61c8-d0c0-4069-9a99-07ef5e5ef04f">
-          <input type="hidden" name="redirect" value="https://javiersansano222.github.io/mi-web/gracias.html">
-          <input type="hidden" name="subject" value="Nuevo mensaje desde tu portafolio">
-          <input type="hidden" name="from_name" value="Portafolio Javier Sansano">
-          <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+      action="https://formsubmit.co/javiersansano222@gmail.com"
+      method="POST">
 
-          <p class="contact-form__label">O escríbeme directamente:</p>
+  <!-- Autoresponder: mensaje automático al remitente -->
+  <input type="hidden" name="_autoresponse"
+         value="Hola, gracias por escribirme. He recibido tu mensaje y te responderé en menos de 24h. Mientras tanto, echa un vistazo a mi portafolio: https://javiersansano222.github.io/mi-web/">
 
-          <div class="contact-form__row">
-            <div class="contact-form__field">
-              <label for="form-nombre">Nombre</label>
-              <input type="text" id="form-nombre" name="nombre"
-                     placeholder="Tu nombre" required autocomplete="name">
-            </div>
-            <div class="contact-form__field">
-              <label for="form-email">Email</label>
-              <input type="email" id="form-email" name="email"
-                     placeholder="tu@email.com" required autocomplete="email">
-            </div>
-          </div>
+  <!-- Redirigir tras el envío a tu página de gracias -->
+  <input type="hidden" name="_next"
+         value="https://javiersansano222.github.io/mi-web/gracias.html">
 
-          <div class="contact-form__field">
-            <label for="form-mensaje">Mensaje</label>
-            <textarea id="form-mensaje" name="mensaje" rows="5"
-                      placeholder="Cuéntame en qué puedo ayudarte..." required></textarea>
-          </div>
+  <!-- Asunto del correo que recibes tú -->
+  <input type="hidden" name="_subject"
+         value="Nuevo mensaje desde tu portafolio">
 
-          <button type="submit" class="contact-form__submit">
-            Enviar mensaje <span aria-hidden="true">→</span>
-          </button>
-        </form>
+  <!-- Formato del correo (tabla limpia) -->
+  <input type="hidden" name="_template" value="table">
+
+  <!-- Desactivar captcha de FormSubmit (usamos honeypot abajo) -->
+  <input type="hidden" name="_captcha" value="false">
+
+  <!-- Honeypot anti-spam -->
+  <input type="checkbox" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+  <p class="contact-form__label">O escríbeme directamente:</p>
+
+  <div class="contact-form__row">
+    <div class="contact-form__field">
+      <label for="form-nombre">Nombre</label>
+      <input type="text" id="form-nombre" name="nombre"
+             placeholder="Tu nombre" required autocomplete="name">
+    </div>
+    <div class="contact-form__field">
+      <label for="form-email">Email</label>
+      <input type="email" id="form-email" name="email"
+             placeholder="tu@email.com" required autocomplete="email">
+    </div>
+  </div>
+
+  <div class="contact-form__field">
+    <label for="form-mensaje">Mensaje</label>
+    <textarea id="form-mensaje" name="mensaje" rows="5"
+              placeholder="Cuéntame en qué puedo ayudarte..." required></textarea>
+  </div>
+
+  <button type="submit" class="contact-form__submit">
+    Enviar mensaje <span aria-hidden="true">→</span>
+  </button>
+</form>
 
         <div class="contact-links">
           <p class="contact-links__label">O encuéntrame aquí:</p>
