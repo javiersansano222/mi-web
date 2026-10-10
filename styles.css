@@ -4800,3 +4800,146 @@ html, body,
 .pc-svg .pc-part *{
   pointer-events: inherit;
 }
+/* =========================================================
+   25. POP-UP DE VÍDEO — Próximo proyecto
+   ========================================================= */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s;
+  padding: 20px;
+}
+
+.video-modal.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.video-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 16, 0.94);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.video-modal__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
+  padding: 16px;
+  background: var(--bg-deep);
+  border: 1px solid var(--gold);
+  outline: 1px solid rgba(0, 255, 247, 0.2);
+  outline-offset: 6px;
+  box-shadow:
+    0 20px 80px rgba(0, 0, 0, 0.9),
+    0 0 80px rgba(0, 255, 247, 0.25);
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.video-modal.is-visible .video-modal__inner {
+  transform: translateY(0) scale(1);
+}
+
+.video-modal__inner::before,
+.video-modal__inner::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.video-modal__inner::before {
+  top: 4px; left: 4px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+}
+.video-modal__inner::after {
+  bottom: 4px; right: 4px;
+  border-bottom: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+}
+
+.video-modal__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.video-modal__caption {
+  margin: 16px 0 10px;
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--gold-bright);
+}
+
+.video-modal__link {
+  display: block;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  padding: 12px 20px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--gold) 6%, transparent);
+  text-decoration: none;
+  transition: background 0.3s, border-color 0.3s, transform 0.2s;
+}
+
+.video-modal__link:hover {
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  border-color: var(--gold-bright);
+  transform: translateY(-2px);
+}
+
+.video-modal__close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-deep);
+  border: 1px solid var(--gold);
+  color: var(--gold-bright);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+
+.video-modal__close:hover {
+  background: var(--gold);
+  color: #000;
+  transform: rotate(90deg);
+}
+
+@media (max-width: 600px) {
+  .video-modal__close {
+    top: 6px;
+    right: 6px;
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+  .video-modal__inner { padding: 10px; }
+  .video-modal__caption { font-size: 0.85rem; margin-top: 12px; }
+  .video-modal__link { font-size: 0.75rem; padding: 10px 16px; }
+}

@@ -2090,6 +2090,75 @@
       }
     });
   }
+    /* =========================================================
+     25. POP-UP DE VÍDEO — Próximo proyecto
+     ========================================================= */
+  const videoModal = $("#video-modal");
+  const videoModalVideo = $("#video-modal-video");
+  const videoModalClose = $("#video-modal-close");
+  const videoModalBackdrop = $("#video-modal-backdrop");
+
+  if (videoModal && videoModalVideo && videoModalClose) {
+    const VIDEO_SESSION_KEY = "portfolio-video-seen";
+    let videoAutoCloseTimer = null;
+
+    const openVideoModal = () => {
+      videoModal.classList.add("is-visible");
+      videoModal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      videoModalVideo.currentTime = 0;
+      const playPromise = videoModalVideo.play();
+      if (playPromise && playPromise.catch) {
+        playPromise.catch((err) => {
+          console.warn("[video-modal] Autoplay bloqueado:", err);
+          videoAutoCloseTimer = setTimeout(closeVideoModal, 5000);
+        });
+      }
+    };
+
+    const closeVideoModal = () => {
+      if (videoAutoCloseTimer) {
+        clearTimeout(videoAutoCloseTimer);
+        videoAutoCloseTimer = null;
+      }
+      videoModal.classList.remove("is-visible");
+      videoModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      videoModalVideo.pause();
+      try { sessionStorage.setItem(VIDEO_SESSION_KEY, "1"); } catch {}
+    };
+
+    // Al terminar el vídeo, esperar 2s para que el usuario vea el botón
+    videoModalVideo.addEventListener("ended", () => {
+      setTimeout(closeVideoModal, 2000);
+    });
+
+    videoModalClose.addEventListener("click", closeVideoModal);
+    videoModalBackdrop?.addEventListener("click", closeVideoModal);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && videoModal.classList.contains("is-visible")) {
+        closeVideoModal();
+      }
+    });
+
+    // Solo mostrar en la primera visita de la sesión
+    let alreadySeen = false;
+    try { alreadySeen = sessionStorage.getItem(VIDEO_SESSION_KEY) === "1"; } catch {}
+
+    if (!alreadySeen) {
+      // Esperar a que la intro termine
+      const waitForIntro = () => {
+        if (!document.body.classList.contains("is-loading")) {
+          setTimeout(openVideoModal, 900);
+        } else {
+          setTimeout(waitForIntro, 400);
+        }
+      };
+      waitForIntro();
+    }
+  }
 
   console.info("[script] Todo listo.");
 })();

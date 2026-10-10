@@ -1481,5 +1481,21 @@
       </form>
     </div>
   </div>
+
+  <!-- POP-UP DE VÍDEO — Próximo proyecto -->
+<div class="video-modal" id="video-modal" aria-hidden="true" role="dialog" aria-label="Preview del próximo proyecto">
+  <div class="video-modal__backdrop" id="video-modal-backdrop"></div>
+  <div class="video-modal__inner">
+    <button class="video-modal__close" id="video-modal-close" type="button" aria-label="Cerrar vídeo">✕</button>
+    <video class="video-modal__video" id="video-modal-video"
+           muted playsinline preload="metadata"
+           poster="img/avance-genoves.png">
+      <source src="img/estate-preview.mp4" type="video/mp4">
+      Tu navegador no soporta vídeo HTML5.
+    </video>
+    <p class="video-modal__caption">Próximo proyecto · Estate Genovés</p>
+    <a class="video-modal__link" href="estate-genoves.html">Descúbrelo aquí →</a>
+  </div>
+</div>
 </body>
 </html>
