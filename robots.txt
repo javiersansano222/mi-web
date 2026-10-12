@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://javiersansano222.github.io/mi-web/sitemap.xml
