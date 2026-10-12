@@ -202,6 +202,14 @@
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
+    // URL params: ?era=matrix-verde
+  const urlParams = new URLSearchParams(window.location.search);
+  const eraFromUrl = urlParams.get("era");
+  if (eraFromUrl && eras.includes(eraFromUrl)) {
+    root.dataset.era = eraFromUrl;
+    safeSet("portfolio-era", eraFromUrl);
+    console.info("[era] Activada desde URL:", eraFromUrl);
+  }
   loadEraFonts(root.dataset.era || "neon-nocturno");
 
   if (eraSelect) {
