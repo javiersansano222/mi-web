@@ -5066,42 +5066,46 @@ html, body,
   .mini-video__title { font-size: 0.85rem; }
   .mini-video__eyebrow { font-size: 0.55rem; }
 }
-
 /* =========================================================
-   26. SELLO "JS" CON SVG ANIMADO
+   SELLO "JS" CON SVG ANIMADO
    ========================================================= */
 .brand__seal {
   padding: 0;
   overflow: hidden;
+  position: relative;
 }
 
-.brand-seal-svg {
+.brand__seal svg {
   width: 100%;
   height: 100%;
   display: block;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 60%, transparent));
+  position: absolute;
+  inset: 0;
 }
 
-/* Trazo que se dibuja */
+.brand-seal-svg {
+  color: var(--gold-bright);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 50%, transparent));
+}
+
 .brand-seal-svg .seal-outline {
-  stroke-dasharray: 220;
-  stroke-dashoffset: 220;
-  animation: seal-draw 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: seal-draw 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
 }
 
 .brand-seal-svg .seal-inner {
-  stroke-dasharray: 160;
-  stroke-dashoffset: 160;
-  animation: seal-draw 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s forwards;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: seal-draw 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s forwards;
 }
 
-/* Letras que aparecen con delay */
 .brand-seal-svg .seal-text {
   opacity: 0;
-  transform-origin: 32px 32px;
+  transform-origin: 20px 20px;
   animation:
-    seal-text-in 0.6s ease-out 1.6s forwards,
-    seal-glow 3s ease-in-out 2.4s infinite;
+    seal-text-in 0.5s ease-out 1.2s forwards,
+    seal-glow 3s ease-in-out 2s infinite;
 }
 
 @keyframes seal-draw {
@@ -5109,20 +5113,15 @@ html, body,
 }
 
 @keyframes seal-text-in {
-  from { opacity: 0; transform: scale(0.8) }
+  from { opacity: 0; transform: scale(0.7) }
   to   { opacity: 1; transform: scale(1) }
 }
 
 @keyframes seal-glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 4px color-mix(in srgb, var(--gold) 50%, transparent));
-  }
-  50% {
-    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--gold-bright) 80%, transparent));
-  }
+  0%, 100% { filter: drop-shadow(0 0 3px currentColor) }
+  50%      { filter: drop-shadow(0 0 8px currentColor) }
 }
 
-/* Accesibilidad: sin animaciones si el usuario prefiere menos movimiento */
 @media (prefers-reduced-motion: reduce) {
   .brand-seal-svg .seal-outline,
   .brand-seal-svg .seal-inner,
