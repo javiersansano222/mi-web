@@ -2151,5 +2151,57 @@
     waitForIntro();
   }
   }
+    /* =========================================================
+     25. MINI REPRODUCTOR DE VÍDEO FLOTANTE
+     ========================================================= */
+  const miniVideo = $("#mini-video");
+  const miniVideoPlayer = $("#mini-video-player");
+  const miniVideoClose = $("#mini-video-close");
+
+  if (miniVideo && miniVideoPlayer && miniVideoClose) {
+    let closeTimer = null;
+
+    const openMiniVideo = () => {
+      miniVideo.classList.add("is-visible");
+      miniVideo.setAttribute("aria-hidden", "false");
+
+      setTimeout(() => {
+        const playPromise = miniVideoPlayer.play();
+        if (playPromise && playPromise.catch) {
+          playPromise.catch((err) => {
+            console.warn("[mini-video] Autoplay bloqueado:", err);
+          });
+        }
+      }, 400);
+    };
+
+    const closeMiniVideo = () => {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      miniVideo.classList.remove("is-visible");
+      miniVideo.setAttribute("aria-hidden", "true");
+      miniVideoPlayer.pause();
+    };
+
+    miniVideoPlayer.addEventListener("ended", () => {
+      closeTimer = setTimeout(closeMiniVideo, 1000);
+    });
+
+    miniVideoClose.addEventListener("click", closeMiniVideo);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && miniVideo.classList.contains("is-visible")) {
+        closeMiniVideo();
+      }
+    });
+
+    const waitForIntro = () => {
+      if (!document.body.classList.contains("is-loading")) {
+        setTimeout(openMiniVideo, 1200);
+      } else {
+        setTimeout(waitForIntro, 400);
+      }
+    };
+    waitForIntro();
+  }
   console.info("[script] Todo listo.");
 })();
