@@ -1,6 +1,6 @@
 /* =========================================================
    GAME.JS — Cyber Descent
-   Fases 3 y 4: Obstáculos, colisiones, niveles y récord
+   Versión optimizada + más rápida
    ========================================================= */
 (() => {
   "use strict";
@@ -16,7 +16,7 @@
 
   if (!canvas || !overlay || !startBtn) return;
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: false });
 
   // --- Dimensiones lógicas ---
   let W = 0;
@@ -24,17 +24,17 @@
 
   // --- Estado del juego ---
   const game = {
-    state: "menu", // "menu" | "playing" | "gameover"
+    state: "menu",
     distance: 0,
     level: 1,
     record: parseInt(localStorage.getItem("cyber-descent-record") || "0", 10),
-    gravity: 0.7,
+    gravity: 0.9,           // más gravedad = saltos más rápidos
     groundRatio: 0.85,
     groundY: 0,
-    speed: 4,           // velocidad base
-    spawnTimer: 0,      // temporizador para el próximo obstáculo
-    spawnInterval: 90,  // frames entre obstáculos (a menor, más seguidos)
-    frame: 0,           // contador de frames
+    speed: 7,               // velocidad base más alta
+    spawnTimer: 0,
+    spawnInterval: 70,      // obstáculos más seguidos
+    frame: 0,
   };
 
   // --- Jugador ---
@@ -43,20 +43,21 @@
     y: 0,
     size: 32,
     vy: 0,
-    jumpForce: -14,
+    jumpForce: -16,         // salto más alto y rápido
     onGround: true,
   };
 
   // --- Obstáculos ---
   let obstacles = [];
 
-  // Actualizar récord mostrado
   if (recordEl) recordEl.textContent = game.record;
 
-  // --- Redimensionar canvas ---
+  // --- Redimensionar canvas (con debounce) ---
+  let resizeTimeout = null;
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    // Limitar el ratio a 1 para mejorar rendimiento
+    const ratio = 1;
     canvas.width = Math.floor(rect.width * ratio);
     canvas.height = Math.floor(rect.height * ratio);
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -64,8 +65,14 @@
     H = rect.height;
     game.groundY = H * game.groundRatio;
   };
+
+  const debouncedResize = () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resize, 150);
+  };
+
   resize();
-  window.addEventListener("resize", resize);
+  window.addEventListener("resize", debouncedResize);
 
   // --- Salto ---
   const jump = () => {
@@ -90,7 +97,6 @@
 
   // --- Generar obstáculo ---
   const spawnObstacle = () => {
-    // Variar tamaño según nivel
     const baseSize = 30;
     const sizeVariation = Math.min(game.level * 2, 20);
     const w = baseSize + Math.random() * sizeVariation;
@@ -101,11 +107,11 @@
       y: game.groundY - h,
       w,
       h,
-      passed: false, // para contar la puntuación
+      passed: false,
     });
   };
 
-  // --- Comprobar colisión (AABB) ---
+  // --- Colisión AABB ---
   const checkCollision = (a, b) => {
     return (
       a.x < b.x + b.w &&
@@ -119,7 +125,6 @@
   const gameOver = () => {
     game.state = "gameover";
 
-    // Guardar récord
     const finalDistance = Math.floor(game.distance);
     if (finalDistance > game.record) {
       game.record = finalDistance;
@@ -141,9 +146,9 @@
     game.state = "playing";
     game.distance = 0;
     game.level = 1;
-    game.speed = 4;
+    game.speed = 7;
     game.spawnTimer = 0;
-    game.spawnInterval = 90;
+    game.spawnInterval = 70;
     game.frame = 0;
 
     obstacles = [];
@@ -169,14 +174,12 @@
     player.vy += game.gravity;
     player.y += player.vy;
 
-    // Colisión con el suelo
     if (player.y >= game.groundY - player.size) {
       player.y = game.groundY - player.size;
       player.vy = 0;
       player.onGround = true;
     }
 
-    // Distancia
     game.distance += game.speed * 0.1;
 
     // Generar obstáculos
@@ -184,26 +187,26 @@
     if (game.spawnTimer >= game.spawnInterval) {
       spawnObstacle();
       game.spawnTimer = 0;
-      // Reducir un poco el intervalo para hacerlo más difícil
-      game.spawnInterval = Math.max(40, game.spawnInterval - 1);
+      game.spawnInterval = Math.max(35, game.spawnInterval - 1);
     }
 
     // Mover obstáculos
-    obstacles.forEach((o) => {
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      const o = obstacles[i];
       o.x -= game.speed;
 
-      // Contar puntos al pasar un obstáculo
       if (!o.passed && o.x + o.w < player.x) {
         o.passed = true;
         game.distance += 10;
       }
-    });
 
-    // Eliminar obstáculos fuera de pantalla
-    obstacles = obstacles.filter((o) => o.x + o.w > -50);
+      // Eliminar si sale de pantalla
+      if (o.x + o.w < -50) {
+        obstacles.splice(i, 1);
+        continue;
+      }
 
-    // Detección de colisiones
-    for (const o of obstacles) {
+      // Colisión
       if (checkCollision(player, o)) {
         gameOver();
         return;
@@ -214,17 +217,16 @@
     const newLevel = Math.floor(game.distance / 500) + 1;
     if (newLevel > game.level) {
       game.level = newLevel;
-      game.speed += 0.5; // aumentar velocidad
+      game.speed += 0.7;
       if (levelEl) levelEl.textContent = game.level;
     }
 
-    // Actualizar HUD
     if (distanceEl) distanceEl.textContent = Math.floor(game.distance);
   };
 
-  // --- Renderizado ---
+  // --- Renderizado (sin shadowBlur) ---
   const render = () => {
-    // Fondo con degradado cyberpunk
+    // Fondo con degradado cyberpunk (cacheado en un objeto)
     const gradient = ctx.createLinearGradient(0, 0, 0, H);
     gradient.addColorStop(0, "#050510");
     gradient.addColorStop(0.6, "#0a1a2e");
@@ -232,67 +234,65 @@
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, W, H);
 
-    // Rejilla
+    // Rejilla con offset (se mueve con la distancia)
     ctx.strokeStyle = "rgba(0, 255, 247, 0.08)";
     ctx.lineWidth = 1;
     const gridSize = 40;
-    const offsetX = -(game.distance * 2) % gridSize;
+    const offsetX = -(game.frame * game.speed * 0.15) % gridSize;
+    ctx.beginPath();
     for (let x = offsetX; x < W; x += gridSize) {
-      ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, H);
-      ctx.stroke();
     }
     for (let y = 0; y < H; y += gridSize) {
-      ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(W, y);
-      ctx.stroke();
+    }
+    ctx.stroke();
+
+    // Suelo
+    ctx.fillStyle = "#00fff7";
+    ctx.fillRect(0, game.groundY, W, 3);
+    // Brillo del suelo (sin shadowBlur, con segunda línea translúcida)
+    ctx.fillStyle = "rgba(0, 255, 247, 0.3)";
+    ctx.fillRect(0, game.groundY + 3, W, 8);
+
+    // Obstáculos
+    for (let i = 0; i < obstacles.length; i++) {
+      const o = obstacles[i];
+      ctx.fillStyle = "#00fff7";
+      ctx.fillRect(o.x, o.y, o.w, o.h);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(o.x, o.y, o.w, o.h);
     }
 
-    // Suelo (línea cian con glow)
-    ctx.fillStyle = "#00fff7";
-    ctx.shadowColor = "#00fff7";
-    ctx.shadowBlur = 12;
-    ctx.fillRect(0, game.groundY, W, 3);
-    ctx.shadowBlur = 0;
-
-    // Obstáculos (rectángulos cian con glow)
-    obstacles.forEach((o) => {
-      ctx.fillStyle = "#00fff7";
-      ctx.shadowColor = "#00fff7";
-      ctx.shadowBlur = 10;
-      ctx.fillRect(o.x, o.y, o.w, o.h);
-      ctx.shadowBlur = 0;
-
-      // Borde blanco
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(o.x, o.y, o.w, o.h);
-    });
-
-    // Jugador (cuadrado magenta con glow)
+    // Jugador
     ctx.fillStyle = "#ff00e5";
-    ctx.shadowColor = "#ff00e5";
-    ctx.shadowBlur = 15;
     ctx.fillRect(player.x, player.y, player.size, player.size);
-    ctx.shadowBlur = 0;
-
-    // Borde blanco del jugador
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
     ctx.strokeRect(player.x, player.y, player.size, player.size);
   };
 
   // --- Bucle principal ---
-  const loop = () => {
+  let lastTime = 0;
+  const FRAME_INTERVAL = 1000 / 60; // 60 FPS
+
+  const loop = (timestamp) => {
+    requestAnimationFrame(loop);
+
+    const elapsed = timestamp - lastTime;
+    if (elapsed < FRAME_INTERVAL) return;
+    lastTime = timestamp - (elapsed % FRAME_INTERVAL);
+
     if (game.state === "playing") {
       update();
     }
     render();
-    requestAnimationFrame(loop);
   };
-  loop();
 
-  console.info("[game] Cyber Descent — Fases 3 y 4 iniciadas.");
+  requestAnimationFrame(loop);
+
+  console.info("[game] Cyber Descent — versión optimizada.");
 })();
