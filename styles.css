@@ -5265,10 +5265,7 @@ body.low-performance .cyber-car {
 body.low-performance .ocean__grain {
   opacity: 0.02;
 }
-/* Ocultar coches voladores en PCs débiles */
-.cyber-car {
-  display: none;
-}
+
 
 /* =========================================================
    MODO BAJO RENDIMIENTO
