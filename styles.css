@@ -5140,10 +5140,12 @@ html, body,
 }
 
 .game-stage {
+  
   position: relative;
   max-width: 900px;
+  width: 100%;
+  height: 500px; /* altura fija */
   margin: 0 auto;
-  aspect-ratio: 16 / 9;
   background: #050510;
   border: 1px solid var(--gold);
   outline: 1px solid color-mix(in srgb, var(--gold) 25%, transparent);
@@ -5154,6 +5156,11 @@ html, body,
     0 0 60px color-mix(in srgb, var(--gold) 20%, transparent);
 }
 
+@media (max-width: 700px) {
+  .game-stage {
+    height: 400px;
+  }
+}
 #game-canvas {
   display: block;
   width: 100%;
