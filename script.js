@@ -174,7 +174,8 @@
     "blade-runner",
     "vaporwave",
     "sangre-neon",
-    "ultravioleta"
+    "ultravioleta",
+    "lluvia-acida"
   ];
 
   const ERA_FONTS = {
@@ -183,7 +184,8 @@
     "blade-runner": ["Cormorant+Garamond:wght@500;700", "Inter:wght@400;500"],
     "vaporwave":    ["Italiana", "Space+Grotesk:wght@400;500"],
     "sangre-neon":  ["Bebas+Neue", "Space+Mono:wght@400;700"],
-    "ultravioleta": ["Cinzel:wght@400;500", "Lora:ital,wght@0,400;0,500;1,400"]
+    "ultravioleta": ["Cinzel:wght@400;500", "Lora:ital,wght@0,400;0,500;1,400"],
+    "lluvia-acida": ["Special+Elite", "IBM+Plex+Mono:wght@400;700"]
   };
 
   const loadEraFonts = (era) => {
@@ -2162,26 +2164,7 @@
     };
     waitForIntro();
   }
-  // Detectar FPS bajo
-let lowFPS = false;
-let frameCount = 0;
-let lastCheck = performance.now();
 
-function checkPerformance() {
-  frameCount++;
-  const now = performance.now();
-  if (now - lastCheck > 1000) {
-    const fps = frameCount;
-    frameCount = 0;
-    lastCheck = now;
-
-    if (fps < 30 && !lowFPS) {
-      lowFPS = true;
-      document.body.classList.add("low-performance");
-      console.info("[perf] Modo bajo rendimiento activado (FPS: " + fps + ")");
-    }
-  }
-}
   /* =========================================================
      26. DETECCIÓN DE BAJO RENDIMIENTO
      ========================================================= */
