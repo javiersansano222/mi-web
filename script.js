@@ -499,7 +499,7 @@
   if (canvas && ctx && !prefersReducedMotion()) {
     let w = 0, h = 0, parts = [], frame = 0;
     const pointer = { x: -1000, y: -1000, active: false };
-    const pCount = () => Math.min(48, Math.max(18, Math.floor(window.innerWidth / 28)));
+    const pCount = () => Math.min(20, Math.max(8, Math.floor(window.innerWidth / 60)));
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -2162,6 +2162,26 @@
     };
     waitForIntro();
   }
+  // Detectar FPS bajo
+let lowFPS = false;
+let frameCount = 0;
+let lastCheck = performance.now();
+
+function checkPerformance() {
+  frameCount++;
+  const now = performance.now();
+  if (now - lastCheck > 1000) {
+    const fps = frameCount;
+    frameCount = 0;
+    lastCheck = now;
+
+    if (fps < 30 && !lowFPS) {
+      lowFPS = true;
+      document.body.classList.add("low-performance");
+      console.info("[perf] Modo bajo rendimiento activado (FPS: " + fps + ")");
+    }
+  }
+}
 
   console.info("[script] Todo listo.");
 })();
