@@ -326,6 +326,30 @@ html[data-era="ultravioleta"]{
   --deco-sun: none;
 }
 
+html[data-era="lluvia-acida"]{
+  --gold: #7fff00;
+  --gold-bright: #c8ff00;
+  --gold-deep: #4a8a00;
+  --ember: #b8a800;
+  --line: rgba(127, 255, 0, .35);
+  --line-soft: rgba(127, 255, 0, .12);
+  --font-display: 'Special Elite', 'Courier New', monospace;
+  --font-body: 'IBM Plex Mono', 'Courier New', monospace;
+  --deco-city: block;
+  --deco-matrix: none;
+  --deco-rays: none;
+  --deco-rain: block;
+  --deco-sun: none;
+}
+html[data-theme="light"][data-era="lluvia-acida"]{
+  --gold: #4a8a00;
+  --gold-bright: #6b9900;
+  --gold-deep: #2e5500;
+  --ember: #6b6000;
+  --line: rgba(74, 138, 0, .35);
+  --line-soft: rgba(74, 138, 0, .12);
+}
+
 /* ---------------------------------------------------------
    2. RESET + BASE
    --------------------------------------------------------- */
