@@ -5254,3 +5254,18 @@ html, body,
     gap: 8px;
   }
 }
+body.low-performance .cyber-city,
+body.low-performance #particles,
+body.low-performance .ocean__glow,
+body.low-performance .bubble,
+body.low-performance .cyber-car {
+  display: none !important;
+}
+
+body.low-performance .ocean__grain {
+  opacity: 0.02;
+}
+/* Ocultar coches voladores en PCs débiles */
+.cyber-car {
+  display: none;
+}
