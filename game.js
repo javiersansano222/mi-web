@@ -1,5 +1,6 @@
 /* =========================================================
-   GAME.JS — Cyber Descent (versión espectacular)
+   GAME.JS — Cyber Descent
+   Versión final: 5 niveles + victoria + más rápido y difícil
    ========================================================= */
 (() => {
   "use strict";
@@ -20,6 +21,15 @@
   let W = 0;
   let H = 0;
 
+  // --- 5 niveles con dificultad progresiva ---
+  const LEVELS = [
+    { name: "INICIACIÓN",       distance: 400,  speed: 9,   spawnInterval: 60, obstacleTypes: ["block"],                  gravity: 0.95, jumpForce: -16 },
+    { name: "ACELERACIÓN",      distance: 500,  speed: 11,  spawnInterval: 50, obstacleTypes: ["block", "spike"],        gravity: 0.95, jumpForce: -16 },
+    { name: "PELIGRO",          distance: 600,  speed: 13,  spawnInterval: 42, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -16 },
+    { name: "SOBRECARGA",       distance: 700,  speed: 15,  spawnInterval: 35, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -17 },
+    { name: "SINGULARIDAD",     distance: 800,  speed: 18,  spawnInterval: 28, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -17 },
+  ];
+
   const game = {
     state: "menu",
     distance: 0,
@@ -28,19 +38,21 @@
     gravity: 0.95,
     groundRatio: 0.85,
     groundY: 0,
-    speed: 7,
-    baseSpeed: 7,
+    speed: 9,
+    baseSpeed: 9,
     spawnTimer: 0,
-    spawnInterval: 70,
+    spawnInterval: 60,
     frame: 0,
     shake: 0,
     flashTimer: 0,
-    palette: 0, // 0=cian/magenta, 1=verde, 2=naranja, 3=azul
+    palette: 0,
+    levelStartDistance: 0,
     palettes: [
       { primary: "#00fff7", secondary: "#ff00e5", bg1: "#050510", bg2: "#0a1a2e", bg3: "#1a0033" },
       { primary: "#00ff41", secondary: "#b8ffbe", bg1: "#000a00", bg2: "#0a1a0a", bg3: "#003300" },
       { primary: "#ff6b00", secondary: "#ffd166", bg1: "#100500", bg2: "#2e0a00", bg3: "#330f00" },
       { primary: "#8a2be2", secondary: "#00fff7", bg1: "#0a0010", bg2: "#1a002e", bg3: "#2a0033" },
+      { primary: "#ff003c", secondary: "#f5ff00", bg1: "#100000", bg2: "#2e0000", bg3: "#330000" },
     ],
   };
 
@@ -62,7 +74,6 @@
 
   if (recordEl) recordEl.textContent = game.record;
 
-  // --- Estrellas de fondo (parallax) ---
   const initStars = () => {
     stars = [];
     for (let i = 0; i < 60; i++) {
@@ -76,7 +87,6 @@
     }
   };
 
-  // --- Edificios de fondo (parallax) ---
   const initBuildings = () => {
     buildings = [];
     let x = 0;
@@ -109,7 +119,6 @@
   resize();
   window.addEventListener("resize", debouncedResize);
 
-  // --- Partículas ---
   const spawnParticles = (x, y, count, color, speed = 3) => {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2;
@@ -146,11 +155,10 @@
     jump();
   });
 
-  // --- Generar obstáculo ---
   const spawnObstacle = () => {
-    const types = ["block", "spike", "laser"];
-    const type = types[Math.floor(Math.random() * Math.min(game.level, 3))];
-    const palette = game.palettes[game.palette];
+    const currentLevel = LEVELS[game.level - 1] || LEVELS[LEVELS.length - 1];
+    const types = currentLevel.obstacleTypes;
+    const type = types[Math.floor(Math.random() * types.length)];
 
     if (type === "block") {
       const w = 30 + Math.random() * 20;
@@ -168,21 +176,38 @@
   };
 
   const checkCollision = (a, b) => {
-    if (b.type === "laser") {
-      // Laser: solo colisiona si el jugador está en su rango vertical
-      return (
-        a.x < b.x + b.w &&
-        a.x + a.size > b.x &&
-        a.y < b.y + b.h &&
-        a.y + a.size > b.y
-      );
-    }
     return (
       a.x < b.x + b.w &&
       a.x + a.size > b.x &&
       a.y < b.y + b.h &&
       a.y + a.size > b.y
     );
+  };
+
+  // --- Victoria (completar los 5 niveles) ---
+  const winGame = () => {
+    game.state = "won";
+    game.shake = 15;
+
+    const palette = game.palettes[game.palette];
+    spawnParticles(player.x + player.size / 2, player.y + player.size / 2, 80, palette.primary, 10);
+    spawnParticles(player.x + player.size / 2, player.y + player.size / 2, 60, palette.secondary, 8);
+
+    const finalDistance = Math.floor(game.distance);
+    if (finalDistance > game.record) {
+      game.record = finalDistance;
+      localStorage.setItem("cyber-descent-record", String(game.record));
+      if (recordEl) recordEl.textContent = game.record;
+    }
+
+    overlayTitle.textContent = "¡MISIÓN COMPLETADA!";
+    overlayText.innerHTML = `Has superado los <strong>5 niveles</strong>.<br>Distancia total: <strong>${finalDistance} m</strong>.<br>¡Eres una leyenda del Cyber Descent!`;
+    startBtn.innerHTML = 'Jugar otra vez <span aria-hidden="true">↻</span>';
+
+    setTimeout(() => {
+      overlay.classList.remove("is-hidden");
+      overlay.setAttribute("aria-hidden", "false");
+    }, 1000);
   };
 
   const gameOver = () => {
@@ -203,8 +228,9 @@
       overlayTitle.textContent = "GAME OVER";
     }
 
-    overlayText.textContent = `Has llegado a ${finalDistance} m · Nivel ${game.level}`;
-    startBtn.innerHTML = 'Jugar otra vez <span aria-hidden="true">↻</span>';
+    const currentLevel = LEVELS[game.level - 1] || LEVELS[LEVELS.length - 1];
+    overlayText.innerHTML = `Has llegado a <strong>${finalDistance} m</strong><br>Nivel ${game.level} · ${currentLevel.name}`;
+    startBtn.innerHTML = 'Reintentar <span aria-hidden="true">↻</span>';
 
     setTimeout(() => {
       overlay.classList.remove("is-hidden");
@@ -216,12 +242,20 @@
     game.state = "playing";
     game.distance = 0;
     game.level = 1;
-    game.speed = game.baseSpeed;
+    game.palette = 0;
+    game.levelStartDistance = 0;
+
+    const level = LEVELS[0];
+    game.speed = level.speed;
+    game.baseSpeed = level.speed;
+    game.spawnInterval = level.spawnInterval;
+    game.gravity = level.gravity;
+    player.jumpForce = level.jumpForce;
+
     game.spawnTimer = 0;
-    game.spawnInterval = 70;
     game.frame = 0;
     game.shake = 0;
-    game.palette = 0;
+    game.flashTimer = 0;
 
     obstacles = [];
     particles = [];
@@ -244,11 +278,9 @@
   const update = () => {
     game.frame++;
 
-    // Física del jugador
     player.vy += game.gravity;
     player.y += player.vy;
 
-    // Rotación del jugador al saltar
     if (!player.onGround) {
       player.rotation += 0.15;
     } else {
@@ -264,12 +296,10 @@
       player.onGround = true;
     }
 
-    // Estela del jugador
     player.trail.push({ x: player.x, y: player.y, life: 1 });
     if (player.trail.length > 12) player.trail.shift();
     player.trail.forEach((t) => (t.life -= 0.06));
 
-    // Estrellas parallax
     stars.forEach((s) => {
       s.x -= s.speed;
       if (s.x < 0) {
@@ -278,7 +308,6 @@
       }
     });
 
-    // Edificios parallax
     buildings.forEach((b) => {
       b.x -= game.speed * 0.3;
     });
@@ -293,15 +322,14 @@
 
     game.distance += game.speed * 0.1;
 
-    // Generar obstáculos
     game.spawnTimer++;
     if (game.spawnTimer >= game.spawnInterval) {
       spawnObstacle();
       game.spawnTimer = 0;
-      game.spawnInterval = Math.max(35, game.spawnInterval - 1);
+      // Reducir ligeramente el intervalo dentro del nivel
+      game.spawnInterval = Math.max(20, game.spawnInterval - 0.5);
     }
 
-    // Mover obstáculos
     for (let i = obstacles.length - 1; i >= 0; i--) {
       const o = obstacles[i];
       o.x -= game.speed;
@@ -322,7 +350,6 @@
       }
     }
 
-    // Partículas
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
       p.x += p.vx;
@@ -332,14 +359,30 @@
       if (p.life <= 0) particles.splice(i, 1);
     }
 
-    // Subir de nivel cada 500 m + cambio de paleta
-    const newLevel = Math.floor(game.distance / 500) + 1;
-    if (newLevel > game.level) {
-      game.level = newLevel;
-      game.speed += 0.7;
-      game.palette = (game.palette + 1) % game.palettes.length;
-      game.flashTimer = 20;
-      if (levelEl) levelEl.textContent = game.level;
+    // --- Comprobar si se completa el nivel ---
+    const currentLevel = LEVELS[game.level - 1];
+    if (currentLevel) {
+      const distanceInLevel = game.distance - game.levelStartDistance;
+      if (distanceInLevel >= currentLevel.distance) {
+        // Subir de nivel
+        if (game.level < LEVELS.length) {
+          game.level++;
+          game.levelStartDistance = game.distance;
+          const nextLevel = LEVELS[game.level - 1];
+          game.speed = nextLevel.speed;
+          game.spawnInterval = nextLevel.spawnInterval;
+          game.gravity = nextLevel.gravity;
+          player.jumpForce = nextLevel.jumpForce;
+          game.palette = (game.level - 1) % game.palettes.length;
+          game.flashTimer = 25;
+          if (levelEl) levelEl.textContent = game.level;
+          console.info(`[game] Nivel ${game.level}: ${nextLevel.name}`);
+        } else {
+          // ¡Completado el juego!
+          winGame();
+          return;
+        }
+      }
     }
 
     if (distanceEl) distanceEl.textContent = Math.floor(game.distance);
@@ -353,7 +396,6 @@
 
     ctx.save();
 
-    // Screen shake
     if (game.shake > 0.5) {
       ctx.translate(
         (Math.random() - 0.5) * game.shake,
@@ -361,7 +403,6 @@
       );
     }
 
-    // Fondo degradado
     const gradient = ctx.createLinearGradient(0, 0, 0, H);
     gradient.addColorStop(0, palette.bg1);
     gradient.addColorStop(0.6, palette.bg2);
@@ -369,7 +410,6 @@
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, W, H);
 
-    // Estrellas
     stars.forEach((s) => {
       ctx.globalAlpha = s.alpha;
       ctx.fillStyle = palette.primary;
@@ -377,12 +417,10 @@
     });
     ctx.globalAlpha = 1;
 
-    // Edificios (silueta)
     buildings.forEach((b) => {
       ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
       ctx.fillRect(b.x, game.groundY - b.h, b.w, b.h);
 
-      // Ventanas
       if (b.windows) {
         ctx.fillStyle = palette.primary;
         ctx.globalAlpha = 0.4;
@@ -397,7 +435,6 @@
       }
     });
 
-    // Rejilla parallax
     ctx.strokeStyle = `rgba(0, 255, 247, 0.06)`;
     ctx.lineWidth = 1;
     const gridSize = 50;
@@ -413,7 +450,6 @@
     }
     ctx.stroke();
 
-    // Suelo con glow
     ctx.fillStyle = palette.primary;
     ctx.fillRect(0, game.groundY, W, 3);
     ctx.fillStyle = palette.primary + "55";
@@ -421,7 +457,6 @@
     ctx.fillStyle = palette.primary + "22";
     ctx.fillRect(0, game.groundY + 13, W, 15);
 
-    // Obstáculos
     for (let i = 0; i < obstacles.length; i++) {
       const o = obstacles[i];
 
@@ -432,7 +467,6 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(o.x, o.y, o.w, o.h);
 
-        // Interior con líneas
         ctx.strokeStyle = palette.secondary;
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -443,7 +477,6 @@
         ctx.stroke();
 
       } else if (o.type === "spike") {
-        // Pincho triangular
         ctx.fillStyle = palette.secondary;
         ctx.beginPath();
         ctx.moveTo(o.x, game.groundY);
@@ -456,7 +489,6 @@
         ctx.stroke();
 
       } else if (o.type === "laser") {
-        // Láser parpadeante
         const alpha = 0.7 + Math.sin(game.frame * 0.3) * 0.3;
         ctx.fillStyle = palette.secondary;
         ctx.globalAlpha = alpha;
@@ -467,7 +499,6 @@
       }
     }
 
-    // Estela del jugador
     player.trail.forEach((t) => {
       ctx.globalAlpha = t.life * 0.3;
       ctx.fillStyle = palette.secondary;
@@ -475,19 +506,16 @@
     });
     ctx.globalAlpha = 1;
 
-    // Jugador (nave)
     ctx.save();
     ctx.translate(player.x + player.size / 2, player.y + player.size / 2);
     ctx.rotate(player.rotation);
 
-    // Núcleo
     ctx.fillStyle = palette.secondary;
     ctx.fillRect(-player.size / 2, -player.size / 2, player.size, player.size);
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 2;
     ctx.strokeRect(-player.size / 2, -player.size / 2, player.size, player.size);
 
-    // Ojo/visor central
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(-4, -4, 8, 8);
     ctx.fillStyle = palette.primary;
@@ -495,7 +523,6 @@
 
     ctx.restore();
 
-    // Partículas
     particles.forEach((p) => {
       ctx.globalAlpha = p.life;
       ctx.fillStyle = p.color;
@@ -503,10 +530,19 @@
     });
     ctx.globalAlpha = 1;
 
-    // Flash al subir de nivel
     if (game.flashTimer > 0) {
       ctx.fillStyle = `rgba(255, 255, 255, ${game.flashTimer / 40})`;
       ctx.fillRect(0, 0, W, H);
+    }
+
+    // Mostrar nombre del nivel en la esquina
+    const currentLevel = LEVELS[game.level - 1] || LEVELS[LEVELS.length - 1];
+    if (game.state === "playing" && currentLevel) {
+      ctx.font = "bold 14px 'JetBrains Mono', monospace";
+      ctx.fillStyle = palette.primary;
+      ctx.globalAlpha = 0.5;
+      ctx.fillText(`NIVEL ${game.level} · ${currentLevel.name}`, 16, 32);
+      ctx.globalAlpha = 1;
     }
 
     ctx.restore();
@@ -530,5 +566,5 @@
 
   requestAnimationFrame(loop);
 
-  console.info("[game] Cyber Descent — versión espectacular.");
+  console.info("[game] Cyber Descent — 5 niveles con victoria.");
 })();
