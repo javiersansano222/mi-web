@@ -49,6 +49,7 @@
   </style>
 
   <link rel="stylesheet" href="styles.css">
+  <script src="game.js" defer></script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <script src="script.js" defer></script>
@@ -493,6 +494,38 @@
 
       <p class="projects-note reveal"><span>✳</span> Los proyectos irán creciendo conmigo. Vuelve pronto para ver las novedades.</p>
     </section>
+    <!-- JUEGO: CYBER DESCENT -->
+<section class="game section-shell" id="juego">
+  <div class="section-heading section-heading--row reveal">
+    <div>
+      <p class="eyebrow">03.5 / CYBER DESCENT</p>
+      <h2>Baja por la colina<br><em>esquivando obstáculos.</em></h2>
+    </div>
+    <span class="section-index">JUEGO · 01</span>
+  </div>
+
+  <div class="game-stage reveal">
+    <div class="game-hud">
+      <span>🏆 Récord: <span id="game-record">0</span> m</span>
+      <span>📏 Distancia: <span id="game-distance">0</span> m</span>
+      <span>🎯 Nivel: <span id="game-level">1</span></span>
+    </div>
+
+    <canvas id="game-canvas"></canvas>
+
+    <div class="game-overlay" id="game-overlay">
+      <h3 class="game-overlay__title" id="game-overlay-title">CYBER DESCENT</h3>
+      <p class="game-overlay__text" id="game-overlay-text">Esquiva los obstáculos. Llega lo más lejos posible.</p>
+      <button class="button button--gold" id="game-start-btn" type="button">
+        Empezar partida <span aria-hidden="true">▶</span>
+      </button>
+    </div>
+  </div>
+
+  <p class="game-controls reveal">
+    🎮 <strong>Teclado:</strong> Espacio o ↑ · 📱 <strong>Móvil:</strong> Toca la pantalla
+  </p>
+</section>
 
     <!-- DENTRO DEL ORDENADOR -->
     <section class="inside section-shell" id="dentro">
