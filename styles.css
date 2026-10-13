@@ -5269,3 +5269,33 @@ body.low-performance .ocean__grain {
 .cyber-car {
   display: none;
 }
+
+/* =========================================================
+   MODO BAJO RENDIMIENTO
+   Se activa automáticamente si los FPS bajan de 30
+   ========================================================= */
+body.low-performance .cyber-car {
+  display: none !important;
+}
+
+body.low-performance #particles {
+  display: none !important;
+}
+
+body.low-performance .bubble {
+  display: none !important;
+}
+
+body.low-performance .ocean__glow {
+  animation: none !important;
+  opacity: 0.4;
+}
+
+body.low-performance .deco-rays,
+body.low-performance .deco-rain {
+  display: none !important;
+}
+
+body.low-performance .ocean__grain {
+  opacity: 0.03;
+}

@@ -2182,6 +2182,41 @@ function checkPerformance() {
     }
   }
 }
+  /* =========================================================
+     26. DETECCIÓN DE BAJO RENDIMIENTO
+     ========================================================= */
+  (function detectLowPerformance() {
+    let frameCount = 0;
+    let lastCheck = performance.now();
+    let consecutiveLow = 0; // cuántas veces seguidas ha ido lento
+
+    const check = () => {
+      frameCount++;
+      const now = performance.now();
+
+      if (now - lastCheck >= 1000) {
+        const fps = frameCount;
+        frameCount = 0;
+        lastCheck = now;
+
+        if (fps < 30) {
+          consecutiveLow++;
+          // Si va lento 3 segundos seguidos, activamos modo bajo rendimiento
+          if (consecutiveLow >= 3) {
+            document.body.classList.add("low-performance");
+            console.info("[perf] Modo bajo rendimiento activado (FPS: " + fps + ")");
+            return; // dejamos de comprobar
+          }
+        } else {
+          consecutiveLow = 0;
+        }
+      }
+
+      requestAnimationFrame(check);
+    };
+
+    requestAnimationFrame(check);
+  })();
 
   console.info("[script] Todo listo.");
 })();
