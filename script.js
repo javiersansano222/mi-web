@@ -202,7 +202,7 @@
   const storedEra = safeGet("portfolio-era");
   if (storedEra && eras.includes(storedEra)) root.dataset.era = storedEra;
 
-    // URL params: ?era=matrix-verde
+  // URL params: ?era=matrix-verde
   const urlParams = new URLSearchParams(window.location.search);
   const eraFromUrl = urlParams.get("era");
   if (eraFromUrl && eras.includes(eraFromUrl)) {
@@ -210,6 +210,7 @@
     safeSet("portfolio-era", eraFromUrl);
     console.info("[era] Activada desde URL:", eraFromUrl);
   }
+
   loadEraFonts(root.dataset.era || "neon-nocturno");
 
   if (eraSelect) {
@@ -874,7 +875,7 @@
       const t = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
       const hints = {
-        es: /\b(qué|que|cómo|como|dónde|donde|quién|quien|hola|buenas|gracias|por favor|está|esta)\b/,
+        es: /\b(qué|que|cómo|como|dónde|donde|quién|quien|hola|buenas|gracias|por favor|está|esta|estudios|estudio|proyectos|proyecto|juegos|juego|ordenador|pc|contacto|contactar|trabajos|trabajo|sobre|cuando|porque|tienes|haces)\b/,
         va: /\b(què|com|on|qui|hola|bones|gracies|si us plau|està|estic|vull|puc|soc)\b/,
         en: /\b(what|how|where|who|hello|hi|thanks|please|the|you|your|is|are|does)\b/,
         fr: /\b(quoi|comment|où|qui|bonjour|salut|merci|s'il|vous|tu|est|sont|je)\b/
@@ -972,11 +973,16 @@
     const handleUserMessage = (text) => {
       if (!text) return;
 
-      const detected = detectLang(text);
-      if (detected && detected !== currentLang) {
-        currentLang = detected;
-        safeSet("portfolio-chat-lang", currentLang);
-        applyLangToUI(currentLang);
+      // Solo autodetectar si el usuario NO ha elegido idioma manualmente
+      const userChoseLang = safeGet("portfolio-chat-lang-manual") === "true";
+
+      if (!userChoseLang) {
+        const detected = detectLang(text);
+        if (detected && detected !== currentLang) {
+          currentLang = detected;
+          safeSet("portfolio-chat-lang", currentLang);
+          applyLangToUI(currentLang);
+        }
       }
 
       addMessage(text, "user");
@@ -1023,18 +1029,31 @@
     });
 
     $$(".chat__quick-btn", chatQuick || document).forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const text = btn.dataset.msg || btn.textContent;
-        handleUserMessage(text);
-      });
-    });
+  btn.addEventListener("click", () => {
+    const key = btn.dataset.msg; // "projects", "contact", "studies", "pc", "games"
+    if (!key) return;
 
+    // Mostrar el texto del botón al usuario (en el idioma actual)
+    const userText = btn.textContent;
+    addMessage(userText, "user");
+
+    // Buscar la respuesta por clave (no por texto)
+    const dict = knowledge[currentLang] || knowledge.es;
+    const item = dict[key];
+    const reply = item && Array.isArray(item.reply)
+      ? item.reply[Math.floor(Math.random() * item.reply.length)]
+      : (dict.unknown || knowledge.es.unknown)[0];
+
+    botReply(reply);
+  });
+});
     chatLangBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
         const lang = btn.dataset.lang;
         if (!ui[lang]) return;
         currentLang = lang;
         safeSet("portfolio-chat-lang", lang);
+        safeSet("portfolio-chat-lang-manual", "true");
         applyLangToUI(lang);
         const t = ui[lang];
         addMessage(t.welcome, "bot");
@@ -1063,8 +1082,8 @@
 
   /* --- Caché APOD --- */
   const APOD_CACHE_KEY = "portfolio-apod-cache";
-  const APOD_CACHE_TTL = 24 * 60 * 60 * 1000;        // 24 horas = "fresca"
-  const APOD_CACHE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30 días = "usable como fallback"
+  const APOD_CACHE_TTL = 24 * 60 * 60 * 1000;
+  const APOD_CACHE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 
   const getApodCache = () => {
     try {
@@ -1095,7 +1114,6 @@
     return cache && (Date.now() - cache.time < APOD_CACHE_MAX_AGE);
   };
 
-  /* --- Renderizar APOD (desde API o desde caché) --- */
   const renderApod = (apod, fromCache = false) => {
     if (!apod || !apodMedia) return;
 
@@ -1140,11 +1158,9 @@
     if (apodLoader) apodLoader.classList.add("is-hidden");
   };
 
-  /* --- Placeholder de error (con fallback a caché) --- */
   const mostrarApodError = (err) => {
     if (apodLoader) apodLoader.classList.add("is-hidden");
 
-    // Antes de mostrar el error, intentar usar caché antigua como fallback
     const cache = getApodCache();
     if (isCacheUsable(cache)) {
       console.info("[apod] API falló, usando caché como fallback");
@@ -1176,11 +1192,9 @@
     if (apodType) apodType.textContent = "Sin conexión";
   };
 
-  /* --- Cargar APOD (con caché) --- */
   const loadApod = async (date) => {
     if (!apodMedia) return;
 
-    // 1. Si NO se ha pedido fecha concreta, mirar caché fresca primero
     if (!date) {
       const cache = getApodCache();
       if (isCacheFresh(cache)) {
@@ -1190,7 +1204,6 @@
       }
     }
 
-    // 2. Mostrar loader
     if (apodLoader) apodLoader.classList.remove("is-hidden");
     if (apodTitle) apodTitle.textContent = "Cargando…";
     if (apodExplanation) apodExplanation.textContent = "—";
@@ -1239,11 +1252,9 @@
         return;
       }
 
-      // 3. ¡ÉXITO! Guardar en caché
       setApodCache(apod);
       console.info("[apod] Guardado en caché:", apod.title);
 
-      // 4. Renderizar
       renderApod(apod);
 
     } catch (err) {
@@ -2097,69 +2108,9 @@
         matrixFrame = requestAnimationFrame(matrixStep);
       }
     });
-      /* =========================================================
-     25. POP-UP DE VÍDEO — Próximo proyecto
-     ========================================================= */
-  const videoModal = $("#video-modal");
-  const videoModalVideo = $("#video-modal-video");
-  const videoModalClose = $("#video-modal-close");
-  const videoModalBackdrop = $("#video-modal-backdrop");
-
-  if (videoModal && videoModalVideo && videoModalClose) {
-    let videoAutoCloseTimer = null;
-
-    const openVideoModal = () => {
-      videoModal.classList.add("is-visible");
-      videoModal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-
-      videoModalVideo.currentTime = 0;
-      const playPromise = videoModalVideo.play();
-      if (playPromise && playPromise.catch) {
-        playPromise.catch((err) => {
-          console.warn("[video-modal] Autoplay bloqueado:", err);
-          videoAutoCloseTimer = setTimeout(closeVideoModal, 5000);
-        });
-      }
-    };
-
-    const closeVideoModal = () => {
-      if (videoAutoCloseTimer) {
-        clearTimeout(videoAutoCloseTimer);
-        videoAutoCloseTimer = null;
-      }
-      videoModal.classList.remove("is-visible");
-      videoModal.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      videoModalVideo.pause();
-    };
-
-    // Al terminar el vídeo, esperar 2s para que el usuario vea el botón
-    videoModalVideo.addEventListener("ended", () => {
-      setTimeout(closeVideoModal, 2000);
-    });
-
-    videoModalClose.addEventListener("click", closeVideoModal);
-    videoModalBackdrop?.addEventListener("click", closeVideoModal);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && videoModal.classList.contains("is-visible")) {
-        closeVideoModal();
-      }
-    });
-
-    // Mostrar SIEMPRE (cada recarga)
-    const waitForIntro = () => {
-      if (!document.body.classList.contains("is-loading")) {
-        setTimeout(openVideoModal, 900);
-      } else {
-        setTimeout(waitForIntro, 400);
-      }
-    };
-    waitForIntro();
   }
-  }
-    /* =========================================================
+
+  /* =========================================================
      25. MINI REPRODUCTOR DE VÍDEO FLOTANTE
      ========================================================= */
   const miniVideo = $("#mini-video");
@@ -2211,5 +2162,6 @@
     };
     waitForIntro();
   }
+
   console.info("[script] Todo listo.");
 })();
