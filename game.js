@@ -19,7 +19,7 @@
   const ctx = canvas.getContext("2d", { alpha: false });
 
   /* =========================================================
-     AUDIO — Web Audio API (motor de sonido)
+     AUDIO — Web Audio API
      ========================================================= */
   let audioCtx = null;
   let muted = localStorage.getItem("cyber-descent-muted") === "true";
@@ -77,13 +77,12 @@
   let W = 0;
   let H = 0;
 
-  // --- 5 niveles con dificultad progresiva ---
   const LEVELS = [
-    { name: "INICIACIÓN",   distance: 400, speed: 9,  spawnInterval: 60, obstacleTypes: ["block", "float"],                  gravity: 0.95, jumpForce: -16 },
-    { name: "ACELERACIÓN",  distance: 500, speed: 11, spawnInterval: 50, obstacleTypes: ["block", "spike", "float"],        gravity: 0.95, jumpForce: -16 },
-    { name: "PELIGRO",      distance: 600, speed: 13, spawnInterval: 42, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -16 },
-    { name: "SOBRECARGA",   distance: 700, speed: 15, spawnInterval: 35, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -17 },
-    { name: "SINGULARIDAD", distance: 800, speed: 18, spawnInterval: 28, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -17 },
+    { name: "INICIACIÓN",   distance: 400, speed: 9,  spawnInterval: 60, obstacleTypes: ["block", "float"],                          gravity: 0.95, jumpForce: -16 },
+    { name: "ACELERACIÓN",  distance: 500, speed: 11, spawnInterval: 50, obstacleTypes: ["block", "spike", "float", "pit"],            gravity: 0.95, jumpForce: -16 },
+    { name: "PELIGRO",      distance: 600, speed: 13, spawnInterval: 42, obstacleTypes: ["block", "spike", "laser", "float", "pit"],   gravity: 0.95, jumpForce: -16 },
+    { name: "SOBRECARGA",   distance: 700, speed: 15, spawnInterval: 35, obstacleTypes: ["block", "spike", "laser", "float", "pit"],   gravity: 0.95, jumpForce: -17 },
+    { name: "SINGULARIDAD", distance: 800, speed: 18, spawnInterval: 28, obstacleTypes: ["block", "spike", "laser", "float", "pit"],   gravity: 0.95, jumpForce: -17 },
   ];
 
   const game = {
@@ -234,6 +233,9 @@
       const h = 30 + Math.random() * 20;
       const y = game.groundY - 80 - Math.random() * 30;
       obstacles.push({ x: W + 50, y, w, h, type: "float", passed: false });
+    } else if (type === "pit") {
+      const w = 60 + Math.random() * 40;
+      obstacles.push({ x: W + 50, y: game.groundY, w, h: 0, type: "pit", passed: false });
     }
   };
 
@@ -353,13 +355,24 @@
       player.rotation *= 0.8;
     }
 
-    if (player.y >= game.groundY - player.size) {
+    const overPit = obstacles.some(o =>
+      o.type === "pit" &&
+      player.x + player.size > o.x &&
+      player.x < o.x + o.w
+    );
+
+    if (!overPit && player.y >= game.groundY - player.size) {
       player.y = game.groundY - player.size;
       if (!player.onGround && player.vy > 5) {
         spawnParticles(player.x + player.size / 2, game.groundY, 8, game.palettes[game.palette].primary);
       }
       player.vy = 0;
       player.onGround = true;
+    }
+
+    if (player.y > game.groundY + 100) {
+      gameOver();
+      return;
     }
 
     player.trail.push({ x: player.x, y: player.y, life: 1 });
@@ -409,7 +422,7 @@
         continue;
       }
 
-      if (checkCollision(player, o)) {
+      if (o.type !== "pit" && checkCollision(player, o)) {
         gameOver();
         return;
       }
@@ -578,6 +591,24 @@
         ctx.moveTo(o.x + 5, o.y + 5);
         ctx.lineTo(o.x + o.w - 5, o.y + o.h - 5);
         ctx.stroke();
+
+      } else if (o.type === "pit") {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(o.x, game.groundY, o.w, 40);
+        ctx.strokeStyle = palette.secondary;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(o.x, game.groundY);
+        ctx.lineTo(o.x, game.groundY + 40);
+        ctx.moveTo(o.x + o.w, game.groundY);
+        ctx.lineTo(o.x + o.w, game.groundY + 40);
+        ctx.stroke();
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(o.x, game.groundY);
+        ctx.lineTo(o.x + o.w, game.groundY);
+        ctx.stroke();
+        ctx.setLineDash([]);
       }
     }
 
