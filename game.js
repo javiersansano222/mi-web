@@ -370,7 +370,7 @@
       player.onGround = true;
     }
 
-    if (player.y > game.groundY + 100) {
+    if (overPit && player.onGround) {
       gameOver();
       return;
     }
