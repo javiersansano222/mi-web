@@ -611,8 +611,7 @@
 
     ctx.restore();
   };
-
-  let lastTime = 0;
+   let lastTime = 0;
   const FRAME_INTERVAL = 1000 / 60;
 
   const loop = (timestamp) => {
@@ -627,6 +626,8 @@
     }
     render();
   };
+
+  
 
   requestAnimationFrame(loop);
     // Exponer playTone en consola para probarlo manualmente
