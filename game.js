@@ -195,7 +195,8 @@
       player.vy = player.jumpForce;
       player.onGround = false;
       spawnParticles(player.x + player.size / 2, player.y + player.size, 12, game.palettes[game.palette].primary);
-    }
+      playTone({ freq: 880, type: "square", duration: 0.08, volume: 0.12 })
+   }
   };
 
   document.addEventListener("keydown", (e) => {
@@ -243,6 +244,10 @@
   const winGame = () => {
     game.state = "won";
     game.shake = 15;
+        playTone({ freq: 523, type: "triangle", duration: 0.12, volume: 0.18 });
+    setTimeout(() => playTone({ freq: 659, type: "triangle", duration: 0.12, volume: 0.18 }), 130);
+    setTimeout(() => playTone({ freq: 784, type: "triangle", duration: 0.12, volume: 0.18 }), 260);
+    setTimeout(() => playTone({ freq: 1046, type: "triangle", duration: 0.3, volume: 0.2 }), 390);
 
     const palette = game.palettes[game.palette];
     spawnParticles(player.x + player.size / 2, player.y + player.size / 2, 80, palette.primary, 10);
@@ -268,6 +273,7 @@
   const gameOver = () => {
     game.state = "gameover";
     game.shake = 20;
+        playTone({ freq: 220, type: "sawtooth", duration: 0.4, volume: 0.18, slideTo: 60 });
 
     const palette = game.palettes[game.palette];
     spawnParticles(player.x + player.size / 2, player.y + player.size / 2, 60, palette.secondary, 8);
@@ -430,6 +436,9 @@
           player.jumpForce = nextLevel.jumpForce;
           game.palette = (game.level - 1) % game.palettes.length;
           game.flashTimer = 25;
+                    playTone({ freq: 523, type: "triangle", duration: 0.1, volume: 0.15 });
+          setTimeout(() => playTone({ freq: 659, type: "triangle", duration: 0.1, volume: 0.15 }), 90);
+          setTimeout(() => playTone({ freq: 784, type: "triangle", duration: 0.15, volume: 0.15 }), 180);
           if (levelEl) levelEl.textContent = game.level;
           console.info(`[game] Nivel ${game.level}: ${nextLevel.name}`);
         } else {
