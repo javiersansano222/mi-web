@@ -17,7 +17,8 @@
   if (!canvas || !overlay || !startBtn) return;
 
   const ctx = canvas.getContext("2d", { alpha: false });
-    /* =========================================================
+
+  /* =========================================================
      AUDIO — Web Audio API (motor de sonido)
      ========================================================= */
   let audioCtx = null;
@@ -78,11 +79,11 @@
 
   // --- 5 niveles con dificultad progresiva ---
   const LEVELS = [
-    { name: "INICIACIÓN",       distance: 400,  speed: 9,   spawnInterval: 60, obstacleTypes: ["block"],                  gravity: 0.95, jumpForce: -16 },
-    { name: "ACELERACIÓN",      distance: 500,  speed: 11,  spawnInterval: 50, obstacleTypes: ["block", "spike"],        gravity: 0.95, jumpForce: -16 },
-    { name: "PELIGRO",          distance: 600,  speed: 13,  spawnInterval: 42, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -16 },
-    { name: "SOBRECARGA",       distance: 700,  speed: 15,  spawnInterval: 35, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -17 },
-    { name: "SINGULARIDAD",     distance: 800,  speed: 18,  spawnInterval: 28, obstacleTypes: ["block", "spike", "laser"], gravity: 0.95, jumpForce: -17 },
+    { name: "INICIACIÓN",   distance: 400, speed: 9,  spawnInterval: 60, obstacleTypes: ["block", "float"],                  gravity: 0.95, jumpForce: -16 },
+    { name: "ACELERACIÓN",  distance: 500, speed: 11, spawnInterval: 50, obstacleTypes: ["block", "spike", "float"],        gravity: 0.95, jumpForce: -16 },
+    { name: "PELIGRO",      distance: 600, speed: 13, spawnInterval: 42, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -16 },
+    { name: "SOBRECARGA",   distance: 700, speed: 15, spawnInterval: 35, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -17 },
+    { name: "SINGULARIDAD", distance: 800, speed: 18, spawnInterval: 28, obstacleTypes: ["block", "spike", "laser", "float"], gravity: 0.95, jumpForce: -17 },
   ];
 
   const game = {
@@ -195,7 +196,7 @@
       player.vy = player.jumpForce;
       player.onGround = false;
       spawnParticles(player.x + player.size / 2, player.y + player.size, 12, game.palettes[game.palette].primary);
-            playTone({ freq: 880, type: "square", duration: 0.08, volume: 0.12 });
+      playTone({ freq: 880, type: "square", duration: 0.08, volume: 0.12 });
     }
   };
 
@@ -228,6 +229,11 @@
       const h = 8;
       const y = game.groundY - 100 - Math.random() * 60;
       obstacles.push({ x: W + 50, y, w: 40, h, type: "laser", passed: false });
+    } else if (type === "float") {
+      const w = 40 + Math.random() * 20;
+      const h = 30 + Math.random() * 20;
+      const y = game.groundY - 80 - Math.random() * 30;
+      obstacles.push({ x: W + 50, y, w, h, type: "float", passed: false });
     }
   };
 
@@ -240,11 +246,10 @@
     );
   };
 
-  // --- Victoria (completar los 5 niveles) ---
   const winGame = () => {
     game.state = "won";
     game.shake = 15;
-        playTone({ freq: 523, type: "triangle", duration: 0.12, volume: 0.18 });
+    playTone({ freq: 523, type: "triangle", duration: 0.12, volume: 0.18 });
     setTimeout(() => playTone({ freq: 659, type: "triangle", duration: 0.12, volume: 0.18 }), 130);
     setTimeout(() => playTone({ freq: 784, type: "triangle", duration: 0.12, volume: 0.18 }), 260);
     setTimeout(() => playTone({ freq: 1046, type: "triangle", duration: 0.3, volume: 0.2 }), 390);
@@ -273,7 +278,7 @@
   const gameOver = () => {
     game.state = "gameover";
     game.shake = 20;
-        playTone({ freq: 220, type: "sawtooth", duration: 0.4, volume: 0.18, slideTo: 60 });
+    playTone({ freq: 220, type: "sawtooth", duration: 0.4, volume: 0.18, slideTo: 60 });
 
     const palette = game.palettes[game.palette];
     spawnParticles(player.x + player.size / 2, player.y + player.size / 2, 60, palette.secondary, 8);
@@ -387,7 +392,6 @@
     if (game.spawnTimer >= game.spawnInterval) {
       spawnObstacle();
       game.spawnTimer = 0;
-      // Reducir ligeramente el intervalo dentro del nivel
       game.spawnInterval = Math.max(20, game.spawnInterval - 0.5);
     }
 
@@ -420,12 +424,10 @@
       if (p.life <= 0) particles.splice(i, 1);
     }
 
-    // --- Comprobar si se completa el nivel ---
     const currentLevel = LEVELS[game.level - 1];
     if (currentLevel) {
       const distanceInLevel = game.distance - game.levelStartDistance;
       if (distanceInLevel >= currentLevel.distance) {
-        // Subir de nivel
         if (game.level < LEVELS.length) {
           game.level++;
           game.levelStartDistance = game.distance;
@@ -436,13 +438,12 @@
           player.jumpForce = nextLevel.jumpForce;
           game.palette = (game.level - 1) % game.palettes.length;
           game.flashTimer = 25;
-                    playTone({ freq: 523, type: "triangle", duration: 0.1, volume: 0.15 });
+          playTone({ freq: 523, type: "triangle", duration: 0.1, volume: 0.15 });
           setTimeout(() => playTone({ freq: 659, type: "triangle", duration: 0.1, volume: 0.15 }), 90);
           setTimeout(() => playTone({ freq: 784, type: "triangle", duration: 0.15, volume: 0.15 }), 180);
           if (levelEl) levelEl.textContent = game.level;
           console.info(`[game] Nivel ${game.level}: ${nextLevel.name}`);
         } else {
-          // ¡Completado el juego!
           winGame();
           return;
         }
@@ -560,6 +561,23 @@
         ctx.globalAlpha = 1;
         ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
         ctx.fillRect(o.x, o.y + o.h / 2 - 1, o.w, 2);
+
+      } else if (o.type === "float") {
+        ctx.fillStyle = palette.primary;
+        ctx.globalAlpha = 0.85;
+        ctx.fillRect(o.x, o.y, o.w, o.h);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(o.x, o.y, o.w, o.h);
+        ctx.setLineDash([]);
+        ctx.strokeStyle = palette.secondary;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(o.x + 5, o.y + 5);
+        ctx.lineTo(o.x + o.w - 5, o.y + o.h - 5);
+        ctx.stroke();
       }
     }
 
@@ -599,7 +617,6 @@
       ctx.fillRect(0, 0, W, H);
     }
 
-    // Mostrar nombre del nivel en la esquina
     const currentLevel = LEVELS[game.level - 1] || LEVELS[LEVELS.length - 1];
     if (game.state === "playing" && currentLevel) {
       ctx.font = "bold 14px 'JetBrains Mono', monospace";
@@ -611,7 +628,8 @@
 
     ctx.restore();
   };
-   let lastTime = 0;
+
+  let lastTime = 0;
   const FRAME_INTERVAL = 1000 / 60;
 
   const loop = (timestamp) => {
@@ -627,12 +645,11 @@
     render();
   };
 
-  
-
   requestAnimationFrame(loop);
-    // Exponer playTone en consola para probarlo manualmente
+
   window.__playTone = playTone;
-   /* =========================================================
+
+  /* =========================================================
      BOTÓN DE MUTE + ATAJO DE TECLADO
      ========================================================= */
   const muteBtn = document.getElementById("game-mute");
@@ -652,7 +669,6 @@
     localStorage.setItem("cyber-descent-muted", String(muted));
     syncMuteButton();
     if (!muted) {
-      // Pequeño feedback al reactivar
       playTone({ freq: 660, type: "sine", duration: 0.1, volume: 0.15 });
     }
   };
@@ -667,5 +683,6 @@
       toggleMute();
     }
   });
+
   console.info("[game] Cyber Descent — 5 niveles con victoria.");
 })();
