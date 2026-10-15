@@ -361,6 +361,10 @@
       player.x < o.x + o.w
     );
 
+    if (overPit) {
+      player.onGround = false;
+    }
+
     if (!overPit && player.y >= game.groundY - player.size) {
       player.y = game.groundY - player.size;
       if (!player.onGround && player.vy > 5) {
@@ -370,7 +374,11 @@
       player.onGround = true;
     }
 
-    if (overPit && player.onGround) {
+    if (overPit && !player.onGround) {
+      player.vy += 2.5;
+    }
+
+    if (player.y > game.groundY + 60) {
       gameOver();
       return;
     }
