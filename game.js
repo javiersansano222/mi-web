@@ -17,6 +17,61 @@
   if (!canvas || !overlay || !startBtn) return;
 
   const ctx = canvas.getContext("2d", { alpha: false });
+    /* =========================================================
+     AUDIO — Web Audio API (motor de sonido)
+     ========================================================= */
+  let audioCtx = null;
+  let muted = localStorage.getItem("cyber-descent-muted") === "true";
+
+  const getAudio = () => {
+    if (muted) return null;
+    if (!audioCtx) {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (err) {
+        console.warn("[audio] No se pudo crear AudioContext:", err);
+        return null;
+      }
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  };
+
+  const playTone = ({
+    freq = 440,
+    type = "square",
+    duration = 0.12,
+    volume = 0.15,
+    slideTo = null,
+  } = {}) => {
+    const ac = getAudio();
+    if (!ac) return;
+
+    const now = ac.currentTime;
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+
+    if (slideTo !== null) {
+      osc.frequency.exponentialRampToValueAtTime(
+        Math.max(1, slideTo),
+        now + duration
+      );
+    }
+
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(ac.destination);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  };
 
   let W = 0;
   let H = 0;
@@ -565,6 +620,8 @@
   };
 
   requestAnimationFrame(loop);
+    // Exponer playTone en consola para probarlo manualmente
+  window.__playTone = playTone;
 
   console.info("[game] Cyber Descent — 5 niveles con victoria.");
 })();
