@@ -195,8 +195,8 @@
       player.vy = player.jumpForce;
       player.onGround = false;
       spawnParticles(player.x + player.size / 2, player.y + player.size, 12, game.palettes[game.palette].primary);
-      playTone({ freq: 880, type: "square", duration: 0.08, volume: 0.12 })
-   }
+            playTone({ freq: 880, type: "square", duration: 0.08, volume: 0.12 });
+    }
   };
 
   document.addEventListener("keydown", (e) => {
@@ -631,6 +631,40 @@
   requestAnimationFrame(loop);
     // Exponer playTone en consola para probarlo manualmente
   window.__playTone = playTone;
+   /* =========================================================
+     BOTÓN DE MUTE + ATAJO DE TECLADO
+     ========================================================= */
+  const muteBtn = document.getElementById("game-mute");
 
+  const syncMuteButton = () => {
+    if (!muteBtn) return;
+    muteBtn.textContent = muted ? "🔇" : "🔊";
+    muteBtn.setAttribute("aria-pressed", String(muted));
+    muteBtn.setAttribute(
+      "aria-label",
+      muted ? "Activar sonido" : "Silenciar sonido"
+    );
+  };
+
+  const toggleMute = () => {
+    muted = !muted;
+    localStorage.setItem("cyber-descent-muted", String(muted));
+    syncMuteButton();
+    if (!muted) {
+      // Pequeño feedback al reactivar
+      playTone({ freq: 660, type: "sine", duration: 0.1, volume: 0.15 });
+    }
+  };
+
+  syncMuteButton();
+
+  muteBtn?.addEventListener("click", toggleMute);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "w" || e.key === "W") {
+      e.preventDefault();
+      toggleMute();
+    }
+  });
   console.info("[game] Cyber Descent — 5 niveles con victoria.");
 })();
