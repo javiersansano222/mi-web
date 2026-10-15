@@ -357,7 +357,7 @@ html[data-theme="light"][data-era="lluvia-acida"]{
 html{ scroll-behavior: smooth; scroll-padding-top: 90px }
 body{
   margin: 0;
-  background: var(--bg);
+  background: transparent;
   color: var(--ink);
   font-family: var(--sans);
   line-height: 1.65;
@@ -4111,7 +4111,8 @@ html[data-era="neon-nocturno"] .deco-matrix,
 html[data-era="blade-runner"] .deco-matrix,
 html[data-era="vaporwave"] .deco-matrix,
 html[data-era="sangre-neon"] .deco-matrix,
-html[data-era="ultravioleta"] .deco-matrix {
+html[data-era="ultravioleta"] .deco-matrix,
+html[data-era="lluvia-acida"] .deco-matrix {
   display: none !important;
 }
 
