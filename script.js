@@ -132,7 +132,7 @@
     console.info("[script] Intro saltada.");
   } else {
     const startTime = performance.now();
-    const minDuration = 1400;
+    const minDuration = 600;
 
     const step = () => {
       const elapsed = performance.now() - startTime;
