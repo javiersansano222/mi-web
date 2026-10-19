@@ -5357,3 +5357,16 @@ body.low-performance .ocean__grain {
   color: #ff5577;
   border-color: #ff5577;
 }
+/* =========================================================
+   OPTIMIZACIÓN: ocultar animaciones no compuestas
+   Elimina los coches voladores y el parpadeo de ventanas
+   para reducir el TBT y mejorar el Speed Index.
+   ========================================================= */
+.cyber-car {
+  display: none !important;
+}
+
+.cyber-bld::before {
+  animation: none !important;
+  opacity: 0.5;
+}
