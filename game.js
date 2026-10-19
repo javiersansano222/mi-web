@@ -723,5 +723,46 @@
     }
   });
 
+    /* =========================================================
+   27. CARGA DIFERIDA DEL JUEGO
+   ========================================================= */
+(function lazyLoadGame() {
+  const gameSection = document.getElementById("juego");
+  if (!gameSection) return;
+
+  let gameLoaded = false;
+
+  const loadGame = () => {
+    if (gameLoaded) return;
+    gameLoaded = true;
+
+    const script = document.createElement("script");
+    script.src = "game.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    console.info("[game] Cargando juego bajo demanda...");
+  };
+
+  // Cargar cuando el usuario esté cerca de la sección
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadGame();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: "200px" });
+
+    observer.observe(gameSection);
+  } else {
+    // Fallback: cargar al hacer scroll
+    window.addEventListener("scroll", loadGame, { once: true, passive: true });
+  }
+})();
+
+
+
   console.info("[game] Cyber Descent — 5 niveles con victoria.");
 })();
