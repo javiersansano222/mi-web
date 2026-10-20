@@ -1995,7 +1995,7 @@ const isMobile = window.matchMedia("(max-width: 700px)").matches;
 
 if (matrixCanvas && matrixCtx && !prefersReducedMotion() && !isMobile) {
   // ... todo el código del Matrix
-}
+
     let matrixActive = false;
     let matrixFrame = null;
     let matrixCols = 0;

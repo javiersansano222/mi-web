@@ -1,6 +1,6 @@
 /* =========================================================
    GAME.JS — Cyber Descent
-   Versión final: 5 niveles + victoria + más rápido y difícil
+   Versión corregida: Solucionado bug de inicio y posición.
    ========================================================= */
 (() => {
   "use strict";
@@ -161,6 +161,12 @@
     W = rect.width;
     H = rect.height;
     game.groundY = H * game.groundRatio;
+    
+    // CORRECCIÓN: Colocar al jugador en el suelo al redimensionar
+    if (game.state === "menu" || game.state === "gameover") {
+      player.y = game.groundY - player.size;
+    }
+
     initStars();
     initBuildings();
   };
@@ -329,6 +335,7 @@
     particles = [];
     player.trail = [];
 
+    // CORRECCIÓN: Asegurar posición inicial
     player.y = game.groundY - player.size;
     player.vy = 0;
     player.onGround = true;
@@ -339,9 +346,13 @@
 
     if (distanceEl) distanceEl.textContent = "0";
     if (levelEl) levelEl.textContent = "1";
+    
+    // CORRECCIÓN: Forzar el foco para capturar teclas
+    canvas.focus();
   };
 
-  startBtn.addEventListener("click", startGame);
+  // CORRECCIÓN: Usar onclick directamente para evitar fallos de carga asíncrona
+  startBtn.onclick = startGame;
 
   const update = () => {
     game.frame++;
@@ -723,46 +734,6 @@
     }
   });
 
-    /* =========================================================
-   27. CARGA DIFERIDA DEL JUEGO
-   ========================================================= */
-(function lazyLoadGame() {
-  const gameSection = document.getElementById("juego");
-  if (!gameSection) return;
-
-  let gameLoaded = false;
-
-  const loadGame = () => {
-    if (gameLoaded) return;
-    gameLoaded = true;
-
-    const script = document.createElement("script");
-    script.src = "game.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    console.info("[game] Cargando juego bajo demanda...");
-  };
-
-  // Cargar cuando el usuario esté cerca de la sección
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          loadGame();
-          observer.disconnect();
-        }
-      });
-    }, { rootMargin: "200px" });
-
-    observer.observe(gameSection);
-  } else {
-    // Fallback: cargar al hacer scroll
-    window.addEventListener("scroll", loadGame, { once: true, passive: true });
-  }
-})();
-
-
-
   console.info("[game] Cyber Descent — 5 niveles con victoria.");
+
 })();
