@@ -1723,7 +1723,7 @@
      22. TMDB — Carga de pósters de películas
      ========================================================= */
   const TMDB_API_KEY = "eb84a38debac4f94c4f640978ca7a112";
-  const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/w500";
+  const TMDB_IMG_BASE = "https://image.tmdb.org/t/p/w200";
 
   const fetchTMDBPoster = async (title, year) => {
     if (!TMDB_API_KEY) return null;
