@@ -1262,7 +1262,7 @@
 
     } catch (err) {
       clearTimeout(timeoutId);
-      console.warn("[apod] Error:", err);
+            console.info("[apod] Aviso: la NASA no responde o ha dado error. Usando fallback.");
 
       if (!date && err.name === "AbortError") {
         console.info("[apod] Timeout. Probando ayer…");
