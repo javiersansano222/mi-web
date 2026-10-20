@@ -1226,8 +1226,9 @@
       clearTimeout(timeoutId);
       const data = await res.json();
 
-      if (data.code && data.code !== 200) {
-        console.warn("[apod] NASA respondió con error:", data);
+           if (data.code && data.code !== 200) {
+        console.info("[apod] Aviso: NASA devolvió un error de servidor (" + data.code + "). Usando caché o fallback.");
+        // ... (el resto del código sigue igual)
 
         if (!date && (data.code === 500 || data.code === 503)) {
           console.info("[apod] Reintentando con la foto de ayer…");

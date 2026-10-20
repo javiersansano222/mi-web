@@ -50,7 +50,9 @@
     .eyebrow{font-size:9px;letter-spacing:.35em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:25px}
   </style>
 
-  <link rel="stylesheet" href="styles.css">
+     <!-- Cargar CSS de forma asíncrona -->
+   <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+   <noscript><link rel="stylesheet" href="styles.css"></noscript>
   <script src="game.js" defer></script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
