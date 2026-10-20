@@ -29,6 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.themoviedb.org">
   <link rel="preconnect" href="https://image.tmdb.org">
+  
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap"></noscript>
 
@@ -50,17 +51,18 @@
     .eyebrow{font-size:9px;letter-spacing:.35em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:25px}
   </style>
 
-     <!-- Cargar CSS de forma asíncrona -->
-   
-    <script src="game.js" defer></script>
+  <!-- Cargar CSS normal (sin preload para no romper nada) -->
+  <link rel="stylesheet" href="styles.min.css">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   
-  <!-- AQUÍ ESTÁ EL CAMBIO -->
- <link rel="stylesheet" href="styles.min.css">
-
-  <script data-goatcounter="https://javiersansano.goatcounter.com/count"
+  <!-- Cargar los scripts al final del head -->
+  <script src="script.min.js" defer></script>
+  <script src="game.js" defer></script>
+  <script data-goatcounter="https://javiersansano222.goatcounter.com/count"
           async src="https://gc.zgo.at/count.js"></script>
 </head>
+
+<body class="is-loading">
 
 <body class="is-loading">
   <!-- MINI REPRODUCTOR DE VÍDEO FLOTANTE -->
