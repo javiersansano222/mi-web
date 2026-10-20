@@ -4203,6 +4203,8 @@ html[data-era="ultravioleta"] #matrix-canvas {
   left: 50%;
   bottom: 30%;
   transform: translateX(-50%);
+  contain: layout paint; /* <--- AÑADE ESTO */
+  will-change: transform; /* <--- AÑADE ESTO */
   width: min(60vw, 600px);
   height: min(60vw, 600px);
   border-radius: 50%;
@@ -5377,4 +5379,28 @@ body.is-loading-anim .cyber-bld::before,
 body.is-loading-anim #particles,
 body.is-loading-anim .ocean__glow {
   animation-play-state: paused !important;
+}
+/* OPTIMIZACIÓN EXTREMA PARA MÓVIL (Lighthouse) */
+@media (max-width: 768px) {
+  /* Apagar animaciones de fondo pesadas */
+  .cyber-car,
+  .bubble,
+  .cyber-bld::before,
+  .deco-rays,
+  .deco-rain,
+  .deco-sun,
+  .ocean__glow {
+    animation: none !important;
+  }
+  
+  /* Apagar partículas en móvil */
+  #particles {
+    display: none !important;
+  }
+
+  /* Asegurar que el texto de bienvenida se renderice rápido */
+  .welcome-bar__text {
+    animation: none !important;
+    opacity: 1 !important;
+  }
 }
