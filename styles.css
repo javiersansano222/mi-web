@@ -5370,3 +5370,11 @@ body.low-performance .ocean__grain {
   animation: none !important;
   opacity: 0.5;
 }
+/* Pausar animaciones pesadas mientras carga */
+body.is-loading-anim .cyber-car,
+body.is-loading-anim .bubble,
+body.is-loading-anim .cyber-bld::before,
+body.is-loading-anim #particles,
+body.is-loading-anim .ocean__glow {
+  animation-play-state: paused !important;
+}
