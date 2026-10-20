@@ -55,7 +55,7 @@
   <script src="game.js" defer></script>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <script src="script.js" defer></script>
+  <script src="script.min.js" defer></script>
   <script data-goatcounter="https://javiersansano.goatcounter.com/count"
           async src="https://gc.zgo.at/count.js"></script>
 </head>
@@ -1280,5 +1280,14 @@
       </form>
     </div>
   </div>
+  <script>
+  // Evitar que las animaciones bloqueen la carga inicial
+  document.body.classList.add('is-loading-anim');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.body.classList.remove('is-loading-anim');
+    }, 1000);
+  });
+</script>
 </body>
 </html>

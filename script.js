@@ -503,21 +503,25 @@
     const pointer = { x: -1000, y: -1000, active: false };
     const pCount = () => Math.min(20, Math.max(8, Math.floor(window.innerWidth / 60)));
 
+      let resizeTimeout;
     const resize = () => {
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = Math.floor(w * ratio);
-      canvas.height = Math.floor(h * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      parts = Array.from({ length: pCount() }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.7 + 0.4,
-        speed: Math.random() * 0.22 + 0.08,
-        phase: Math.random() * Math.PI * 2
-      }));
-    };
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = Math.floor(w * ratio);
+        canvas.height = Math.floor(h * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        parts = Array.from({ length: pCount() }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.7 + 0.4,
+          speed: Math.random() * 0.22 + 0.08,
+          phase: Math.random() * Math.PI * 2
+        }));
+      }, 100);
+    };  
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
