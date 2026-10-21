@@ -173,3 +173,5 @@ Se eligió el **SVG interactivo** porque:
 - `feat(pc): animar ventiladores con CSS`
 - `refactor(pc): eliminar modelo 3D .glb (65 MB) y quedarse con SVG`
 - `docs(prompts): actualizar documentación de hotspots`
+## Nota final (Octubre 2026)
+El diagrama SVG sigue siendo la solución elegida. El modelo 3D `.glb` de 65 MB se descartó definitivamente por su peso inviable para una web. La documentación del proceso (ADR-005) está en el README.
