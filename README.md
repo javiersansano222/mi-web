@@ -268,7 +268,7 @@ Las claves de API se encuentran en `script.js` y `estate-genoves.html`. Este pro
 
 | Hero | Chat multilingüe | Diagrama del PC |
 |---|---|---|
-| ![Hero](img/og-image.jpg) | (pendiente) | (pendiente) |
+| ![Hero](img/og-image.jpg) | (img/asistentepersonal.png) | (img/diagrama.png) |
 
 ---
 
