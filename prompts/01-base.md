@@ -10,8 +10,11 @@ Estructura base del portafolio personal de Javier Sansano Martínez, estudiante 
 
     mi-web/
     ├── index.html                # Página principal
-    ├── styles.css                # Todos los estilos (~2900 líneas)
-    ├── script.js                 # Lógica principal (~1800 líneas)
+    ├── styles.css                # Todos los estilos (~3000 líneas)
+    ├── styles.min.css            # CSS minificado para producción
+    ├── script.js                 # Lógica principal (~1900 líneas)
+    ├── script.min.js             # JS minificado para producción
+    ├── game.js                   # Juego Cyber Descent
     ├── 404.html                  # Página 404 personalizada
     ├── gracias.html              # Página de éxito tras formulario
     ├── estate-genoves.html       # Proyecto secundario (inmobiliaria)
@@ -20,7 +23,6 @@ Estructura base del portafolio personal de Javier Sansano Martínez, estudiante 
     ├── sitemap.xml               # Sitemap para SEO
     ├── robots.txt                # Instrucciones para crawlers
     ├── README.md                 # Documentación principal
-    ├── og-image.html             # Generador de Open Graph (temporal)
     ├── prompts/                  # Documentación técnica
     │   ├── 01-base.md
     │   ├── 02-art-deco.md
@@ -33,17 +35,17 @@ Estructura base del portafolio personal de Javier Sansano Martínez, estudiante 
     │   ├── 09-apod.md
     │   ├── 10-video-popup.md
     │   ├── 11-analytics.md
-    │   └── 12-adr.md
+    │   ├── 12-adr.md
+    │   └── 13-caso-estudio.md    # NUEVO: Documentación del caso de estudio
     └── img/                      # Imágenes optimizadas
-        ├── avance-genoves.png
+        ├── avance-genoves.webp
         ├── bioshock.webp
-        ├── cyberpunk.avif
+        ├── cyberpunk.webp
         ├── doom.webp
         ├── estate-preview.mp4
         ├── fallout-new-vegas.webp
         ├── og-image.jpg
-        ├── pc.webp
-        └── skyrim-tag-page-cover-art.avif
+        └── skyrim-tag-page-cover-art.webp
 
 ## Estructura HTML
 
@@ -54,7 +56,9 @@ La página principal sigue una estructura semántica clara:
       <section id="inicio">           # Hero con ciudad animada
       <section id="sobre-mi">         # Quién soy + valores
       <section id="apod">             # NASA APOD
-      <section id="proyectos">        # Intereses (juegos, pelis, PC)
+      <section id="proyectos">        # Intereses (juegos y pelis)
+      <section id="caso-estudio">     # NUEVO: Caso de estudio Estate Genovés
+      <section id="juego">            # Juego Cyber Descent
       <section id="dentro">           # Diagrama del PC
       <section id="recorrido">        # Timeline
       <section id="contacto">         # Formulario + redes
@@ -121,6 +125,8 @@ Las paletas cambian con `html[data-era="..."]`:
     23. Abanico 3D
     24. Lluvia de código Matrix
     25. Mini reproductor de vídeo
+    26. Detección de bajo rendimiento (juego)
+    27. Juego Cyber Descent (en game.js)
 
 ## Accesibilidad
 
@@ -148,4 +154,5 @@ Breakpoints principales:
 - `feat: estructura inicial del portafolio`
 - `feat: CSS con variables y temas`
 - `refactor: organizar JS en secciones numeradas`
-- `docs: actualizar documentación base con estado actual`
+- `feat: añadir caso de estudio y métricas`
+- `docs: actualizar documentación base con estructura final`
