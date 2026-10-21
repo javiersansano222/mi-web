@@ -259,8 +259,7 @@ Las claves de API se encuentran en `script.js` y `estate-genoves.html`. Este pro
 - [ ] Añadir Open Graph completo en `index.html`
 - [ ] Añadir atribución obligatoria de TMDB en el footer
 - [ ] Implementar PWA (manifest + service worker)
-- [ ] Vídeo propio del PC encendiéndose
-- [ ] Revisar el enlace de LinkedIn (issue abierto)
+- [ ] Revisar el enlace de LinkedIn (issue abierto)(arreglado)
 
 ---
 
