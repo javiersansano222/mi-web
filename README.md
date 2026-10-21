@@ -125,6 +125,8 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 ---
 
 ## 📁 Estructura del proyecto
+
+```text
 mi-web/
 ├── index.html # Página principal
 ├── styles.css # Todos los estilos (~3000 líneas)
@@ -163,20 +165,16 @@ mi-web/
 ├── fallout-new-vegas.webp
 ├── og-image.jpg
 └── skyrim-tag-page-cover-art.webp
+🚀 Cómo probarlo en local
+Opción 1 — Live Server (recomendado)
+Instala la extensión Live Server en VS Code.
 
-text
+Clic derecho sobre index.html → "Open with Live Server".
 
----
+Se abre en http://127.0.0.1:5500/.
 
-## 🚀 Cómo probarlo en local
-
-### Opción 1 — Live Server (recomendado)
-1. Instala la extensión **Live Server** en VS Code.
-2. Clic derecho sobre `index.html` → **"Open with Live Server"**.
-3. Se abre en `http://127.0.0.1:5500/`.
-
-### Opción 2 — Python
-```bash
+Opción 2 — Python
+bash
 python3 -m http.server 8000
 # Abrir http://localhost:8000
 Opción 3 — Abrir directamente
@@ -198,45 +196,77 @@ access_key (Web3Forms)	Formularios de contacto	✅ Sí (gratis en web3forms.com)
 ✅ Estado del proyecto
 Completado
 ☑ Intro cinematográfica
+
 ☑ Fondo cyberpunk animado
+
 ☑ Tema claro/oscuro + 6 paletas intercambiables
+
 ☑ Hero con ciudad Art Déco en SVG animado
+
 ☑ Sección "Sobre mí" con repos GitHub dinámicos
+
 ☑ Sección "Intereses" con videojuegos y cine (hardware eliminado)
+
 ☑ Caso de estudio Estate Genovés (Problema → Solución → Resultado)
+
 ☑ Métricas reales del portafolio (Lighthouse 70-90)
+
 ☑ Juego Cyber Descent en Canvas
+
 ☑ Diagrama SVG interactivo del PC
+
 ☑ Timeline de recorrido
+
 ☑ Formulario de contacto con Web3Forms
+
 ☑ Página de gracias personalizada
+
 ☑ Página secundaria "Estate Genovés" con Web3Forms propio
+
 ☑ Página de gracias específica para Estate Genovés
+
 ☑ Chatbot multilingüe (ES/VA/EN/FR)
+
 ☑ Widget del tiempo (Open-Meteo)
+
 ☑ Foto del día de NASA (APOD)
+
 ☑ Galería de películas (TMDB)
+
 ☑ Efecto Matrix en el menú
+
 ☑ Indicador de sección activa
+
 ☑ Cursor personalizado
+
 ☑ Barra de progreso de lectura
+
 ☑ Favicon SVG
+
 ☑ Páginas 404 y gracias personalizadas
+
 ☑ Analítica ligera con GoatCounter
+
 ☑ Lighthouse 90+ en rendimiento y accesibilidad
+
 ☑ Documentación técnica completa en prompts/
+
 Pendiente / Mejoras futuras
 □ Añadir Open Graph completo en index.html
+
 □ Añadir atribución obligatoria de TMDB en el footer
+
 □ Implementar PWA (manifest + service worker)
+
 □ Vídeo propio del PC encendiéndose
+
 □ Revisar el enlace de LinkedIn (issue abierto)
+
 📸 Capturas
 Hero	Chat multilingüe	Diagrama del PC
 https://img/og-image.jpg	(pendiente)	(pendiente)
 🧠 Decisiones de arquitectura (ADR)
-Documentación de las decisiones técnicas clave del proyecto, con contexto,
-alternativas consideradas y consecuencias.
+Documentación de las decisiones técnicas clave del proyecto, con contexto, alternativas consideradas y consecuencias.
 
 ADR-001: Sistema de paletas intercambiables con variables CSS
 Fecha: Octubre 2026 · Estado: Aceptada
@@ -422,7 +452,3 @@ GitHub: @javiersansano222
 WhatsApp: +34 663 509 281
 
 Email: A través del formulario de contacto de la web
-
-Un paso cada día. Una idea cada vez.
-
-</div> ```
