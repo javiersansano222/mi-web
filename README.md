@@ -15,7 +15,7 @@ Portafolio personal con estética **cyberpunk / neón noir**, chatbot multiling�
 [![Lighthouse](https://img.shields.io/badge/Lighthouse-90%2B-00fff7?style=for-the-badge&logo=lighthouse&logoColor=white)](https://developer.chrome.com/docs/lighthouse/)
 
 <!-- ESTADO DEL PROYECTO -->
-![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-ff00e5?style=flat-square)
+![Estado](https://img.shields.io/badge/Estado-Completado-00fff7?style=flat-square)
 ![Commits](https://img.shields.io/github/commit-activity/m/javiersansano222/mi-web?color=00fff7&style=flat-square)
 ![Último commit](https://img.shields.io/github/last-commit/javiersansano222/mi-web?color=ff00e5&style=flat-square)
 
@@ -27,7 +27,7 @@ Portafolio personal con estética **cyberpunk / neón noir**, chatbot multiling�
 
 Portafolio personal de **Javier Sansano Martínez**, estudiante de **Desarrollo de Aplicaciones Multiplataforma (DAM)**.
 
-Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno** y **JavaScript vanilla**, combinando diseño **cyberpunk / neón noir** con tecnologías actuales como consumo de APIs REST, SVG interactivos y chatbot multilingüe.
+Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno** y **JavaScript vanilla**, combinando diseño **cyberpunk / neón noir** con tecnologías actuales como consumo de APIs REST, SVG interactivos, chatbot multilingüe y un juego en Canvas.
 
 **🌐 Web en vivo:** [javiersansano222.github.io/mi-web](https://javiersansano222.github.io/mi-web/)
 
@@ -77,14 +77,11 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 - **TMDB** → Galería de películas favoritas con pósters reales.
 - **ipwho.is** → Pop-up de bienvenida personalizado por país.
 
-### 🎮 Secciones de contenido
-- **Hero** con ciudad Art Déco y presentación personal.
-- **Sobre mí** con lista de valores y contador de repos GitHub.
-- **NASA APOD** con foto astronómica diaria y selector de fecha.
-- **Intereses**: videojuegos, cine y hardware con filtros y carátulas reales.
-- **Dentro del ordenador** → Diagrama SVG interactivo de un PC gaming con hotspots.
-- **Recorrido** → Timeline con hitos formativos y personales.
-- **Contacto** → Formulario funcional vía Web3Forms + WhatsApp + GitHub.
+### 🎮 Juego Cyber Descent
+- **5 niveles** de dificultad progresiva.
+- **Física**: Gravedad, salto, colisiones AABB.
+- **Controles**: Teclado (Espacio/↑) y táctil.
+- **Optimización**: `requestAnimationFrame` a 60 FPS.
 
 ### 🖼️ Diagrama SVG interactivo del PC
 - **Componentes identificables**: CPU, RAM, GPU, SSD, refrigeración, PSU, placa base.
@@ -93,6 +90,11 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 - **LEDs parpadeando** con `@keyframes`.
 - **Modo "resaltar componente"** al pasar el ratón.
 - **Leyenda clicable** con filtros por componente.
+
+### 📊 Caso de estudio y métricas
+- **Sección "Caso de estudio"** con estructura Problema → Solución → Resultado del proyecto Estate Genovés.
+- **Bloque de métricas** con datos reales del portafolio (SEO 100, Rendimiento 70-90, 7 paletas, 4 idiomas, 5 APIs).
+- **Nota honesta** sobre la limitación de caché de GitHub Pages.
 
 ### 🎨 Detalles avanzados
 - **Efecto Matrix** en el menú: enlaces codificados que se descodifican al hover.
@@ -113,42 +115,56 @@ Esta web es el resultado de aplicar conocimientos de **HTML5**, **CSS3 moderno**
 | **Estilos** | CSS3 moderno (`custom properties`, `color-mix`, `:has()`, grid, flexbox, `backdrop-filter`) |
 | **JavaScript** | Vanilla JS (ES6+, sin frameworks) |
 | **Animaciones** | CSS `@keyframes` + IntersectionObserver |
-| **Gráficos** | SVG animado + Canvas 2D (partículas, matrix) |
+| **Gráficos** | SVG animado + Canvas 2D (partículas, matrix, juego) |
 | **Tipografía** | Google Fonts (Bebas Neue, JetBrains Mono, y dinámicas por era) |
 | **APIs** | Open-Meteo, NASA APOD, GitHub, TMDB, ipwho.is |
 | **Formularios** | Web3Forms |
+| **Analítica** | GoatCounter (sin cookies) |
 | **Hosting** | GitHub Pages |
 
 ---
 
 ## 📁 Estructura del proyecto
-
-```
 mi-web/
-├── index.html                # Página principal
-├── styles.css                # Todos los estilos
-├── script.js                 # Lógica principal (chat, temas, APIs, efectos)
-├── 404.html                  # Página 404 personalizada
-├── gracias.html              # Página tras enviar el formulario
-├── estate-genoves.html       # Página secundaria: proyecto Estate Genovés
-├── estate-gracias.html       # Página de gracias específica para Estate Genovés
-├── favicon.svg               # Favicon del sello JS
-├── README.md                 # Este archivo
-├── .gitignore
-├── docs/
-│   ├── 01-base.md            # Documentación: estructura base
-│   ├── 02-art-deco.md        # Documentación: estética
-│   ├── 03-tema.md            # Documentación: gestión de temas
-│   └── prompt.txt            # Prompt inicial del profesor
-└── img/
-    ├── bioshock.png
-    ├── cyberpunk.avif
-    ├── doom.webp
-    ├── fallout new vegas.jpg
-    ├── skyrim-tag-page-cover-art.avif
-    ├── pc.jpg
-    └── og-image.jpg
-```
+├── index.html # Página principal
+├── styles.css # Todos los estilos (~3000 líneas)
+├── styles.min.css # CSS minificado para producción
+├── script.js # Lógica principal (~1900 líneas)
+├── script.min.js # JS minificado para producción
+├── game.js # Juego Cyber Descent
+├── 404.html # Página 404 personalizada
+├── gracias.html # Página tras enviar el formulario
+├── estate-genoves.html # Página secundaria: proyecto Estate Genovés
+├── estate-gracias.html # Página de gracias específica para Estate Genovés
+├── favicon.svg # Favicon del sello JS
+├── README.md # Este archivo
+├── sitemap.xml # Sitemap para SEO
+├── robots.txt # Instrucciones para crawlers
+├── prompts/ # Documentación técnica
+│ ├── 01-base.md # Estructura base
+│ ├── 02-art-deco.md # Estética cyberpunk
+│ ├── 03-tema.md # Gestión de temas y paletas
+│ ├── 04-contador.md # Contadores colapsables
+│ ├── 05-hotspots.md # Diagrama interactivo del PC
+│ ├── 06-cursor.md # Cursor personalizado
+│ ├── 07-formulario.md # Formulario de contacto
+│ ├── 08-chatbot.md # Chatbot multilingüe
+│ ├── 09-apod.md # NASA APOD con caché
+│ ├── 10-video-popup.md # Mini reproductor de vídeo
+│ ├── 11-analytics.md # Analítica con GoatCounter
+│ ├── 12-adr.md # Decisiones de arquitectura
+│ └── 13-caso-estudio.md # Caso de estudio y métricas
+└── img/ # Imágenes optimizadas
+├── avance-genoves.webp
+├── bioshock.webp
+├── cyberpunk.webp
+├── doom.webp
+├── estate-preview.mp4
+├── fallout-new-vegas.webp
+├── og-image.jpg
+└── skyrim-tag-page-cover-art.webp
+
+text
 
 ---
 
@@ -163,238 +179,250 @@ mi-web/
 ```bash
 python3 -m http.server 8000
 # Abrir http://localhost:8000
-```
-
-### Opción 3 — Abrir directamente
-```bash
+Opción 3 — Abrir directamente
+bash
 git clone https://github.com/javiersansano222/mi-web.git
 cd mi-web
 # Doble clic en index.html
-```
+⚠️ Nota: algunas funciones (APIs con CORS, carga de recursos) funcionan mejor con un servidor local.
 
-> ⚠️ **Nota:** algunas funciones (APIs con CORS, carga de recursos) funcionan mejor con un servidor local.
+🔑 Variables y claves de API
+Las claves de API se encuentran en script.js y estate-genoves.html. Este proyecto usa claves públicas por ser un portafolio personal educativo.
 
----
-
-## 🔑 Variables y claves de API
-
-Las claves de API se encuentran en `script.js` y `estate-genoves.html`. **Este proyecto usa claves públicas por ser un portafolio personal educativo.**
-
-| Variable | Dónde se usa | Requiere key |
-|---|---|---|
-| `WEATHER_LAT`, `WEATHER_LON`, `WEATHER_CITY` | Widget del tiempo | ❌ No (Open-Meteo es libre) |
-| `GITHUB_USER` | Listado de repos | ❌ No (API pública) |
-| `NASA_API_KEY` | Foto del día | ✅ Sí (gratis en [api.nasa.gov](https://api.nasa.gov/)) |
-| `TMDB_API_KEY` | Galería de películas | ✅ Sí (gratis en [themoviedb.org](https://www.themoviedb.org/settings/api)) |
-| `access_key` (Web3Forms) | Formularios de contacto | ✅ Sí (gratis en [web3forms.com](https://web3forms.com)) |
-
----
-
-## ✅ Estado del proyecto
-
-### Completado
-- [x] Intro cinematográfica
-- [x] Fondo cyberpunk animado
-- [x] Tema claro/oscuro + 6 paletas intercambiables
-- [x] Hero con ciudad Art Déco en SVG animado
-- [x] Sección "Sobre mí" con repos GitHub dinámicos
-- [x] Sección "Intereses" con videojuegos, cine y hardware
-- [x] Diagrama SVG interactivo del PC
-- [x] Timeline de recorrido
-- [x] Formulario de contacto con Web3Forms
-- [x] Página de gracias personalizada
-- [x] Página secundaria "Estate Genovés" con Web3Forms propio
-- [x] Página de gracias específica para Estate Genovés
-- [x] Chatbot multilingüe (ES/VA/EN/FR)
-- [x] Widget del tiempo (Open-Meteo)
-- [x] Foto del día de NASA (APOD)
-- [x] Galería de películas (TMDB)
-- [x] Efecto Matrix en el menú
-- [x] Indicador de sección activa
-- [x] Cursor personalizado
-- [x] Barra de progreso de lectura
-- [x] Favicon SVG
-- [x] Páginas 404 y gracias personalizadas
-- [x] Lighthouse 90+ en rendimiento y accesibilidad
-
-### Pendiente / Mejoras futuras
-- [ ] Añadir Open Graph completo en `index.html`
-- [ ] Añadir atribución obligatoria de TMDB en el footer
-- [ ] Añadir `sitemap.xml` y `robots.txt` para SEO
-- [ ] Optimizar imágenes (WebP/AVIF) y añadir `width`/`height`
-- [ ] Implementar PWA (manifest + service worker)
-- [ ] Analítica ligera (Plausible / Umami)
-- [ ] Vídeo propio del PC encendiéndose
-- [ ] Revisar el enlace de LinkedIn (issue abierto)
-
----
-
-## 📸 Capturas
-
-| Hero | Chat multilingüe | Diagrama del PC |
-|---|---|---|
-| ![Hero](img/og-image.jpg) | *(pendiente)* | *(pendiente)* |
-
----
----
-
-## 🧠 Decisiones de arquitectura (ADR)
-
+Variable	Dónde se usa	Requiere key
+WEATHER_LAT, WEATHER_LON, WEATHER_CITY	Widget del tiempo	❌ No (Open-Meteo es libre)
+GITHUB_USER	Listado de repos	❌ No (API pública)
+NASA_API_KEY	Foto del día	✅ Sí (gratis en api.nasa.gov)
+TMDB_API_KEY	Galería de películas	✅ Sí (gratis en themoviedb.org)
+access_key (Web3Forms)	Formularios de contacto	✅ Sí (gratis en web3forms.com)
+✅ Estado del proyecto
+Completado
+☑ Intro cinematográfica
+☑ Fondo cyberpunk animado
+☑ Tema claro/oscuro + 6 paletas intercambiables
+☑ Hero con ciudad Art Déco en SVG animado
+☑ Sección "Sobre mí" con repos GitHub dinámicos
+☑ Sección "Intereses" con videojuegos y cine (hardware eliminado)
+☑ Caso de estudio Estate Genovés (Problema → Solución → Resultado)
+☑ Métricas reales del portafolio (Lighthouse 70-90)
+☑ Juego Cyber Descent en Canvas
+☑ Diagrama SVG interactivo del PC
+☑ Timeline de recorrido
+☑ Formulario de contacto con Web3Forms
+☑ Página de gracias personalizada
+☑ Página secundaria "Estate Genovés" con Web3Forms propio
+☑ Página de gracias específica para Estate Genovés
+☑ Chatbot multilingüe (ES/VA/EN/FR)
+☑ Widget del tiempo (Open-Meteo)
+☑ Foto del día de NASA (APOD)
+☑ Galería de películas (TMDB)
+☑ Efecto Matrix en el menú
+☑ Indicador de sección activa
+☑ Cursor personalizado
+☑ Barra de progreso de lectura
+☑ Favicon SVG
+☑ Páginas 404 y gracias personalizadas
+☑ Analítica ligera con GoatCounter
+☑ Lighthouse 90+ en rendimiento y accesibilidad
+☑ Documentación técnica completa en prompts/
+Pendiente / Mejoras futuras
+□ Añadir Open Graph completo en index.html
+□ Añadir atribución obligatoria de TMDB en el footer
+□ Implementar PWA (manifest + service worker)
+□ Vídeo propio del PC encendiéndose
+□ Revisar el enlace de LinkedIn (issue abierto)
+📸 Capturas
+Hero	Chat multilingüe	Diagrama del PC
+https://img/og-image.jpg	(pendiente)	(pendiente)
+🧠 Decisiones de arquitectura (ADR)
 Documentación de las decisiones técnicas clave del proyecto, con contexto,
 alternativas consideradas y consecuencias.
 
----
+ADR-001: Sistema de paletas intercambiables con variables CSS
+Fecha: Octubre 2026 · Estado: Aceptada
 
-### ADR-001: Sistema de paletas intercambiables con variables CSS
-
-**Fecha:** Octubre 2026 · **Estado:** Aceptada
-
-**Contexto**
+Contexto
 El portafolio necesitaba destacar visualmente. Un único esquema de color lo haría parecer una plantilla más. Pero cargar CSS diferente por cada paleta aumentaría el peso y el tiempo de carga.
 
-**Decisión**
-Implementar 6 paletas intercambiables (Neón Nocturno, Matrix Verde, Blade Runner, Vaporwave, Sangre Neón, Ultravioleta) mediante variables CSS en `:root` y atributos `data-era` en `<html>`.
+Decisión
+Implementar 6 paletas intercambiables (Neón Nocturno, Matrix Verde, Blade Runner, Vaporwave, Sangre Neón, Ultravioleta) mediante variables CSS en :root y atributos data-era en <html>.
 
-**Alternativas consideradas**
-- **CSS separado por paleta**: aumenta el peso, dificulta el mantenimiento y no permite cambio instantáneo sin recargar.
-- **Tailwind con temas**: requiere build y añade ~50 KB de CSS. Innecesario para una web personal.
-- **Paletas predefinidas sin cambio en vivo**: menos interactivo.
+Alternativas consideradas
 
-**Consecuencias**
-- ✅ Cambio de paleta instantáneo sin recargar la página.
-- ✅ Persistencia en `localStorage` para recordar la preferencia.
-- ✅ Un solo `styles.css` (~40 KB gzip) sirve para todas las paletas.
-- ✅ Fácil añadir nuevas paletas: solo añadir un bloque `html[data-era="..."]`.
-- ⚠️ `styles.css` crece con cada paleta nueva (coste de red despreciable).
+CSS separado por paleta: aumenta el peso, dificulta el mantenimiento y no permite cambio instantáneo sin recargar.
 
----
+Tailwind con temas: requiere build y añade ~50 KB de CSS. Innecesario para una web personal.
 
-### ADR-002: JavaScript vanilla en lugar de React o Vue
+Paletas predefinidas sin cambio en vivo: menos interactivo.
 
-**Fecha:** Septiembre 2026 · **Estado:** Aceptada
+Consecuencias
 
-**Contexto**
+✅ Cambio de paleta instantáneo sin recargar la página.
+
+✅ Persistencia en localStorage para recordar la preferencia.
+
+✅ Un solo styles.css (~40 KB gzip) sirve para todas las paletas.
+
+✅ Fácil añadir nuevas paletas: solo añadir un bloque html[data-era="..."].
+
+⚠️ styles.css crece con cada paleta nueva (coste de red despreciable).
+
+ADR-002: JavaScript vanilla en lugar de React o Vue
+Fecha: Septiembre 2026 · Estado: Aceptada
+
+Contexto
 El portafolio necesitaba interactividad (chatbot, cambio de tema, consumo de APIs, abanico 3D de intereses). El objetivo era aprender DAM, no aprender un framework.
 
-**Decisión**
-JavaScript vanilla (ES6+) sin frameworks ni bundlers. Todo el código en un `script.js` modular con IIFEs.
+Decisión
+JavaScript vanilla (ES6+) sin frameworks ni bundlers. Todo el código en un script.js modular con IIFEs.
 
-**Alternativas consideradas**
-- **React + Vite**: bundle >100 KB, requiere build, añade complejidad para una sola página.
-- **Vue + Nuxt**: mismo problema, con más configuración.
-- **Astro**: genera HTML estático, pero añade dependencias de build.
+Alternativas consideradas
 
-**Consecuencias**
-- ✅ Bundle final ~30 KB (vs. >100 KB con React).
-- ✅ Lighthouse 90+ sostenido en rendimiento.
-- ✅ Cero dependencias de build, cero node_modules.
-- ✅ Control total sobre cada línea de código.
-- ✅ Aprendizaje de fundamentos reales de JavaScript.
-- ⚠️ Más código manual que escribir.
-- ⚠️ Sin hot reload ni componentización automática.
+React + Vite: bundle >100 KB, requiere build, añade complejidad para una sola página.
 
----
+Vue + Nuxt: mismo problema, con más configuración.
 
-### ADR-003: Hero con SVG animado en lugar de Three.js
+Astro: genera HTML estático, pero añade dependencias de build.
 
-**Fecha:** Octubre 2026 · **Estado:** Aceptada
+Consecuencias
 
-**Contexto**
+✅ Bundle final ~30 KB (vs. >100 KB con React).
+
+✅ Lighthouse 90+ sostenido en rendimiento.
+
+✅ Cero dependencias de build, cero node_modules.
+
+✅ Control total sobre cada línea de código.
+
+✅ Aprendizaje de fundamentos reales de JavaScript.
+
+⚠️ Más código manual que escribir.
+
+⚠️ Sin hot reload ni componentización automática.
+
+ADR-003: Hero con SVG animado en lugar de Three.js
+Fecha: Octubre 2026 · Estado: Aceptada
+
+Contexto
 El hero necesitaba un elemento visual impactante (una ciudad Art Déco cyberpunk). Inicialmente se implementó con Three.js (rascacielos 3D procedural + WebGL).
 
-**Decisión**
-Sustituir Three.js por un SVG animado con CSS puro. Eliminar el archivo `scene.js` y el canvas 3D del DOM.
+Decisión
+Sustituir Three.js por un SVG animado con CSS puro. Eliminar el archivo scene.js y el canvas 3D del DOM.
 
-**Alternativas consideradas**
-- **Three.js solo en desktop, SVG en móvil**: complejidad de mantenimiento y dos rutas de código.
-- **Vídeo de fondo con la ciudad**: pesa MB, complica responsive.
-- **Solo SVG sin animaciones**: menos impactante, no aporta vida.
+Alternativas consideradas
 
-**Consecuencias**
-- ✅ Ahorro de ~600 KB (tamaño de Three.js).
-- ✅ Lighthouse 90+ en ambos tipos de dispositivo.
-- ✅ SVG escala perfectamente en cualquier resolución.
-- ✅ Animaciones CSS más ligeras que renderizado WebGL.
-- ✅ Coherencia visual con el resto del portafolio.
-- ⚠️ Menos "wow" tecnológico que WebGL (pero misma sensación visual).
+Three.js solo en desktop, SVG en móvil: complejidad de mantenimiento y dos rutas de código.
 
----
+Vídeo de fondo con la ciudad: pesa MB, complica responsive.
 
-### ADR-004: Web3Forms para formularios de contacto
+Solo SVG sin animaciones: menos impactante, no aporta vida.
 
-**Fecha:** Octubre 2026 · **Estado:** Aceptada
+Consecuencias
 
-**Contexto**
+✅ Ahorro de ~600 KB (tamaño de Three.js).
+
+✅ Lighthouse 90+ en ambos tipos de dispositivo.
+
+✅ SVG escala perfectamente en cualquier resolución.
+
+✅ Animaciones CSS más ligeras que renderizado WebGL.
+
+✅ Coherencia visual con el resto del portafolio.
+
+⚠️ Menos "wow" tecnológico que WebGL (pero misma sensación visual).
+
+ADR-004: Web3Forms para formularios de contacto
+Fecha: Octubre 2026 · Estado: Aceptada
+
+Contexto
 Necesitaba formularios que enviaran correos reales sin backend. Los candidatos eran FormSubmit, Formspree y Web3Forms.
 
-**Decisión**
-Usar Web3Forms con `access_key` pública en el HTML.
+Decisión
+Usar Web3Forms con access_key pública en el HTML.
 
-**Alternativas consideradas**
-- **FormSubmit**: probado. Muestra su propia página "Thanks!" en lugar del `_next` esperado hasta que el formulario se activa. Más opaco.
-- **Formspree**: 50 envíos/mes gratis con panel. Bueno, pero requiere registro y el límite es bajo.
-- **Formulario propio con backend**: demasiado para un portafolio.
+Alternativas consideradas
 
-**Consecuencias**
-- ✅ 250 envíos/mes gratis (5× más que Formspree).
-- ✅ Panel de control para ver submissions.
-- ✅ Redirección personalizada a página `gracias.html`.
-- ✅ Fácil de integrar con `action` + `access_key`.
-- ✅ Funciona sin necesidad de backend.
-- ⚠️ El autoresponder (respuesta automática) es de pago (~10€/mes).
-- ⚠️ Dependencia de un servicio externo.
+FormSubmit: probado. Muestra su propia página "Thanks!" en lugar del _next esperado hasta que el formulario se activa. Más opaco.
 
----
+Formspree: 50 envíos/mes gratis con panel. Bueno, pero requiere registro y el límite es bajo.
 
-### ADR-005: Diagrama SVG interactivo en lugar de modelo 3D del PC
+Formulario propio con backend: demasiado para un portafolio.
 
-**Fecha:** Octubre 2026 · **Estado:** Aceptada
+Consecuencias
 
-**Contexto**
-Quería mostrar mi PC gaming en la sección "Dentro del ordenador". Inicialmente consideré un modelo 3D `.glb` con Three.js y carga diferida.
+✅ 250 envíos/mes gratis (5× más que Formspree).
 
-**Decisión**
+✅ Panel de control para ver submissions.
+
+✅ Redirección personalizada a página gracias.html.
+
+✅ Fácil de integrar con action + access_key.
+
+✅ Funciona sin necesidad de backend.
+
+⚠️ El autoresponder (respuesta automática) es de pago (~10€/mes).
+
+⚠️ Dependencia de un servicio externo.
+
+ADR-005: Diagrama SVG interactivo en lugar de modelo 3D del PC
+Fecha: Octubre 2026 · Estado: Aceptada
+
+Contexto
+Quería mostrar mi PC gaming en la sección "Dentro del ordenador". Inicialmente consideré un modelo 3D .glb con Three.js y carga diferida.
+
+Decisión
 Crear un diagrama SVG interactivo con hotspots, tooltips, ventiladores animados con CSS y LEDs parpadeando.
 
-**Alternativas consideradas**
-- **Modelo 3D .glb original**: pesaba 65 MB, 1.035.437 triángulos, 95 materiales. Inviable para una web.
-- **Modelo 3D comprimido con Draco**: bajaba a ~5 MB pero con pérdida notable de calidad.
-- **Modelo 3D solo en desktop con carga diferida**: sigue siendo 5 MB de carga bajo demanda.
-- **Solo foto del PC**: poco interactivo.
+Alternativas consideradas
 
-**Consecuencias**
-- ✅ Cero peso adicional (SVG pesa ~40 KB).
-- ✅ Lighthouse 90+ intacto.
-- ✅ Interactividad real (hotspots, tooltips, hover).
-- ✅ Coherencia visual con la estética del portafolio.
-- ✅ Muestra comprensión real de los componentes del PC.
-- ⚠️ Menos "wow" tecnológico que un modelo 3D.
+Modelo 3D .glb original: pesaba 65 MB, 1.035.437 triángulos, 95 materiales. Inviable para una web.
 
----
+Modelo 3D comprimido con Draco: bajaba a ~5 MB pero con pérdida notable de calidad.
 
-## 📄 Licencia y créditos
+Modelo 3D solo en desktop con carga diferida: sigue siendo 5 MB de carga bajo demanda.
 
-- **Contenido y código:** © 2026 Javier Sansano Martínez.
-- **NASA APOD:** datos y fotografías de dominio público por [NASA](https://apod.nasa.gov/).
-- **TMDB:** datos de películas por [The Movie Database](https://www.themoviedb.org/). *Este producto usa la API de TMDB pero no está respaldado ni certificado por TMDB.*
-- **Open-Meteo:** datos meteorológicos por [open-meteo.com](https://open-meteo.com/) (CC BY 4.0).
-- **ipwho.is:** datos de geolocalización por [ipwho.is](https://ipwho.is/).
-- **Web3Forms:** gestión de formularios por [web3forms.com](https://web3forms.com/).
-- **Tipografías:** [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue) y [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) de Google Fonts (SIL Open Font License).
+Solo foto del PC: poco interactivo.
 
----
+Consecuencias
 
-## 📬 Contacto
+✅ Cero peso adicional (SVG pesa ~40 KB).
 
-- **Web:** [javiersansano222.github.io/mi-web](https://javiersansano222.github.io/mi-web/)
-- **GitHub:** [@javiersansano222](https://github.com/javiersansano222)
-- **WhatsApp:** [+34 663 509 281](https://wa.me/34663509281)
-- **Email:** A través del formulario de contacto de la web
+✅ Lighthouse 90+ intacto.
 
----
+✅ Interactividad real (hotspots, tooltips, hover).
 
+✅ Coherencia visual con la estética del portafolio.
 
+✅ Muestra comprensión real de los componentes del PC.
 
-*Un paso cada día. Una idea cada vez.*
+⚠️ Menos "wow" tecnológico que un modelo 3D.
 
-</div>
+📄 Licencia y créditos
+Contenido y código: © 2026 Javier Sansano Martínez.
+
+NASA APOD: datos y fotografías de dominio público por NASA.
+
+TMDB: datos de películas por The Movie Database. Este producto usa la API de TMDB pero no está respaldado ni certificado por TMDB.
+
+Open-Meteo: datos meteorológicos por open-meteo.com (CC BY 4.0).
+
+ipwho.is: datos de geolocalización por ipwho.is.
+
+Web3Forms: gestión de formularios por web3forms.com.
+
+GoatCounter: analítica web sin cookies por goatcounter.com.
+
+Tipografías: Bebas Neue y JetBrains Mono de Google Fonts (SIL Open Font License).
+
+📬 Contacto
+Web: javiersansano222.github.io/mi-web
+
+GitHub: @javiersansano222
+
+WhatsApp: +34 663 509 281
+
+Email: A través del formulario de contacto de la web
+
+Un paso cada día. Una idea cada vez.
+
+</div> ```
