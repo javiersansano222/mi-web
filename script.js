@@ -270,6 +270,9 @@
   });
 
   document.addEventListener("keydown", (e) => {
+    // Si el usuario está escribiendo en un input o textarea, no hacemos nada
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+    
     if (e.key === "Escape") setMenu(false);
   });
 
@@ -1022,7 +1025,10 @@
     });
 
     chatClose?.addEventListener("click", closeChat);
-    document.addEventListener("keydown", (e) => {
+       document.addEventListener("keydown", (e) => {
+      // Si el usuario está escribiendo en el input del chat, ignoramos el evento
+      if (e.target === chatInput) return;
+      
       if (e.key === "Escape" && chat.classList.contains("is-open")) closeChat();
     });
 

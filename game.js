@@ -205,7 +205,10 @@
     }
   };
 
-  document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", (e) => {
+    // Si el usuario está escribiendo en el chat, ignoramos la tecla
+    if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
     if (e.key === " " || e.key === "ArrowUp") {
       e.preventDefault();
       jump();
